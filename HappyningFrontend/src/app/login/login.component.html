@@ -1,0 +1,17 @@
+<form>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Happyning</mat-card-title>
+            <mat-card-subtitle>Рады вас снова видеть!</mat-card-subtitle>
+          </mat-card-header>
+          <mat-form-field>
+            <mat-label>Пользователь</mat-label>
+            <input matInput placeholder="Введите имя пользователя">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Пароль</mat-label>
+            <input matInput placeholder="Введите пароль">
+          </mat-form-field>
+        <button mat-button (click)="checkCredentials()">Вход</button>
+    </mat-card>
+</form>

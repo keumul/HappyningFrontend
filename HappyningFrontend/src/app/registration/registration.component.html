@@ -1,0 +1,28 @@
+<form>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Happyning</mat-card-title>
+            <mat-card-subtitle>Добро пожаловать!</mat-card-subtitle>
+        </mat-card-header>
+        <mat-form-field>
+            <mat-label>Пользователь</mat-label>
+            <input matInput placeholder="Введите имя пользователя">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Пароль</mat-label>
+            <input matInput placeholder="Введите пароль">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Введите email">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Дата рождения</mat-label>
+            <input matInput [matDatepicker]="picker">
+            <mat-datepicker-toggle matIconSuffix [for]="picker">-
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <button mat-button>Зарегистрироваться</button>
+    </mat-card>
+</form>
