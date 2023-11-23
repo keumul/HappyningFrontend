@@ -6,12 +6,13 @@
           </mat-card-header>
           <mat-form-field>
             <mat-label>Пользователь</mat-label>
-            <input matInput placeholder="Введите имя пользователя">
+            <input matInput [(ngModel)]="username" name="username" required>
           </mat-form-field>
           <mat-form-field>
             <mat-label>Пароль</mat-label>
-            <input matInput placeholder="Введите пароль">
+            <input matInput [(ngModel)]="password" name="password" required>
           </mat-form-field>
+          <div class="error">{{errorMessage}}</div>
         <button mat-button (click)="checkCredentials()">Вход</button>
     </mat-card>
 </form>

@@ -1,0 +1,18 @@
+<app-header></app-header>
+<div class="event-container">
+    <mat-card class="main-card">
+        <mat-card-header class="event-title">
+            <div>{{ event.title }}</div>
+        </mat-card-header>
+        <div class="info-text">Описание</div>
+        <mat-card-content class="info-card">{{ event.description }}</mat-card-content>
+        <div class="info-text">Местонахождение</div>
+        <mat-card-content class="info-card">{{ event.location }}</mat-card-content>
+        <div class="info-text">Дата</div>
+        <mat-card-content class="info-card">{{ startDate }}</mat-card-content>
+        <div class="info-text">Организатор</div>
+        <mat-card-content class="info-card">{{ organizer.username }}</mat-card-content>
+        <div class="info-text">Категория</div>
+        <mat-card-content class="info-card">{{ category.title }}</mat-card-content>
+    </mat-card>
+</div>

@@ -1,0 +1,41 @@
+/* Add these styles to your component's CSS file */
+
+.event-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+}
+
+.main-card {
+    max-width: 400px;
+    width: 100%;
+    margin: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+
+}
+
+.event-title {
+    font-size: 1.5em;
+    font-weight: 20px;
+    color: #2c2c2c;
+    align-self: center;
+}
+
+.info-text {
+    font-size: smaller;
+    font-weight: 20px;
+    margin-top: 10px;
+    margin-left: 1px;
+    align-self: self-start;
+    color: #7b7b7bc2;
+}
+
+.info-card {
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    margin-bottom: 2px;
+    align-content: center;
+}

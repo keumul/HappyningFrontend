@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin: 1%;
+  }
+  
+  .calendar {
+    flex: 0 0 70%;
+    margin-right: 8px;
+  }
+  
+  .side-components {
+    flex: 0 0 30%;
+  }
+  

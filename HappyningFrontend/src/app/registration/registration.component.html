@@ -6,23 +6,25 @@
         </mat-card-header>
         <mat-form-field>
             <mat-label>Пользователь</mat-label>
-            <input matInput placeholder="Введите имя пользователя">
+            <input matInput [(ngModel)]="username" name="username" required>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Пароль</mat-label>
-            <input matInput placeholder="Введите пароль">
+            <input matInput [(ngModel)]="password" name="password" required>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Email</mat-label>
-            <input matInput placeholder="Введите email">
+            <input matInput [(ngModel)]="email" name="email" required>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Дата рождения</mat-label>
-            <input matInput [matDatepicker]="picker">
+            <input matInput [(ngModel)]="bday" name="bday" [matDatepicker]="picker">
             <mat-datepicker-toggle matIconSuffix [for]="picker">-
             </mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <button mat-button>Зарегистрироваться</button>
+        <div class="error">{{errorMessage}}</div>
+        <div class="success">{{successMessage}}</div>
+        <button mat-button (click)="registerUser()">Зарегистрироваться</button>
     </mat-card>
 </form>

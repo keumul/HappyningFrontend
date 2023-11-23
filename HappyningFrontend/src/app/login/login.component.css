@@ -51,3 +51,9 @@ input {
     color: #2C2C2C;
     width: auto;
 }
+
+.error {
+    color: red;
+    font-size: 12px;
+    font-weight: 50;
+}

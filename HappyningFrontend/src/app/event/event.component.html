@@ -1,0 +1,14 @@
+<mat-card class="scrollable-card">
+  <mat-card-title>События</mat-card-title>
+
+  <div>
+    <button mat-button *ngFor="let event of events" (click)="redirectToEvent(event.id)">
+      {{ event.title }}
+      {{ startDate }}
+    </button>
+  </div>
+
+  <div *ngIf="selectedEvent">
+    <h3>Selected Event: {{ selectedEvent.title }}</h3>
+  </div>
+</mat-card>

@@ -1,0 +1,50 @@
+<app-header></app-header>
+<mat-card>
+<div class="main">
+    <mat-card class="main-list">
+        <div class="title">Список событий</div>
+        <div class="events-list">
+            <button mat-button *ngFor="let event of events" (click)="onSelectEvent(event)">
+                {{ event.title }}
+            </button>
+        </div>
+    </mat-card>
+    <mat-card class="main-card">
+        <div *ngIf="selectedEvent">
+            <mat-card-header class="event-title">
+                <div>{{ selectedEvent.title }}</div>
+            </mat-card-header>
+            <div class="info-text">Описание</div>
+            <mat-card-content class="info-card">{{ selectedEvent.description }}</mat-card-content>
+            <div class="info-text">Местоположение</div>
+            <mat-card-content class="info-card">{{ selectedEvent.location }}</mat-card-content>
+            <div class="info-text">Дата</div>
+            <mat-card-content class="info-card">{{ startDate }}</mat-card-content>
+            <div class="info-text">Допустимое количество участников</div>
+            <mat-card-content class="info-card">{{ selectedEvent.maxGuestAmount }}</mat-card-content>
+            <div class="info-text">Категория</div>
+            <mat-card-content class="info-card">{{ category.title }}</mat-card-content>
+        </div>
+    </mat-card> 
+    <mat-card class="main-buttons">
+        <button mat-button (click)="editEvent(selectedEvent.id)">Изменить</button>
+        <button mat-button (click)="createEvent()">Добавить</button>
+        <button mat-button (click)="deleteEvent(selectedEvent.id)">Удалить</button>
+        <button mat-button class="clear-button" (click)="clearInput()">Очистить поля</button>
+        <div *ngIf="selectedEvent">
+            <div class="info-text-input">Заголовок</div>
+            <input [(ngModel)]="selectedEvent.title" name="title" required>
+            <div class="info-text-input">Описание</div>
+            <input [(ngModel)]="selectedEvent.description" name="description" required>
+            <div class="info-text-input">Местоположение</div>
+            <input [(ngModel)]="selectedEvent.location" name="location" required>
+            <div class="info-text-input">Дата</div>
+            <input [(ngModel)]="selectedEvent.startDate" name="startDate" required>
+            <div class="info-text-input">Допустимое кол-во участников</div>
+            <input [(ngModel)]="selectedEvent.maxGuestAmount" name="masGuestAmount" required>
+            <div class="info-text-input">Категория мероприятия</div>
+            <input [(ngModel)]="selectedEvent.categoryId" name="categoryId" required>
+        </div>
+    </mat-card>
+</div>
+</mat-card>

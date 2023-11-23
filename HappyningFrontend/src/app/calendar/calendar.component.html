@@ -1,0 +1,36 @@
+<div>
+
+    <div class='header'>
+        <p class='header-data'>Сегодня {{currentDay}} {{monthNames[currentMonth]}}</p>
+        <div class='header-button'>
+            <button mat-button (click)="decreaseMonth()">&lt;</button>
+            <button mat-button (click)="setCurrentMonth()">{{displayMonth}}</button>
+            <button mat-button (click)="increaseMonth()">&gt;</button>
+        </div>
+    </div>
+
+</div>
+<table class='calendar-table' *ngIf="calendar">
+    <thead>
+        <tr>
+            <th>Понедельник</th>
+            <th>Вторник</th>
+            <th>Среда</th>
+            <th>Четверг</th>
+            <th>Пятница</th>
+            <th>Суббота</th>
+            <th>Воскресенье</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of calendar | chunk: 7; let i = index">
+            <td class="calendar-day" [ngClass]="{'past-date': c.isPastDate, 'today': c.isToday}"
+                *ngFor="let c of row; let j = index">
+                <div class="calendar-day-header" [ngClass]="{'blue-date': c.isToday}">
+                    <strong>{{c.date.getDate()}}</strong> <strong
+                        *ngIf="c.isToday || (i==0 && j==0) || (c.date.getDate() == 1)">
+                        {{monthNames[c.date.getMonth()]}}</strong></div>
+            </td>
+        </tr>
+    </tbody>
+</table>
