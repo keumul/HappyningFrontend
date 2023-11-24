@@ -1,0 +1,16 @@
+<div class="event-container">
+    <div class="messgae"> {{ message }} </div>
+    <button (click)="addParticipant()">Зарегистрироваться</button>
+    <div>
+<button (click)="removeEventParticipant()">Отменить регистрацию</button>
+        <button (click)="findAllEventParticipants()">Найти всех участников события</button>
+        <div *ngIf="participants.length > 0">
+            <h2>Список участников:</h2>
+            <ul>
+                <li *ngFor="let participant of participants">
+                    {{ user.username }} - {{ user.email }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

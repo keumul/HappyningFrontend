@@ -94,3 +94,29 @@ button {
     color: #2c2c2c;
     font-weight: 20;
 }
+
+.event-button {
+    background-color: #e7e7e4;
+    height: 70%;
+    width: 100%;
+}
+
+.scrollable-card {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.scrollable-card::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scrollable-card::-webkit-scrollbar-track {
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+    background-color: #f9f9fd;
+    border-radius: 10px;
+}
+
+.scrollable-card::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: linear-gradient(180deg, #d6e4e8, #D2DE32);
+}

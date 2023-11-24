@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CalendarDay } from './calendar';
+import { Event } from '../dto/event.dto'
+import { EventService } from '../services/event.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-calendar',
@@ -7,13 +10,21 @@ import { CalendarDay } from './calendar';
   styleUrls: ['./calendar.component.css']
 })
 export class CalendarComponent implements OnInit{
+
+  constructor(private eventService: EventService,
+    private router: Router) { }
+
   public calendar: CalendarDay[] = [];
   monthNames: string[] = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
   public displayMonth!: string;
   private monthIndex: number = 0;
   currentDay: any = new Date().getDate();
   currentMonth: any = new Date().getMonth();
+  events!: Event[];
+  currentYear: number = new Date().getFullYear();
+
   ngOnInit() {
+    this.getEvents();
     this.generateCalendarDays(this.monthIndex);
   }
   
@@ -55,5 +66,26 @@ export class CalendarComponent implements OnInit{
   public setCurrentMonth() {
     this.monthIndex = 0;
     this.generateCalendarDays(this.monthIndex);
+  }
+
+  isEventInCell(event: any, cellDate: Date): boolean {
+    const eventStartDate = new Date(event.startDate);
+    console.log(eventStartDate.getDate() === cellDate.getDate() &&
+    eventStartDate.getMonth() === cellDate.getMonth() &&
+    eventStartDate.getFullYear() === cellDate.getFullYear());
+    
+    return eventStartDate.getDate() === cellDate.getDate() &&
+           eventStartDate.getMonth() === cellDate.getMonth() &&
+           eventStartDate.getFullYear() === cellDate.getFullYear();
+  }
+  
+  getEvents() {
+    return this.eventService.getAllEvents().subscribe(data => {
+      this.events = data;
+    });
+  }
+
+  redirectToEvent(eventId: number) {
+    this.router.navigate([`event/${eventId}`]);
   }
 }

@@ -25,11 +25,17 @@
     <tbody>
         <tr *ngFor="let row of calendar | chunk: 7; let i = index">
             <td class="calendar-day" [ngClass]="{'past-date': c.isPastDate, 'today': c.isToday}"
-                *ngFor="let c of row; let j = index">
+                *ngFor="let c of row; let j = index" id="scrollable-card">
                 <div class="calendar-day-header" [ngClass]="{'blue-date': c.isToday}">
                     <strong>{{c.date.getDate()}}</strong> <strong
                         *ngIf="c.isToday || (i==0 && j==0) || (c.date.getDate() == 1)">
-                        {{monthNames[c.date.getMonth()]}}</strong></div>
+                        {{monthNames[c.date.getMonth()]}}</strong>
+                </div>
+                <div class="event" *ngFor="let event of events">
+                    <ng-container *ngIf="isEventInCell(event, c.date)">
+                       <button mat-button class="event-button" (click)="redirectToEvent(event.id)">{{ event.title }}</button> 
+                    </ng-container>
+                </div>
             </td>
         </tr>
     </tbody>

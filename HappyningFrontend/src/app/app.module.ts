@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { HomeComponent } from './home/home.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { ChunkPipe } from './chunk.pipe';
@@ -25,6 +25,9 @@ import { TokenInterceptor } from './token.interceptor';
 import { ProfileComponent } from './profile/profile.component';
 import { EventCardComponent } from './event-card/event-card.component';
 import { EditorComponent } from './editor/editor.component';
+import { MatSelectModule } from '@angular/material/select';
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { EventRegistrationComponent } from './event-registration/event-registration.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +42,8 @@ import { EditorComponent } from './editor/editor.component';
     HeaderComponent,
     ProfileComponent,
     EventCardComponent,
-    EditorComponent
+    EditorComponent,
+    EventRegistrationComponent
   ],
   imports: [
     BrowserModule,
@@ -53,6 +57,10 @@ import { EditorComponent } from './editor/editor.component';
     MatNativeDateModule,
     FormsModule,
     HttpClientModule,
+    MatOptionModule,
+    MatSelectModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule
   ],
   providers: [
     [

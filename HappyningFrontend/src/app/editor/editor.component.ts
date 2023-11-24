@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../services/event.service';
-import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Event } from '../dto/event.dto';
@@ -19,8 +18,10 @@ export class EditorComponent implements OnInit {
   events!: any[];
   selectedEvent!: Event;
   category!: Category;
+  categories!: Category[];
   auxDate!: Date;
   startDate!: string;
+  newDate!: Date;
 
   constructor(private eventService: EventService,
     private authService: AuthService,
@@ -32,8 +33,9 @@ export class EditorComponent implements OnInit {
     this.eventService.getUserEvents(userId).subscribe(data => {
       this.events = data;
     });
-    this.clearInput();
     this.auxId = this.events.length + Math.random() * 10000;
+    this.loadCategories();
+    this.clearInput();
   }
 
   onSelectEvent(event: any) {
@@ -41,7 +43,7 @@ export class EditorComponent implements OnInit {
     this.auxDate = new Date(this.selectedEvent.startDate);
     this.startDate = moment().format('YYYY.MM.DD HH:MM');
     this.loadCategory(this.selectedEvent.categoryId);
-
+    this.loadCategories();
   }
 
   redirectToEvent(eventId: number) {
@@ -50,7 +52,13 @@ export class EditorComponent implements OnInit {
 
   loadCategory(id: number) {
     this.categoryService.findCategory(id).subscribe((data: any) => {
-      this.category = data as Category;
+      this.category = data;
+    })
+  }
+
+  loadCategories() {
+    this.categoryService.findAllCategories().subscribe((data: any) => {
+      this.categories = data;
     })
   }
 
@@ -62,18 +70,11 @@ export class EditorComponent implements OnInit {
       startDate: new Date(0),
       location: '',
       organizerId: this.authService.getCurrentUser()?.id,
-      categoryId: 0,
+      categoryId: this.selectedEvent.categoryId,
       maxGuestAmount: 100,
       isPublic: false,
     };
-
-    //чтобы дата была пустой
     this.startDate = new Date(0).toISOString().slice(0, 16);
-    this.category = {
-      id: 1,
-      title: '',
-      description: '',
-    }
     this.selectedEvent = this.event;
   }
 
@@ -81,10 +82,11 @@ export class EditorComponent implements OnInit {
     this.eventService.updateEvent(eventId, {
       title: this.selectedEvent.title,
       description: this.selectedEvent.description,
-      startDate: this.selectedEvent.startDate,
+      startDate: new Date(this.selectedEvent.startDate),
       location: this.selectedEvent.location,
       organizerId: this.selectedEvent.organizerId,
       categoryId: this.selectedEvent.categoryId,
+      maxGuestAmount: this.selectedEvent.maxGuestAmount,
       isPublic: this.selectedEvent.isPublic,
     }).subscribe(
       (response: any) => {
@@ -100,10 +102,11 @@ export class EditorComponent implements OnInit {
     this.eventService.createEvent({
       title: this.event.title,
       description: this.event.description,
-      startDate: this.event.startDate,
+      startDate: new Date(this.event.startDate),
       location: this.event.location,
       organizerId: this.event.organizerId,
       categoryId: this.event.categoryId,
+      maxGuestAmount: this.event.maxGuestAmount,
       isPublic: this.event.isPublic,
     }).subscribe(
       (response: any) => {
