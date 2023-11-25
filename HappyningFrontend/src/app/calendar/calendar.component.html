@@ -33,7 +33,7 @@
                 </div>
                 <div class="event" *ngFor="let event of events">
                     <ng-container *ngIf="isEventInCell(event, c.date)">
-                       <button mat-button class="event-button" (click)="redirectToEvent(event.id)">{{ event.title }}</button> 
+                       <button mat-button class="event-button" (click)="redirectToEvent(event.id)">{{ event.title | ellipsis:6 }}</button> 
                     </ng-container>
                 </div>
             </td>

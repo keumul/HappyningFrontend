@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, PipeTransform } from '@angular/core';
 import { EventService } from '../services/event.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -6,6 +6,7 @@ import { Event } from '../dto/event.dto';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../dto/category.dto';
 import * as moment from 'moment';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-editor',
@@ -22,11 +23,13 @@ export class EditorComponent implements OnInit {
   auxDate!: Date;
   startDate!: string;
   newDate!: Date;
+  message!: string;
 
   constructor(private eventService: EventService,
     private authService: AuthService,
     private categoryService: CategoryService,
-    private router: Router) { }
+    private router: Router,
+    private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     let userId = this.authService.getCurrentUser()?.id;
@@ -36,6 +39,13 @@ export class EditorComponent implements OnInit {
     this.auxId = this.events.length + Math.random() * 10000;
     this.loadCategories();
     this.clearInput();
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, '', {
+      duration: 2000,
+      panelClass: ['blue-snackbar']
+    })
   }
 
   onSelectEvent(event: any) {
@@ -90,10 +100,16 @@ export class EditorComponent implements OnInit {
       isPublic: this.selectedEvent.isPublic,
     }).subscribe(
       (response: any) => {
+        this.openSnackBar('Событие успешно изменено');
         this.ngOnInit();
       },
       (error) => {
-        console.error(error);
+        if (this.selectedEvent.title.length > 20) {
+          this.openSnackBar('Заголовок недопустимой длины (максимум 20 символов)');
+          return;
+        } else {
+          this.openSnackBar(error.error.message);
+        }
       }
     );
   }
@@ -110,10 +126,16 @@ export class EditorComponent implements OnInit {
       isPublic: this.event.isPublic,
     }).subscribe(
       (response: any) => {
+        this.openSnackBar('Событие успешно создано');
         this.ngOnInit();
       },
       (error) => {
-        console.error(error);
+        if (this.selectedEvent.title.length >= 20) {
+          this.openSnackBar('Заголовок недопустимой длины (максимум 20 символов)');
+          return;
+        } else {
+          this.openSnackBar(error.error.message);
+        }
       }
     );
   }
@@ -121,10 +143,11 @@ export class EditorComponent implements OnInit {
   deleteEvent(eventId: number) {
     this.eventService.removeEvent(eventId).subscribe(
       (response: any) => {
+        this.openSnackBar('Событие успешно удалено');
         this.ngOnInit();
       },
       (error) => {
-        console.error(error);
+        this.openSnackBar(error.error.message);
       }
     );
   }

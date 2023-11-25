@@ -1,16 +1,71 @@
-mat-card {
-    width: 100%; 
+.main-card {
+    width: 100%;
     height: 30%;
     align-content: center;
     display: flex;
-    margin-bottom: 100px;
- }
- 
- mat-card-title {
-     font-size: 24px;
-     font-weight: 500;
-     color: #D2DE32;
-     text-align: center;
-     font-weight: 100;
-     margin: 10px;
- }
+}
+
+mat-card-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: #D2DE32;
+    text-align: center;
+    font-weight: 100;
+    margin: 10px;
+}
+
+.rating-card {
+    width: 100%;
+    height: 20%;
+    margin-bottom: 5px;
+}
+
+button {
+    display: list-item;
+}
+
+.star-rating {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.star {
+    font-size: 24px;
+    color: rgb(222, 222, 222);
+    margin-right: 4px;
+}
+
+.filled {
+    color: #ffdf00;
+}
+
+.scrollable-card {
+    overflow: auto;
+  max-height: 445px;
+    height: 445px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.header {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
+  }
+.scrollable-card::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scrollable-card::-webkit-scrollbar-track {
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+    background-color: #f9f9fd;
+    border-radius: 10px;
+}
+
+.scrollable-card::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: linear-gradient(180deg, #d6e4e8, #D2DE32);
+}

@@ -1,6 +1,23 @@
-<mat-card>
-    <mat-card-title>Рейтинг</mat-card-title>
-    <mat-card-content>
-      <p>Current Rating: {{ rate || 'Not rated yet' }}</p>
-    </mat-card-content>
-  </mat-card>
+<mat-card class="scrollable-card">
+  <div class="header" *ngIf="userRate !== null && userRate.length > 0">
+    <mat-card-title>Ваша оценка: {{ calculateAverageRating() }}</mat-card-title>
+    <div class="star-rating">
+      <ng-container *ngFor="let star of starsArray()">
+        <span class="star" [class.filled]="star <= calculateAverageRating()">★</span>
+      </ng-container>
+    </div>
+  </div>
+
+  <div *ngIf="userRate !== null && userRate.length > 0" class="center-content">
+    <ng-container *ngFor="let rate of userRate">
+      <mat-card class="rating-card" matTooltip="{{ rate.message }}">
+        <mat-card-content>Оценка: {{ rate.rate }}</mat-card-content>
+        <mat-card-content>Комментарий: {{ rate.message | ellipsis: 25 }}</mat-card-content>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <div *ngIf="userRate === null || userRate.length === 0" class="center-content">
+    <p>У вас еще нет оценок.</p>
+  </div>
+</mat-card>

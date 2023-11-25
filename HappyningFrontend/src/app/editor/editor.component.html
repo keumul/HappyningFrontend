@@ -5,7 +5,7 @@
             <div class="title">Список событий</div>
             <div class="events-list">
                 <button mat-button *ngFor="let event of events" (click)="onSelectEvent(event)">
-                    {{ event.title }}
+                    {{ event.title | ellipsis: 16 }}
                 </button>
             </div>
         </mat-card>

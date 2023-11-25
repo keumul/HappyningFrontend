@@ -1,16 +1,18 @@
 <div class="event-container">
-    <div class="messgae"> {{ message }} </div>
+    <div class="message"> {{ message }} </div>
     <button (click)="addParticipant()">Зарегистрироваться</button>
     <div>
 <button (click)="removeEventParticipant()">Отменить регистрацию</button>
-        <button (click)="findAllEventParticipants()">Найти всех участников события</button>
+        <button (click)="findAllEventParticipants()">Участники события</button>
         <div *ngIf="participants.length > 0">
             <h2>Список участников:</h2>
+            <mat-card class="participants">
             <ul>
                 <li *ngFor="let participant of participants">
-                    {{ user.username }} - {{ user.email }}
+                    {{ username }} - {{ email }}
                 </li>
             </ul>
+        </mat-card>
         </div>
     </div>
 </div>

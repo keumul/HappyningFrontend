@@ -28,6 +28,9 @@ import { EditorComponent } from './editor/editor.component';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { EventRegistrationComponent } from './event-registration/event-registration.component';
+import { EllipsisPipe } from './ellipsis.pipe';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +46,8 @@ import { EventRegistrationComponent } from './event-registration/event-registrat
     ProfileComponent,
     EventCardComponent,
     EditorComponent,
-    EventRegistrationComponent
+    EventRegistrationComponent,
+    EllipsisPipe
   ],
   imports: [
     BrowserModule,
@@ -60,7 +64,9 @@ import { EventRegistrationComponent } from './event-registration/event-registrat
     MatOptionModule,
     MatSelectModule,
     NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule
+    NgxMatTimepickerModule,
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   providers: [
     [

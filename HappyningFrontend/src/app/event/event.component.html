@@ -3,7 +3,7 @@
 
   <div>
     <button mat-button *ngFor="let event of events" (click)="redirectToEvent(event.id)">
-      {{ event.title }}
+      {{ event.title | ellipsis: 20 }}
       {{ startDate }}
     </button>
   </div>

@@ -1,7 +1,7 @@
 .main {
     display: flex;
-    justify-content: space-between;
     margin: 1%;
+
 }
 
 .event-container {
@@ -11,6 +11,12 @@
     width: 100%;
     height: 90%;
     margin-left: 2%;
+    font-weight: 20;
+}
+
+app-event-registration {
+    padding: 10px;
+    text-align: center;
 }
 
 .main-card {
@@ -26,6 +32,7 @@
     font-weight: 20px;
     color: #2c2c2c;
     align-self: center;
+
 }
 
 .info-text {
