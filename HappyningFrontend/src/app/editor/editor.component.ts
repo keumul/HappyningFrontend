@@ -17,13 +17,13 @@ export class EditorComponent implements OnInit {
   auxId!: number;
   event!: Event;
   events!: any[];
-  selectedEvent!: Event;
   category!: Category;
   categories!: Category[];
   auxDate!: Date;
   startDate!: string;
   newDate!: Date;
   message!: string;
+  selectedEvent!: Event;
 
   constructor(private eventService: EventService,
     private authService: AuthService,
@@ -35,10 +35,26 @@ export class EditorComponent implements OnInit {
     let userId = this.authService.getCurrentUser()?.id;
     this.eventService.getUserEvents(userId).subscribe(data => {
       this.events = data;
+      if (this.events.length > 0) {
+        this.onSelectEvent(this.events[0]);
+      } else {
+        this.onSelectEvent({
+          id: this.auxId,
+          title: '',
+          description: '',
+          startDate: new Date(0),
+          location: '',
+          organizerId: this.authService.getCurrentUser()?.id,
+          categoryId: 1,
+          maxGuestAmount: 100,
+          isPublic: false,
+        });
+      }
+      this.clearInput();
     });
+
     this.auxId = this.events.length + Math.random() * 10000;
     this.loadCategories();
-    this.clearInput();
   }
 
   openSnackBar(message: string) {
@@ -80,7 +96,7 @@ export class EditorComponent implements OnInit {
       startDate: new Date(0),
       location: '',
       organizerId: this.authService.getCurrentUser()?.id,
-      categoryId: this.selectedEvent.categoryId,
+      categoryId: this.selectedEvent.categoryId || 1,
       maxGuestAmount: 100,
       isPublic: false,
     };
@@ -107,7 +123,11 @@ export class EditorComponent implements OnInit {
         if (this.selectedEvent.title.length > 20) {
           this.openSnackBar('Заголовок недопустимой длины (максимум 20 символов)');
           return;
-        } else {
+        } if (this.selectedEvent.startDate < new Date(moment.now())) {
+          this.openSnackBar('Нельзя проводить событие в прошлом');
+          return;
+        }
+        else {
           this.openSnackBar(error.error.message);
         }
       }
@@ -115,6 +135,10 @@ export class EditorComponent implements OnInit {
   }
 
   createEvent() {
+    if (this.selectedEvent.startDate < new Date(moment.now())) {
+      this.openSnackBar('Нельзя создать событие в прошлом');
+      return;
+    }
     this.eventService.createEvent({
       title: this.event.title,
       description: this.event.description,

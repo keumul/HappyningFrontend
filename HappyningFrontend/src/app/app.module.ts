@@ -31,6 +31,7 @@ import { EventRegistrationComponent } from './event-registration/event-registrat
 import { EllipsisPipe } from './ellipsis.pipe';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { UserComponent } from './user/user.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +48,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     EventCardComponent,
     EditorComponent,
     EventRegistrationComponent,
-    EllipsisPipe
+    EllipsisPipe,
+    UserComponent
   ],
   imports: [
     BrowserModule,

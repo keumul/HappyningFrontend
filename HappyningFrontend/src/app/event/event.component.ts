@@ -30,7 +30,7 @@ export class EventComponent implements OnInit {
 
   loadEvents() {
     let userId = this.authService.getCurrentUser()?.id;
-    this.eventService.getUserEvents(userId).subscribe((data: Event[]) => {
+    this.eventService.getAllEventsByUser(userId).subscribe((data: Event[]) => {
       this.events = data;
       this.auxDate = new Date(this.events[0].startDate);
       this.startDate = moment().format('YYYY.MM.DD HH:MM');

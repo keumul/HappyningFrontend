@@ -1,0 +1,9 @@
+<app-header></app-header>
+<div class="main">
+    <div class="user-info">
+        <h2>{{ currentUser.username }}</h2>
+        <p>Связь: {{ currentUser.email }}</p>
+        <p>Возраст: {{ calculateAge(currentUser.bday) }}</p>
+      </div>
+      <app-user-rating></app-user-rating>
+</div>

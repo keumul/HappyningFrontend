@@ -39,6 +39,24 @@ li {
 .participants {
     background-color: #ffffff;
     font-weight: 20;
+    overflow-x: auto;
+    white-space: nowrap;
+    height: 120px;
+}
+
+.participants::-webkit-scrollbar {
+    width: 5px;
+}
+
+.participants::-webkit-scrollbar-track {
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+    background-color: #f9f9fd;
+    border-radius: 10px;
+}
+
+.participants::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: linear-gradient(180deg, #d6e4e8, #D2DE32);
 }
 
 ::ng-deep .mat-mdc-snack-bar-container.blue-snackbar {

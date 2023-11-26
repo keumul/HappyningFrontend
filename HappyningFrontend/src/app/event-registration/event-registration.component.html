@@ -2,17 +2,18 @@
     <div class="message"> {{ message }} </div>
     <button (click)="addParticipant()">Зарегистрироваться</button>
     <div>
-<button (click)="removeEventParticipant()">Отменить регистрацию</button>
-        <button (click)="findAllEventParticipants()">Участники события</button>
-        <div *ngIf="participants.length > 0">
-            <h2>Список участников:</h2>
-            <mat-card class="participants">
-            <ul>
-                <li *ngFor="let participant of participants">
-                    {{ username }} - {{ email }}
-                </li>
-            </ul>
+      <button (click)="removeEventParticipant()">Отменить регистрацию</button>
+      <button (click)="findAllEventParticipants()">Участники события</button>
+      <div *ngIf="participants.length > 0">
+        <h2>Список участников:</h2>
+        <mat-card class="participants">
+          <ul>
+            <li *ngFor="let participant of participants">
+              {{ userDetails[participant.userId]?.username }} - {{ userDetails[participant.userId]?.email }}
+            </li>
+          </ul>
         </mat-card>
-        </div>
+      </div>
     </div>
-</div>
+  </div>
+  

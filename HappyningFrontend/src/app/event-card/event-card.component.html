@@ -5,6 +5,7 @@
             <mat-card-header class="event-title">
                 {{ event.title }}
             </mat-card-header>
+            <div class="scrollable-card">
             <div class="info-text">Описание</div>
             <mat-card-content class="info-card">{{ event.description }}</mat-card-content>
             <div class="info-text">Местонахождение</div>
@@ -12,9 +13,10 @@
             <div class="info-text">Дата</div>
             <mat-card-content class="info-card">{{ startDate }}</mat-card-content>
             <div class="info-text">Организатор</div>
-            <mat-card-content class="info-card">{{ organizer.username }}</mat-card-content>
+            <button mat-button class="info-card" (click)="navigateToUserProfile(organizer.id)">{{ organizer.username }}</button>
             <div class="info-text">Категория</div>
             <mat-card-content class="info-card">{{ category.title }}</mat-card-content>
+        </div>
         </mat-card>
         <app-event-registration></app-event-registration>
     </div>

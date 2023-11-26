@@ -32,7 +32,7 @@ app-event-registration {
     font-weight: 20px;
     color: #2c2c2c;
     align-self: center;
-
+    margin-bottom: 2%;
 }
 
 .info-text {
@@ -50,4 +50,29 @@ app-event-registration {
     border-radius: 5px;
     margin-bottom: 2px;
     align-content: center;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    max-width: 400px;
+}
+
+.scrollable-card {
+    overflow-x: auto;
+    white-space: nowrap;
+    max-height: 400px;
+    max-width: 400px;
+}
+
+.scrollable-card::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scrollable-card::-webkit-scrollbar-track {
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+    background-color: #f9f9fd;
+    border-radius: 10px;
+}
+
+.scrollable-card::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: linear-gradient(180deg, #d6e4e8, #D2DE32);
 }

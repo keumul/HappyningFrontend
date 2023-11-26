@@ -3,10 +3,12 @@
     <div class="main">
         <mat-card class="main-list">
             <div class="title">Список событий</div>
-            <div class="events-list">
-                <button mat-button *ngFor="let event of events" (click)="onSelectEvent(event)">
-                    {{ event.title | ellipsis: 16 }}
-                </button>
+            <div class="scrollable-card-list">
+                <div class="events-list">
+                    <button mat-button *ngFor="let event of events" (click)="onSelectEvent(event)">
+                        {{ event.title | ellipsis: 16 }}
+                    </button>
+                </div>
             </div>
         </mat-card>
         <mat-card class="main-card">
@@ -15,7 +17,9 @@
                     <div>{{ selectedEvent.title }}</div>
                 </mat-card-header>
                 <div class="info-text">Описание</div>
-                <mat-card-content class="info-card">{{ selectedEvent.description }}</mat-card-content>
+                <div class="scrollable-card">
+                    <mat-card-content class="info-card">{{ selectedEvent.description }}</mat-card-content>
+                </div>
                 <div class="info-text">Местоположение</div>
                 <mat-card-content class="info-card">{{ selectedEvent.location }}</mat-card-content>
                 <div class="info-text">Дата</div>
@@ -44,14 +48,13 @@
                 <input [(ngModel)]="selectedEvent.maxGuestAmount" name="maxGuestAmount" type="number" required>
                 <div class="info-text-input">Категория</div>
                 <mat-form-field>
-                <mat-select [(ngModel)]="selectedEvent.categoryId">
-                    <mat-option *ngFor="let cat of categories" [value]="cat.id">
-                        {{ cat.title }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+                    <mat-select [(ngModel)]="selectedEvent.categoryId">
+                        <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                            {{ cat.title }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-           
         </mat-card>
     </div>
 </mat-card>

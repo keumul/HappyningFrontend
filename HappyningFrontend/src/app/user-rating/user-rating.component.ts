@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { RateUser } from '../dto/rate-user.dto';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-rating',
@@ -9,26 +10,41 @@ import { RateUser } from '../dto/rate-user.dto';
   styleUrls: ['./user-rating.component.css']
 })
 export class UserRatingComponent implements OnInit {
-  userId!: number;
+  userId: number | undefined;
   userRate!: RateUser[];
 
-  constructor(private userService: UserService, private route: ActivatedRoute) { }
+  constructor(private userService: UserService, 
+    private route: ActivatedRoute,
+    private router: Router) { }
 
-  ngOnInit(): void {
-    // this.route.params.subscribe(params => {
-    //   this.userId = +params['id'];
-    // });
+    ngOnInit(): void {
+      this.route.params.subscribe(params => {
+        this.userId = params['userId'] ? +params['userId'] : undefined;
+        this.loadUserRating();
+      });
+    
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.route.paramMap.subscribe(params => {
+            const userId = params.get('id');
+            this.userId = userId ? +userId : undefined;
+            this.loadUserRating();
+          });
+        }
+      });
 
-    // this.userService.viewUserRate(this.userId).subscribe(data => {
-    //   this.userRate = data.rate;
-    // });
+      this.loadUserRating();
+    }
+    
 
-    this.currentUserRate();
-  }
-
-  removeRate() {
-    this.userService.removeUserRate(this.userId).subscribe(() => {
-    });
+  loadUserRating() {
+    if (this.userId) {
+      this.userService.viewUserRate(this.userId).subscribe( (data: RateUser[]) => {
+        this.userRate = data;
+      });
+    } else {
+      this.currentUserRate();
+    }
   }
 
   currentUserRate() {
@@ -36,6 +52,20 @@ export class UserRatingComponent implements OnInit {
       this.userRate = data;
     });
   }
+
+  // removeRate() {
+  //   if (this.userId) {
+  //     // Если есть id, удаляем рейтинг для конкретного пользователя
+  //     this.userService.removeUserRate(this.userId).subscribe(() => {
+  //       this.loadUserRating(); // Обновляем рейтинг после удаления
+  //     });
+  //   } else {
+  //     // В противном случае удаляем рейтинг текущего пользователя
+  //     this.userService.removeCurrentUserRate().subscribe(() => {
+  //       this.currentUserRate(); // Обновляем рейтинг после удаления
+  //     });
+  //   }
+  // }
 
   calculateAverageRating(): number {
     if (this.userRate && this.userRate.length > 0) {
@@ -49,6 +79,4 @@ export class UserRatingComponent implements OnInit {
   starsArray(): number[] {
     return Array.from({ length: 5 }, (_, index) => index + 1);
   }
-
-
 }
