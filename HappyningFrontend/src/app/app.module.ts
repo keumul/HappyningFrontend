@@ -32,6 +32,9 @@ import { EllipsisPipe } from './ellipsis.pipe';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserComponent } from './user/user.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,7 +71,9 @@ import { UserComponent } from './user/user.component';
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatCheckboxModule,
+    MatDialogModule
   ],
   providers: [
     [

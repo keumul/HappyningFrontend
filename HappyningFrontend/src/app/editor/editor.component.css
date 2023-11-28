@@ -8,14 +8,14 @@
 .main-list {
     padding: 20px;
     margin: 15px;
-    height: 470px;
+    height: 500px;
     flex: 0 0 20%;
     margin-left: 20px;
 }
 
 .main-card {
     width: 500%;
-    height: 470px;
+    height: 500px;
     margin: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -52,7 +52,7 @@
 .main-buttons {
     padding: 20px;
     width: 100%;
-    height: 470px;
+    height: 500px;
     margin: 15px;
     flex: 0 0 20%;
 }
@@ -158,6 +158,11 @@ mat-form-field {
 
 mat-select, mat-option {
     font-size: small;
+}
+
+.checkbox {
+    font-size: small;
+    font-weight: lighter;
 }
 
 ::ng-deep .mat-mdc-snack-bar-container.blue-snackbar {

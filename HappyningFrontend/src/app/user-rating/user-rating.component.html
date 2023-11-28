@@ -1,3 +1,18 @@
+<div class="main">
+  <mat-card class="comment-card" *ngIf="canRate">
+    <mat-card-content>
+      <h3>Оцените организатора</h3>
+      <mat-form-field>
+        <mat-label>Оценка</mat-label>
+        <input matInput [(ngModel)]="newRating" min="1" max="5" type="number" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Комментарий</mat-label>
+        <textarea matInput [(ngModel)]="newComment" rows="4" required></textarea>
+      </mat-form-field>
+      <button mat-raised-button (click)="submitRating()">Отправить</button>
+    </mat-card-content>
+  </mat-card>
 <mat-card class="scrollable-card">
   <div class="header" *ngIf="userRate !== null && userRate!.length > 0">
     <mat-card-title>Оценка: {{ calculateAverageRating() }}</mat-card-title>
@@ -18,6 +33,8 @@
   </div>
 
   <div *ngIf="userRate === null || userRate!.length === 0">
-    <p>У вас еще нет оценок.</p>
+    <p>Оценок нет.</p>
   </div>
 </mat-card>
+
+</div>

@@ -7,18 +7,23 @@ import { Event } from '../dto/event.dto';
 import * as moment from 'moment';
 import { UserService } from '../services/user.service';
 import { User } from '../dto/user.dto';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-event-card',
   templateUrl: './event-card.component.html',
-  styleUrls: ['./event-card.component.css']
+  styleUrls: ['./event-card.component.css'],
 })
+
 export class EventCardComponent implements OnInit {
   event!: Event;
   category!: Category;
   organizer!: User;
   auxDate!: Date;
   startDate!: string;
+  codeFromDatabase: string = '';
+  isOverlayVisible: boolean = false;
+  enteredCode: string = '';
 
   constructor(
     private eventService: EventService,
@@ -38,7 +43,11 @@ export class EventCardComponent implements OnInit {
       this.auxDate = new Date(this.event.startDate);
       this.startDate = moment().format('YYYY.MM.DD HH:MM');
       this.loadCategory();
-      this.loadOrganizer()
+      this.loadOrganizer();
+      if (!this.event.isPublic) {
+        this.codeFromDatabase = this.event.secretCode;
+        this.openOverlay();
+      }
     });
   }
 
@@ -56,5 +65,25 @@ export class EventCardComponent implements OnInit {
 
   navigateToUserProfile(userId: number) {
     this.router.navigate([`user/${userId}`]);
+  }
+
+  openOverlay() {
+    this.isOverlayVisible = true;
+  }
+
+  closeOverlay() {
+    this.isOverlayVisible = false;
+    this.enteredCode = '';
+    this.router.navigate(['/home']);
+  }
+
+  onOverlaySubmit() {
+    console.log('Entered Code:', this.enteredCode);
+    if (this.enteredCode === this.codeFromDatabase) {
+      console.log('Correct code!');
+      this.closeOverlay();
+    } else {
+      console.log('Incorrect code!');
+    }
   }
 }

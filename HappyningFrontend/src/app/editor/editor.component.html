@@ -28,6 +28,8 @@
                 <mat-card-content class="info-card">{{ selectedEvent.maxGuestAmount }}</mat-card-content>
                 <div class="info-text">Категория</div>
                 <mat-card-content class="info-card">{{ category.title }}</mat-card-content>
+                <div class="info-text">Уровень доступа</div>
+                <mat-card-content class="info-card">{{ accessLevel }}</mat-card-content>
             </div>
         </mat-card>
         <mat-card class="main-buttons">
@@ -46,15 +48,24 @@
                 <input [(ngModel)]="selectedEvent.startDate" type="datetime-local" name="startDate" required>
                 <div class="info-text-input">Допустимое кол-во участников</div>
                 <input [(ngModel)]="selectedEvent.maxGuestAmount" name="maxGuestAmount" type="number" required>
-                <div class="info-text-input">Категория</div>
-                <mat-form-field>
-                    <mat-select [(ngModel)]="selectedEvent.categoryId">
-                        <mat-option *ngFor="let cat of categories" [value]="cat.id">
-                            {{ cat.title }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <div class="info-text-input">Уровень доступа</div>
+                <mat-checkbox class="checkbox" [(ngModel)]="selectedEvent.isPublic" (change)="updateIsPublic()"
+                    *ngIf="canCheck; else existsEventCheckbox" color="primary">Публичный</mat-checkbox>
+                <ng-template #existsEventCheckbox>
+                    <mat-checkbox class="checkbox" [(ngModel)]="selectedEvent.isPublic" [disabled]="true" color="primary">
+                        Публичный
+                    </mat-checkbox>
+                </ng-template>
+                <input *ngIf="!selectedEvent.isPublic" [(ngModel)]="selectedEvent.secretCode" required>
             </div>
+            <div class="info-text-input">Категория</div>
+            <mat-form-field>
+                <mat-select [(ngModel)]="selectedEvent.categoryId">
+                    <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                        {{ cat.title }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
         </mat-card>
     </div>
 </mat-card>

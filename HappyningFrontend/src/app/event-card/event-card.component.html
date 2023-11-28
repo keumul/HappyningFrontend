@@ -19,6 +19,15 @@
         </div>
         </mat-card>
         <app-event-registration></app-event-registration>
+        
     </div>
 
 </div>
+
+<div class="overlay" *ngIf="isOverlayVisible">
+    <div class="overlay-content">
+      <input [(ngModel)]="enteredCode" placeholder="Введите код" />
+      <button (click)="onOverlaySubmit()">Submit</button>
+      <button (click)="closeOverlay()">Close</button>
+    </div>
+  </div>

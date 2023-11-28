@@ -12,6 +12,10 @@ import { NavigationEnd, Router } from '@angular/router';
 export class UserRatingComponent implements OnInit {
   userId: number | undefined;
   userRate!: RateUser[];
+  canRate: boolean = true;
+  newRating: number = 5;
+  newComment: string = "";
+  currentUser!: number;
 
   constructor(private userService: UserService, 
     private route: ActivatedRoute,
@@ -32,6 +36,16 @@ export class UserRatingComponent implements OnInit {
           });
         }
       });
+
+      this.userService.whoAmI().subscribe((user) => {
+        this.currentUser = user.id;
+      });
+
+      if(this.userId && this.userId != this.currentUser) {
+        this.canRate = true;
+      } else {
+        this.canRate = false;
+      }
 
       this.loadUserRating();
     }
@@ -78,5 +92,23 @@ export class UserRatingComponent implements OnInit {
 
   starsArray(): number[] {
     return Array.from({ length: 5 }, (_, index) => index + 1);
+  }
+
+  submitRating() {
+    if (this.canRate && this.userId) {
+      this.userService.rateUser(+this.userId, {
+        rate: this.newRating,
+        message: this.newComment
+      }).subscribe((response) => {
+        console.log('Rating submitted successfully', response);
+        this.loadUserRating();
+        this.newRating = 5;
+        this.newComment = "";
+      },
+      (error) => {
+        console.error('Error submitting rating', error);
+      }
+    );
+    }
   }
 }

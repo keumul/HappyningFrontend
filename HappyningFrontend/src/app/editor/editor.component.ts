@@ -1,4 +1,4 @@
-import { Component, OnInit, PipeTransform } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EventService } from '../services/event.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -24,6 +24,9 @@ export class EditorComponent implements OnInit {
   newDate!: Date;
   message!: string;
   selectedEvent!: Event;
+  accessLevel!: string;
+  canCheck = true;
+  secretCode!: string;
 
   constructor(private eventService: EventService,
     private authService: AuthService,
@@ -32,6 +35,7 @@ export class EditorComponent implements OnInit {
     private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    this.canCheck = true;
     let userId = this.authService.getCurrentUser()?.id;
     this.eventService.getUserEvents(userId).subscribe(data => {
       this.events = data;
@@ -55,6 +59,12 @@ export class EditorComponent implements OnInit {
 
     this.auxId = this.events.length + Math.random() * 10000;
     this.loadCategories();
+
+    if(this.selectedEvent.isPublic) {
+      this.accessLevel = 'Публичный';
+    } else {
+      this.accessLevel = 'Частный';
+    }
   }
 
   openSnackBar(message: string) {
@@ -65,11 +75,17 @@ export class EditorComponent implements OnInit {
   }
 
   onSelectEvent(event: any) {
+    this.canCheck = false;
     this.selectedEvent = event;
     this.auxDate = new Date(this.selectedEvent.startDate);
     this.startDate = moment().format('YYYY.MM.DD HH:MM');
     this.loadCategory(this.selectedEvent.categoryId);
     this.loadCategories();
+    if (this.selectedEvent && this.selectedEvent.isPublic) {
+      this.accessLevel = 'Публичный';
+    } else {
+      this.accessLevel = 'Частный';
+    }
   }
 
   redirectToEvent(eventId: number) {
@@ -89,6 +105,7 @@ export class EditorComponent implements OnInit {
   }
 
   clearInput() {
+    this.canCheck = true;
     this.event = {
       id: this.auxId,
       title: '',
@@ -99,6 +116,7 @@ export class EditorComponent implements OnInit {
       categoryId: this.selectedEvent.categoryId || 1,
       maxGuestAmount: 100,
       isPublic: false,
+      secretCode: '',
     };
     this.startDate = new Date(0).toISOString().slice(0, 16);
     this.selectedEvent = this.event;
@@ -114,6 +132,7 @@ export class EditorComponent implements OnInit {
       categoryId: this.selectedEvent.categoryId,
       maxGuestAmount: this.selectedEvent.maxGuestAmount,
       isPublic: this.selectedEvent.isPublic,
+      secretCode: this.selectedEvent.secretCode,
     }).subscribe(
       (response: any) => {
         this.openSnackBar('Событие успешно изменено');
@@ -139,6 +158,11 @@ export class EditorComponent implements OnInit {
       this.openSnackBar('Нельзя создать событие в прошлом');
       return;
     }
+
+    if(!this.event.isPublic && this.event.secretCode == '') {
+      this.openSnackBar('При создании частного события необходимо указать секретный код');
+      return;
+    }
     this.eventService.createEvent({
       title: this.event.title,
       description: this.event.description,
@@ -148,6 +172,7 @@ export class EditorComponent implements OnInit {
       categoryId: this.event.categoryId,
       maxGuestAmount: this.event.maxGuestAmount,
       isPublic: this.event.isPublic,
+      secretCode: this.event.secretCode,
     }).subscribe(
       (response: any) => {
         this.openSnackBar('Событие успешно создано');
@@ -175,5 +200,12 @@ export class EditorComponent implements OnInit {
       }
     );
   }
+
+  updateIsPublic() {
+    if (this.selectedEvent.isPublic) {
+      this.selectedEvent.isPublic = true;
+    }
+  }
+  
 }
 

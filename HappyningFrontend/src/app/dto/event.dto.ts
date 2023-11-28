@@ -7,5 +7,6 @@ export interface Event {
     organizerId: number;
     categoryId: number;
     maxGuestAmount: number;
+    secretCode: string;
     isPublic: boolean;
 }
