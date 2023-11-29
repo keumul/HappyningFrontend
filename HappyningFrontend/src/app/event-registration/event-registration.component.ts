@@ -15,13 +15,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class EventRegistrationComponent implements OnInit {
 
   participant!: Participant;
-  participants!: Participant[];
+  participants?: Participant[];
   user!: User;
   eventId!: number;
   userId!: number;
   isRegistered: boolean = false;
   message: any;
-  userDetails: { [userId: number]: { username: string, email: string } } = {};
+  userDetails?: { [userId: number]: { username: string, email: string } } = {};
 
   constructor(
     private participantService: ParticipantService,
@@ -66,7 +66,7 @@ export class EventRegistrationComponent implements OnInit {
     this.participantService.findAllEventParticipants(this.eventId).subscribe(
       (response: any) => {
         this.participants = response;
-        this.participants.forEach((participant: any) => {
+        this.participants?.forEach((participant: any) => {
           this.loadUser(participant.userId);
         });
       },
@@ -79,7 +79,7 @@ export class EventRegistrationComponent implements OnInit {
   loadUser(userId: number): void {
     this.userService.findUser(userId).subscribe(
       (data: any) => {
-        this.userDetails[userId] = { username: data.username, email: data.email };
+        this.userDetails![userId] = { username: data.username, email: data.email };
       },
       (error) => {
         console.error('Error loading user details:', error);

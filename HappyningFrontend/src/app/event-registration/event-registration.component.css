@@ -36,6 +36,10 @@ li {
     margin-bottom: 5px;
 }
 
+h2 {
+    color: #2c2c2c;
+}
+
 .participants {
     background-color: #ffffff;
     font-weight: 20;

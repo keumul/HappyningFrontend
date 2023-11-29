@@ -1,4 +1,5 @@
 <app-header></app-header>
+<mat-card>
 <div class="main">
     <div class="event-container">
         <mat-card class="main-card">
@@ -6,28 +7,29 @@
                 {{ event.title }}
             </mat-card-header>
             <div class="scrollable-card">
-            <div class="info-text">Описание</div>
-            <mat-card-content class="info-card">{{ event.description }}</mat-card-content>
-            <div class="info-text">Местонахождение</div>
-            <mat-card-content class="info-card">{{ event.location }}</mat-card-content>
-            <div class="info-text">Дата</div>
-            <mat-card-content class="info-card">{{ startDate }}</mat-card-content>
-            <div class="info-text">Организатор</div>
-            <button mat-button class="info-card" (click)="navigateToUserProfile(organizer.id)">{{ organizer.username }}</button>
-            <div class="info-text">Категория</div>
-            <mat-card-content class="info-card">{{ category.title }}</mat-card-content>
-        </div>
+                <div class="info-text">Описание</div>
+                <mat-card-content class="info-card">{{ event.description }}</mat-card-content>
+                <div class="info-text">Местонахождение</div>
+                <mat-card-content class="info-card">{{ event.location }}</mat-card-content>
+                <div class="info-text">Дата</div>
+                <mat-card-content class="info-card">{{ startDate }}</mat-card-content>
+                <div class="info-text">Организатор</div>
+                <button mat-button class="info-card" (click)="navigateToUserProfile(organizer.id)">{{ organizer.username
+                    }}</button>
+                <div class="info-text">Категория</div>
+                <mat-card-content class="info-card">{{ category.title }}</mat-card-content>
+            </div>
         </mat-card>
         <app-event-registration></app-event-registration>
-        
     </div>
-
+    <app-chat></app-chat>
 </div>
 
 <div class="overlay" *ngIf="isOverlayVisible">
     <div class="overlay-content">
-      <input [(ngModel)]="enteredCode" placeholder="Введите код" />
-      <button (click)="onOverlaySubmit()">Submit</button>
-      <button (click)="closeOverlay()">Close</button>
+        <input [(ngModel)]="enteredCode" placeholder="Введите код доступа" />
+        <button (click)="onOverlaySubmit()">OK</button>
+        <button (click)="closeOverlay()">Отмена</button>
     </div>
-  </div>
+</div>
+</mat-card>

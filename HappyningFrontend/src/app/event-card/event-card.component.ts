@@ -77,13 +77,17 @@ export class EventCardComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
+  closeSuccessOverlay() {
+    this.isOverlayVisible = false;
+    this.enteredCode = '';
+  }
+
   onOverlaySubmit() {
-    console.log('Entered Code:', this.enteredCode);
     if (this.enteredCode === this.codeFromDatabase) {
-      console.log('Correct code!');
-      this.closeOverlay();
+      console.log('Верный код!');
+      this.closeSuccessOverlay();
     } else {
-      console.log('Incorrect code!');
+      console.log('Неверный код!');
     }
   }
 }

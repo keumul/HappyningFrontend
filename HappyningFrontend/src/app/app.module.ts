@@ -34,6 +34,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserComponent } from './user/user.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     EditorComponent,
     EventRegistrationComponent,
     EllipsisPipe,
-    UserComponent
+    UserComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

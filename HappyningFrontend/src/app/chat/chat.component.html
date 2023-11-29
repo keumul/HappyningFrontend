@@ -1,0 +1,24 @@
+<div class="chat-container">
+    <div class="messages-container" #chatContainer>
+        <div *ngFor="let message of messages" class="message"
+            [ngClass]="{ 'currentUser': message.user.id === currentUser.id, 'otherUser': message.user.id !== currentUser.id }">
+            <div class="message-header" *ngIf="message.user.id === currentUser.id">
+                Вы
+            </div>
+            <div class="message-header" *ngIf="message.user.id !== currentUser.id">
+                {{ message.user.username }}
+            </div>
+                <span class="message-date">{{
+                    message.createdAt | date : "MMM d, h:mm a"
+                    }}</span>
+                <div class="message-content">{{ message.message }}</div>
+           
+        </div>
+    </div>
+    <div class="input-container">
+        <input [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" class="input-field" />
+        <button mat-button (click)="sendMessage()" class="send-button" [disabled]="newMessage === ''">
+            Отправить
+        </button>
+    </div>
+</div>

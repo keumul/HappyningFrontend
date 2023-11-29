@@ -4,12 +4,12 @@
     <div>
       <button (click)="removeEventParticipant()">Отменить регистрацию</button>
       <button (click)="findAllEventParticipants()">Участники события</button>
-      <div *ngIf="participants.length > 0">
-        <h2>Список участников:</h2>
+      <div *ngIf="participants?.length">
+        <h2>Список участников</h2>
         <mat-card class="participants">
           <ul>
             <li *ngFor="let participant of participants">
-              {{ userDetails[participant.userId]?.username }} - {{ userDetails[participant.userId]?.email }}
+              {{ userDetails![participant.userId]?.username }} - {{ userDetails![participant.userId]?.email }}
             </li>
           </ul>
         </mat-card>
