@@ -6,6 +6,10 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { User } from '../dto/user.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../services/notification.service';
+import { Notifications } from '../dto/notification.dto';
+import { switchMap } from 'rxjs';
+import { RegistrationService } from '../services/registration.service';
 
 @Component({
   selector: 'app-event-registration',
@@ -22,21 +26,52 @@ export class EventRegistrationComponent implements OnInit {
   isRegistered: boolean = false;
   message: any;
   userDetails?: { [userId: number]: { username: string, email: string } } = {};
+  notification!: Notifications[];
+  qrCode: string = '';
 
   constructor(
     private participantService: ParticipantService,
     private authService: AuthService,
     private userService: UserService,
     private route: ActivatedRoute,
-    private _snackBar: MatSnackBar
-  ) {}
+    private _snackBar: MatSnackBar,
+    private notificationService: NotificationService,
+    private registrationService: RegistrationService
+  ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.eventId = params['eventId'];
     });
     this.userId = this.authService.getCurrentUser()?.id;
-    this.isUserRegistered();
+
+    this.participantService
+    .findAllEventParticipants(this.eventId)
+    .pipe(switchMap(() => this.notificationService.findAllNotifications()))
+    .subscribe((data: Notifications[]) => {
+      this.notification = data;
+      this.updateQrCode();
+    });
+
+    this.findAllEventParticipants();
+  }
+
+  private updateQrCode(): void {
+    if (this.isRegistered) {
+      const matchingNotification = this.notification.find((item) => {
+        if (item.qrCode === null) return false;
+        return item.eventId === +this.eventId;
+      });
+
+      if (matchingNotification) {
+        this.qrCode = matchingNotification.qrCode;
+        console.log('qr', matchingNotification.qrCode);
+      } else {
+        this.registrationService.qrCode = '';
+      }
+    } else {
+      this.registrationService.qrCode = '';
+    }
   }
 
   openSnackBar(message: string) {
@@ -55,6 +90,7 @@ export class EventRegistrationComponent implements OnInit {
         this.openSnackBar('Вы успешно зарегистрировались на это событие');
         this.findAllEventParticipants();
         this.ngOnInit();
+        this.registrationService.isRegistered = true;
       },
       (error) => {
         this.openSnackBar('Вы уже зарегистрированы на это событие');
@@ -67,6 +103,13 @@ export class EventRegistrationComponent implements OnInit {
       (response: any) => {
         this.participants = response;
         this.participants?.forEach((participant: any) => {
+          console.log(participant.userId);
+          
+          if(participant.userId === this.userId) {
+            this.isRegistered = true;
+          }
+          console.log(this.isRegistered);
+          
           this.loadUser(participant.userId);
         });
       },
@@ -92,13 +135,16 @@ export class EventRegistrationComponent implements OnInit {
       (response: any) => {
         this.openSnackBar('Вы успешно отменили регистрацию на это событие');
         this.findAllEventParticipants();
-        this.ngOnInit();
+        this.isRegistered = false;
+        this.updateQrCode();
+
       },
       (error) => {
         this.message = 'Вы еще не зарегистрированы на это событие';
       }
     );
   }
+  
 
   isUserRegistered() {
     this.participantService.findEventParticipant(this.eventId, {

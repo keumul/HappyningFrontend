@@ -35,6 +35,10 @@ export class UserService {
     return this.http.post(`${this.baseUrl}/rate/${id}`, dto);
   }
 
+  findAllUserRates(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/rates`);
+  }
+
   findCurrentUserRate(): Observable<any> {
     return this.http.get(`${this.baseUrl}/myrate`);
   }

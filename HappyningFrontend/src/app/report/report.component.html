@@ -1,0 +1,32 @@
+<div class="statistics-container">
+    <mat-card class="statistics-card">
+      <mat-card-title>Статистика успеваемости</mat-card-title>
+      
+      <mat-card-content>
+        <div class="statistic-item">
+          <span>Среднее рейтинговое значение: </span>
+          <span>{{ averageRating | number: '1.2-2' }}</span>
+        </div>
+        
+        <div class="statistic-item">
+          <span>Количество участников: </span>
+          <span>{{ totalUsers }}</span>
+        </div>
+  
+        <div class="statistic-item">
+          <span>Самая высокая успевамость: </span>
+          <span>{{ highestRatedUser || 'Рейтинга нет' }}</span>
+        </div>
+  
+        <div class="statistic-item">
+          <span>Самая низка успевамость: </span>
+          <span>{{ lowestRatedUser || 'Рейтинга нет' }}</span>
+        </div>
+        <div style="display: block;">
+            <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend"></canvas>
+          </div>
+      </mat-card-content>
+      <button mat-button (click)="generateReport()">Сгенерировать отчет</button>
+    </mat-card>
+  </div>
+  

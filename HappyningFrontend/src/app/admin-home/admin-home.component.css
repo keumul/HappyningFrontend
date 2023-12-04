@@ -1,0 +1,24 @@
+.main {
+    display: flex;
+    justify-content: space-between;
+    margin: 1%;
+}
+
+.users {
+    padding: 5px;
+    margin-bottom: 10px;
+    height: 200px;
+}
+
+.categories {
+    padding: 5px;
+}
+
+.side-components {
+    flex: 0 0 30%;
+}
+
+.reports {
+    flex: 0 0 70%;
+    margin-right: 8px;
+}

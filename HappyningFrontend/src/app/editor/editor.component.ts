@@ -7,6 +7,7 @@ import { CategoryService } from '../services/category.service';
 import { Category } from '../dto/category.dto';
 import * as moment from 'moment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-editor',
@@ -32,7 +33,8 @@ export class EditorComponent implements OnInit {
     private authService: AuthService,
     private categoryService: CategoryService,
     private router: Router,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar,
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.canCheck = true;
@@ -175,6 +177,12 @@ export class EditorComponent implements OnInit {
       secretCode: this.event.secretCode,
     }).subscribe(
       (response: any) => {
+        this.notificationService.createNotification({
+          userId: this.authService.getCurrentUser()?.id,
+          eventId: response.id,
+          message: 'Вы создали событие',
+          isRead: false,
+        }).subscribe();
         this.openSnackBar('Событие успешно создано');
         this.ngOnInit();
       },

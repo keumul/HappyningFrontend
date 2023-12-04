@@ -1,0 +1,49 @@
+<div class="main">
+    <app-report class="reports"></app-report>
+
+    <div class="side-components">
+    <mat-card class="users">
+        <div *ngFor="let user of users">
+            {{user.id}}. {{user.username}} - {{user.email}} 
+            - {{rateUser(user.id)}}
+            <button mat-button (click)="deleteUser(user.id)">Удалить</button>
+        </div>
+    </mat-card>
+
+    <mat-card class="categories">
+        <mat-card-header>Категории</mat-card-header>
+      
+        <div *ngFor="let category of categories">
+          <mat-card-content>
+            {{category.id}} - {{category.title}}
+            {{category.description}}
+          </mat-card-content>
+          <div *ngIf="isEditing && selectedCategory.id === category.id">
+            <mat-form-field>
+              <mat-label>Название</mat-label>
+              <input matInput [(ngModel)]="selectedCategory.title" name="title" required>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Описание</mat-label>
+              <input matInput [(ngModel)]="selectedCategory.description" name="description">
+            </mat-form-field>
+          </div>
+          <button mat-button (click)="updateCategory(category.id)">Редактировать</button>
+          <button mat-button (click)="deleteCategory(category.id)">Удалить</button>
+        </div>
+      
+        <div *ngIf="!isEditing">
+          <mat-form-field>
+            <mat-label>Название</mat-label>
+            <input matInput [(ngModel)]="selectedCategory.title" name="title" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Описание</mat-label>
+            <input matInput [(ngModel)]="selectedCategory.description" name="description">
+          </mat-form-field>
+          <button mat-button (click)="createCategory()">Создать</button>
+        </div>
+      </mat-card>
+      
+</div>
+</div>

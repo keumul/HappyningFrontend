@@ -35,6 +35,12 @@ import { UserComponent } from './user/user.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ChatComponent } from './chat/chat.component';
+import { NotificationComponent } from './notification/notification.component';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatIconModule } from '@angular/material/icon';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { ReportComponent } from './report/report.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -54,7 +60,10 @@ import { ChatComponent } from './chat/chat.component';
     EventRegistrationComponent,
     EllipsisPipe,
     UserComponent,
-    ChatComponent
+    ChatComponent,
+    NotificationComponent,
+    AdminHomeComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +84,10 @@ import { ChatComponent } from './chat/chat.component';
     MatSnackBarModule,
     MatTooltipModule,
     MatCheckboxModule,
-    MatDialogModule
+    MatDialogModule,
+    MatBadgeModule,
+    MatIconModule,
+    NgChartsModule,
   ],
   providers: [
     [

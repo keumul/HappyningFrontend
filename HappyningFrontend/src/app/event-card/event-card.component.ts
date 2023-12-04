@@ -7,7 +7,7 @@ import { Event } from '../dto/event.dto';
 import * as moment from 'moment';
 import { UserService } from '../services/user.service';
 import { User } from '../dto/user.dto';
-import { MatDialog } from '@angular/material/dialog';
+import { Notifications } from '../dto/notification.dto';
 
 @Component({
   selector: 'app-event-card',
@@ -19,12 +19,14 @@ export class EventCardComponent implements OnInit {
   event!: Event;
   category!: Category;
   organizer!: User;
+  notification!: Notifications[];
   auxDate!: Date;
   startDate!: string;
   codeFromDatabase: string = '';
   isOverlayVisible: boolean = false;
   enteredCode: string = '';
-
+  qrCode: string = '';
+  
   constructor(
     private eventService: EventService,
     private categoryService: CategoryService,
@@ -38,6 +40,7 @@ export class EventCardComponent implements OnInit {
     this.route.params.subscribe(params => {
       id = params['eventId'];
     });
+
     this.eventService.getEventById(id).subscribe((data: Event) => {
       this.event = data;
       this.auxDate = new Date(this.event.startDate);
@@ -48,7 +51,7 @@ export class EventCardComponent implements OnInit {
         this.codeFromDatabase = this.event.secretCode;
         this.openOverlay();
       }
-    });
+    });  
   }
 
   loadCategory() {

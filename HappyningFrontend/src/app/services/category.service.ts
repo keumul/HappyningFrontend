@@ -1,19 +1,33 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Category } from '../dto/category.dto';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class CategoryService {
-    private baseUrl = 'http://localhost:5000/api/categories';
+  private baseUrl = 'http://localhost:5000/api/categories';
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-    findAllCategories() {
-        return this.http.get(`${this.baseUrl}`);
-    }
+  createCategory(dto: Category): Observable<any> {
+    return this.http.post<any>(this.baseUrl, dto);
+  }
 
-    findCategory(id: number) {
-        return this.http.get(`${this.baseUrl}/${id}`);
-    }
+  findAllCategories(): Observable<any> {
+    return this.http.get<any>(this.baseUrl);
+  }
+
+  findCategory(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
+  }
+
+  updateCategory(id: number, dto: Category): Observable<any> {
+    return this.http.patch<any>(`${this.baseUrl}/${id}`, dto);
+  }
+
+  removeCategory(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/${id}`);
+  }
 }

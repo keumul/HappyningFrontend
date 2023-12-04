@@ -25,7 +25,12 @@ export class ChatComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.chatId = params['eventId'];
       const URL = `http://localhost:5001/chat?chatId=${this.chatId}`;
-      this.socket = io(URL);
+      this.socket = io(URL,
+        { transports: ['websocket'],
+        withCredentials: true,
+        extraHeaders: {
+          'Access-Control-Allow-Origin': 'http://localhost:4200'
+        }});
       this.socket?.on('loadMessages', (messages: Message[]) => {
         this.messages = messages;
       });

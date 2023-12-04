@@ -1,0 +1,6 @@
+<div *ngFor="let notification of notifications" class="main">
+    <button mat-button *ngIf="!notification.isRead; else alreadyRead" class="notification" (click)="markNotificationAsRead(notification.id)">{{ notification.message }}</button>
+  <ng-template #alreadyRead>
+    <button class="read-notification" mat-button>{{ notification.message }}</button>
+  </ng-template>
+</div>

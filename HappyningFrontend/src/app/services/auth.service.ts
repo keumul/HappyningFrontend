@@ -14,7 +14,7 @@ export class AuthService {
     }
 
     registerUser(username: string, password: string, email: string, bday: Date) {
-        return this.http.post<any[]>(`${this.baseUrl}/signup`, { username: username, password: password, email: email, bday: bday })
+        return this.http.post<any[]>(`${this.baseUrl}/signup`, { username: username, password: password, email: email, bday: bday, isAdmin: false })
     }
 
     getToken() {

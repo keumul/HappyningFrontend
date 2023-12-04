@@ -1,0 +1,22 @@
+.notification {
+    background-color: rgba(218, 228, 166, 0.553);
+    box-shadow: none;
+    margin: 5px;
+    font-weight:lighter;
+  }
+
+.read-notification {
+    background-color: rgb(241, 241, 239);
+    box-shadow: none;
+    margin: 2px;
+    font-weight:lighter;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-weight:lighter;
+    width: 100%;
+  }

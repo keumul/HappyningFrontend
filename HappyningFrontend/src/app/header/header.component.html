@@ -1,8 +1,23 @@
-<div class="header">
-    <a href="/home" class="logo">Happyning</a>
-    <div class="header-right">
-      <a class="active" href="/home">Главная</a>
-      <a href="/profile">Профиль</a>
-      <a href="/editor">Редактор</a>
-    </div>
+<div class="header" id="scroll-header">
+  <a href="/home" class="logo">Happyning</a>
+  <div class="header-right">
+    <button mat-button (click)="openNotifications()">
+      <span *ngIf="notificationCount !== 0; else allRead" matBadge="{{notificationCount}}" matBadgeSize="small"
+        class="notification-button">Уведомления</span>
+      <ng-template #allRead>
+        <span class="notification-button">Уведомления</span>
+      </ng-template>
+      </button>
+    
+    <a class="active" href="/home">Главная</a>
+    <a href="/editor">Редактор</a>
+    <a href="/profile">Профиль</a>
   </div>
+</div>
+
+<ng-container *ngIf="showNotifications" class="notifications-container">
+  <div class="notifications-overlay" (click)="closeNotifications()"></div>
+  <mat-card class="notifications">
+    <app-notification [notifications]="notifications" (markAsRead)="markAsRead($event)"></app-notification>
+  </mat-card>
+</ng-container>
