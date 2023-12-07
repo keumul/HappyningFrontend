@@ -62,9 +62,3 @@ h2 {
     border-radius: 10px;
     background: linear-gradient(180deg, #d6e4e8, #D2DE32);
 }
-
-::ng-deep .mat-mdc-snack-bar-container.blue-snackbar {
-    --mdc-snackbar-container-color: #fcfcfc66;
-    --mat-mdc-snack-bar-button-color: #2c2c2c;
-    --mdc-snackbar-supporting-text-color: #2c2c2c;
-}

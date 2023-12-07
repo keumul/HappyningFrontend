@@ -28,18 +28,14 @@ export class LoginComponent implements OnInit {
         window.sessionStorage.setItem('access_token', data.access_token);
         this.username = ''
         this.password = ''
+        if (this.authService.getCurrentUser()?.isAdmin) {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/home']);
+        }
       }, error => {
         this.errorMessage = '*Неверный логин или пароль'
       })
-
-      this.user = this.authService.getCurrentUser();
-
-      if(this.user.isAdmin == true) {
-        this.router.navigate(['/admin']);
-      } else {
-        this.router.navigate(['/home']);
-      }
-
     } catch (error) {
       console.log(error);
     }

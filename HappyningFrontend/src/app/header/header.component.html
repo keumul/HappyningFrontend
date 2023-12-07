@@ -1,19 +1,26 @@
-<div class="header" id="scroll-header">
+<mat-toolbar class="header" id="scroll-header">
   <a href="/home" class="logo">Happyning</a>
-  <div class="header-right">
-    <button mat-button (click)="openNotifications()">
-      <span *ngIf="notificationCount !== 0; else allRead" matBadge="{{notificationCount}}" matBadgeSize="small"
-        class="notification-button">Уведомления</span>
+  <div class="buttons">
+    <button mat-icon-button (click)="openNotifications()" *ngIf="!isAdmin">
+      <span *ngIf="notificationCount !== 0; else allRead" matBadge="{{notificationCount}}" matBadgeSize="small">
+        <mat-icon>notifications</mat-icon>
+      </span>
       <ng-template #allRead>
-        <span class="notification-button">Уведомления</span>
+        <mat-icon>notifications</mat-icon>
       </ng-template>
-      </button>
-    
-    <a class="active" href="/home">Главная</a>
-    <a href="/editor">Редактор</a>
-    <a href="/profile">Профиль</a>
+    </button>
+
+    <button mat-icon-button routerLink="/editor" *ngIf="!isAdmin"><mat-icon>mode</mat-icon></button>
+    <button mat-icon-button class="menu" [matMenuTriggerFor]="menu" >
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/profile" *ngIf="!isAdmin">Профиль</button>
+      <button mat-menu-item (click)="areYouSure()">Выйти</button>
+    </mat-menu>
   </div>
-</div>
+</mat-toolbar>
 
 <ng-container *ngIf="showNotifications" class="notifications-container">
   <div class="notifications-overlay" (click)="closeNotifications()"></div>

@@ -21,7 +21,6 @@ export class EventCardComponent implements OnInit {
   organizer!: User;
   notification!: Notifications[];
   auxDate!: Date;
-  startDate!: string;
   codeFromDatabase: string = '';
   isOverlayVisible: boolean = false;
   enteredCode: string = '';
@@ -44,7 +43,6 @@ export class EventCardComponent implements OnInit {
     this.eventService.getEventById(id).subscribe((data: Event) => {
       this.event = data;
       this.auxDate = new Date(this.event.startDate);
-      this.startDate = moment().format('YYYY.MM.DD HH:MM');
       this.loadCategory();
       this.loadOrganizer();
       if (!this.event.isPublic) {

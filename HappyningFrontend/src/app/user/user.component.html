@@ -1,9 +1,13 @@
 <app-header></app-header>
-<div class="main">
+<mat-card>
+  <div class="main">
     <div class="user-info">
-        <h2>{{ currentUser.username }}</h2>
-        <p>Связь: {{ currentUser.email }}</p>
-        <p>Возраст: {{ calculateAge(currentUser.bday) }}</p>
-      </div>
-      <app-user-rating></app-user-rating>
-</div>
+      <h2 class="username">{{ currentUser.username }}</h2>
+      <div class="subinfo">
+      <p><mat-icon>mail</mat-icon> {{ currentUser.email }}</p>
+      <p><mat-icon>cake</mat-icon> {{ displayAge() }}</p>
+    </div>
+    </div>
+    <app-user-rating></app-user-rating>
+  </div>
+</mat-card>

@@ -1,43 +1,52 @@
-// event.component.ts
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../services/event.service';
 import { Router } from '@angular/router';
 import { Event } from '../dto/event.dto';
 import { AuthService } from '../services/auth.service';
-import * as moment from 'moment';
+import { ParticipantService } from '../services/participant.service';
+import { Participant } from '../dto/participant.dto';
+
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
   styleUrls: ['./event.component.css'],
 })
 export class EventComponent implements OnInit {
-  events: Event[] = [];
+  events:Participant[] = [];
+  myevents: Event[] = [];
   selectedEvent!: Event;
   eventRates: any[] = [];
   currentUser: any;
-  startDate!: string;
-  auxDate!: Date;
+  eventsDetails?: { [eventId: number]: { title: string, startDate: Date } } = {};
+  userId: number = 0;
 
   constructor(
     private eventService: EventService,
     private router: Router,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+    private participant: ParticipantService
+  ) {}
 
   ngOnInit(): void {
+    this.userId = this.authService.getCurrentUser()?.id;
+    this.loadMyEvents();
     this.loadEvents();
   }
 
-  loadEvents() {
-    let userId = this.authService.getCurrentUser()?.id;
-    this.eventService.getAllEventsByUser(userId).subscribe((data: Event[]) => {
-      this.events = data;
-      this.auxDate = new Date(this.events[0].startDate);
-      this.startDate = moment().format('YYYY.MM.DD HH:MM');
+  loadMyEvents() {
+    this.eventService.getUserEvents(this.userId).subscribe((data: Event[]) => {
+      this.myevents = data;
     })
   }
 
-  onSelectEvent(event: any) {
+  loadEvents() {
+    this.participant.findUserEvents(this.userId).subscribe((data: Participant[]) => {
+      this.events = data;
+      console.log(this.events);
+    })
+  }
+
+  onSelectEvent(event: Event) {
     this.selectedEvent = event;
     this.loadEventRates(event.id);
   }
@@ -62,5 +71,11 @@ export class EventComponent implements OnInit {
 
   redirectToEvent(eventId: number) {
     this.router.navigate([`event/${eventId}`]);
+  }
+
+  loadEvent(id: number) {
+    this.eventService.getEventById(id).subscribe((data: Event[]) => {
+      // this.eventsDetails![id] = {title: data.}
+    })
   }
 }

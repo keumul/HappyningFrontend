@@ -5,20 +5,67 @@
 }
 
 .users {
-    padding: 5px;
+    padding: 10px;
     margin-bottom: 10px;
     height: 200px;
 }
 
-.categories {
-    padding: 5px;
-}
-
 .side-components {
-    flex: 0 0 30%;
+    flex: 0 0 29%;
 }
 
 .reports {
     flex: 0 0 70%;
     margin-right: 8px;
+}
+
+.search {
+    justify-content: baseline;
+}
+
+.search-input {
+    height: 20px;
+}
+
+th {
+    text-align: left;
+}
+
+.main-button {
+    background-color: #4f4f4c31;
+    color: #2c2c2c;
+    font-weight: lighter;
+    margin: 10px;
+}
+
+mat-card.categories {
+    padding: 10px;
+}
+
+mat-card-header {
+    color: #2c2c2c;
+    font-weight: lighter;
+    font-size: 20px;
+    align-self: center;
+}
+
+mat-card-subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+mat-card-content {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+mat-button {
+    margin-right: 10px;
+}
+
+input {
+    margin-left: 10px;
+    width: 100px;
 }

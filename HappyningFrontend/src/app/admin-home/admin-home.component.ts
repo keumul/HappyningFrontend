@@ -3,6 +3,7 @@ import { UserService } from "../services/user.service";
 import { User } from "../dto/user.dto";
 import { CategoryService } from "../services/category.service";
 import { Category } from "../dto/category.dto";
+import { RateUser } from "../dto/rate-user.dto";
 
 type NewType = OnInit;
 
@@ -16,7 +17,8 @@ export class AdminHomeComponent implements NewType {
   categories!: Category[];
   selectedCategory: Category = { id: 0, title: '', description: '' };
   isEditing = false;
-  rate!: number;
+  filteredUsers: User[] = [];
+  searchValue: string = '';
 
   constructor(private userService: UserService,
     private categoryService: CategoryService) {}
@@ -30,6 +32,7 @@ export class AdminHomeComponent implements NewType {
     this.userService.findAllUsers().subscribe(
       (data: User[]) => {
         this.users = data.filter(user => !user.isAdmin);
+        this.filteredUsers = this.users;
       },
       (error) => {
         console.error('Error loading users', error);
@@ -103,15 +106,8 @@ export class AdminHomeComponent implements NewType {
     });
   }
 
-  rateUser(rateData: any) {
-  }
-
-  onGetUsersButtonClick() {
-    this.getUsersList();
-  }
-
-  onRateUserButtonClick(userId: number) {
-    this.rateUser(userId);
-    this.getUsersList();
-  }
+  applyFilter(filterValue: string) {
+    const filter = filterValue.toLowerCase();
+    this.filteredUsers = this.users.filter(user => user.id.toString().toLowerCase().includes(filter));
+  } 
 }

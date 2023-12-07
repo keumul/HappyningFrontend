@@ -41,6 +41,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { ReportComponent } from './report/report.component';
 import { NgChartsModule } from 'ng2-charts';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -88,6 +90,8 @@ import { NgChartsModule } from 'ng2-charts';
     MatBadgeModule,
     MatIconModule,
     NgChartsModule,
+    MatToolbarModule,
+    MatMenuModule
   ],
   providers: [
     [

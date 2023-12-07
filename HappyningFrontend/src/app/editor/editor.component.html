@@ -23,7 +23,7 @@
                 <div class="info-text">Местоположение</div>
                 <mat-card-content class="info-card">{{ selectedEvent.location }}</mat-card-content>
                 <div class="info-text">Дата</div>
-                <mat-card-content class="info-card">{{ selectedEvent.startDate }}</mat-card-content>
+                <mat-card-content class="info-card">{{ selectedEvent.startDate | date : "MMM d - YYY" }}</mat-card-content>
                 <div class="info-text">Допустимое количество участников</div>
                 <mat-card-content class="info-card">{{ selectedEvent.maxGuestAmount }}</mat-card-content>
                 <div class="info-text">Категория</div>

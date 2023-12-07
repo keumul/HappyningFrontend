@@ -1,6 +1,20 @@
-.mat-card-title {
+mat-card-title {
   font-size: 20px;
   font-weight: 500;
+  margin-top: 10px;
+  text-align: center;
+}
+
+mat-card-subtitle {
+  font-size: 12px;
+  font-weight: 400;
   margin-bottom: 10px;
-  align-content: center;
+  text-align: center;
+}
+
+button {
+  align-self: center;
+  background-color: #D2DE32;
+  width: 200px;
+  font-weight: lighter;
 }

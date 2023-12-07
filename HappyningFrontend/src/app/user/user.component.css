@@ -1,30 +1,53 @@
-/* Ваши стили могут выглядеть по-разному, вот пример простых стилей */
 .main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-  }
-  
-  .user-info {
-    text-align: left;
-    margin-left: 20px;
-  }
-  
-  .username {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .email {
-    font-size: 16px;
-    color: #777;
-  }
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
-  app-user-rating {
-    padding: 10px;
-    text-align: center;
-    width: 600px;
-  }
-  
+.user-info {
+  text-align: center;
+  margin-right: 20px; 
+}
+
+.subinfo {
+  text-align: left;
+}
+
+.username {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #bec92e;
+}
+
+.email {
+  font-size: 16px;
+  color: #777;
+}
+
+app-user-rating {
+  text-align: center;
+  width: 600px;
+  margin-left: 10%;
+}
+
+mat-icon {
+  font-size: 26px;
+  color: #2c2c2c58;
+}
+
+p {
+  font-weight: lighter;
+  color: #2c2c2c;
+  margin: 2;
+}
+
+mat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: center;
+  width: 100%;
+}

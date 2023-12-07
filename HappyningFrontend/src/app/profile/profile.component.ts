@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../dto/user.dto';
 import { UserService } from '../services/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile',
@@ -9,31 +10,28 @@ import { UserService } from '../services/user.service';
 })
 export class ProfileComponent implements OnInit {
   currentUser!: User;
-  bdayFormatted!: string;
   ageMessage!: string;
   exitMessage!: string;
   isExitMessageShown!: boolean;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.userService.whoAmI().subscribe((user) => {
       this.currentUser = user;
-      this.formatDate();
       this.calculateAgeMessage();
     });
   }
 
-  formatDate(): void {
-    if (this.currentUser.bday) {
-      const date = new Date(this.currentUser.bday);
-      this.bdayFormatted = date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      });
-    }
+  openSnackBar(message: string) {
+    this._snackBar.open(message, '', {
+      duration: 2000,
+      panelClass: ['blue-snackbar']
+    })
   }
+
 
   calculateAgeMessage(): void {
     if (this.currentUser.bday) {
@@ -49,14 +47,9 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  showText(): void {
-    this.exitMessage = 'Пользователь, ты уверен, что хочешь уйти?';
-    this.isExitMessageShown = true;
-   
-  }
-
-  hideText(): void {
-    this.exitMessage = '';
-    this.isExitMessageShown = false;
+  updateUser(): void {
+    this.userService.updateUser(this.currentUser.id, this.currentUser).subscribe(() => {
+      this.openSnackBar('Данные успешно обновлены');
+    });
   }
 }

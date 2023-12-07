@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ParticipantService } from '../services/participant.service';
 import { Participant } from '../dto/participant.dto';
-import { UserService } from '../services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { User } from '../dto/user.dto';
@@ -10,6 +9,9 @@ import { NotificationService } from '../services/notification.service';
 import { Notifications } from '../dto/notification.dto';
 import { switchMap } from 'rxjs';
 import { RegistrationService } from '../services/registration.service';
+import { EventService } from '../services/event.service';
+import { Event } from '../dto/event.dto';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-event-registration',
@@ -28,10 +30,12 @@ export class EventRegistrationComponent implements OnInit {
   userDetails?: { [userId: number]: { username: string, email: string } } = {};
   notification!: Notifications[];
   qrCode: string = '';
+  event!: Event;
 
   constructor(
     private participantService: ParticipantService,
     private authService: AuthService,
+    private eventService: EventService,
     private userService: UserService,
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
@@ -46,14 +50,18 @@ export class EventRegistrationComponent implements OnInit {
     this.userId = this.authService.getCurrentUser()?.id;
 
     this.participantService
-    .findAllEventParticipants(this.eventId)
-    .pipe(switchMap(() => this.notificationService.findAllNotifications()))
-    .subscribe((data: Notifications[]) => {
-      this.notification = data;
-      this.updateQrCode();
-    });
+      .findAllEventParticipants(this.eventId)
+      .pipe(switchMap(() => this.notificationService.findAllNotifications()))
+      .subscribe((data: Notifications[]) => {
+        this.notification = data;
+        this.updateQrCode();
+      });
 
     this.findAllEventParticipants();
+
+    this.eventService.getEventById(this.eventId).subscribe((data: Event) => {
+      this.event = data;
+    });
   }
 
   private updateQrCode(): void {
@@ -82,20 +90,29 @@ export class EventRegistrationComponent implements OnInit {
   }
 
   addParticipant(): void {
-    this.participantService.addParticipant({
-      eventId: this.eventId,
-      userId: this.userId
-    }).subscribe(
-      (response: any) => {
-        this.openSnackBar('Вы успешно зарегистрировались на это событие');
-        this.findAllEventParticipants();
-        this.ngOnInit();
-        this.registrationService.isRegistered = true;
-      },
-      (error) => {
-        this.openSnackBar('Вы уже зарегистрированы на это событие');
-      }
-    );
+    if (this.event.maxGuestAmount <= this.participants!.length) {
+      
+      this.openSnackBar('Достигнуто максимальное количество участников');
+      return;
+    } else if (this.userId === this.event.organizerId) {
+      this.openSnackBar('Вы не можете зарегистрироваться на свое же событие :)');
+      return;
+    } else {
+      this.participantService.addParticipant({
+        eventId: this.eventId,
+        userId: this.userId
+      }).subscribe(
+        (response: any) => {
+          this.openSnackBar('Вы успешно зарегистрировались на это событие');
+          this.findAllEventParticipants();
+          this.ngOnInit();
+          this.registrationService.isRegistered = true;
+        },
+        (error) => {
+          this.openSnackBar('Вы уже зарегистрированы на это событие');
+        }
+      );
+    }
   }
 
   findAllEventParticipants(): void {
@@ -103,13 +120,9 @@ export class EventRegistrationComponent implements OnInit {
       (response: any) => {
         this.participants = response;
         this.participants?.forEach((participant: any) => {
-          console.log(participant.userId);
-          
-          if(participant.userId === this.userId) {
+          if (participant.userId === this.userId) {
             this.isRegistered = true;
           }
-          console.log(this.isRegistered);
-          
           this.loadUser(participant.userId);
         });
       },
@@ -144,7 +157,7 @@ export class EventRegistrationComponent implements OnInit {
       }
     );
   }
-  
+
 
   isUserRegistered() {
     this.participantService.findEventParticipant(this.eventId, {

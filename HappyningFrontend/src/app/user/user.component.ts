@@ -38,5 +38,13 @@ export class UserComponent implements OnInit {
   
     return age;
   }
+
+  displayAge() {
+    var age = this.calculateAge(this.currentUser.bday);
+
+    var yearsText = ( age % 10 === 1 && age % 100 !== 11) ? "год" : (age % 10 >= 2 && age % 10 <= 4 && (age % 100 < 10 || age % 100 >= 20)) ? "года" : "лет";
+
+    return age + " " + yearsText;
+}
   
 }

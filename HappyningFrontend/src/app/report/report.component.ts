@@ -19,7 +19,27 @@ export class ReportComponent implements OnInit {
   barChartOptions: any = {
     scaleShowVerticalLines: false,
     responsive: true,
+    scales: {
+      xAxes: [{
+        ticks: {
+          beginAtZero: true,
+        },
+      }],
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+        },
+      }],
+    },
+    legend: {
+      display: true,
+    },
+    backgroundColor: 'rgba(210,222,50, 0.2)',
+    hoverBackgroundColor: 'rgba(210,222,50, 0.4)',
+    borderColor: 'rgba(210,222,50, 1)',
+    borderWidth: 1,
   };
+
   barChartLabels: string[] = [];
   barChartType: string = 'bar';
   barChartLegend: boolean = true;
@@ -89,8 +109,8 @@ export class ReportComponent implements OnInit {
   
       Средняя успеваемость: ${this.averageRating || 'N/A'}
       Всего участников: ${this.totalUsers}
-      Самая высокая успевамость: ${this.highestRatedUser || 'N/A'}
-      Самая низкая успеваемость: ${this.lowestRatedUser || 'N/A'}
+      Самая высокая успевамость (ID): ${this.highestRatedUser || 'N/A'}
+      Самая низкая успеваемость (ID): ${this.lowestRatedUser || 'N/A'}
   
       Рейтинги пользователей:
       ${this.barChartLabels.map((username, index) => `${index + 1}. ${username}: ${this.barChartData[0].data[index]}`).join('\n')}`;
