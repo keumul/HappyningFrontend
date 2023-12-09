@@ -10,6 +10,8 @@
       </ng-template>
     </button>
 
+    <button mat-icon-button routerLink="/home" *ngIf="!isAdmin"><mat-icon>home</mat-icon></button>
+    
     <button mat-icon-button routerLink="/editor" *ngIf="!isAdmin"><mat-icon>mode</mat-icon></button>
     <button mat-icon-button class="menu" [matMenuTriggerFor]="menu" >
       <mat-icon>account_circle</mat-icon>

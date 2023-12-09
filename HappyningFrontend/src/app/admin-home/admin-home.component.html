@@ -34,9 +34,9 @@
       <mat-card-header>Редактор категорий</mat-card-header>
       <mat-card-subtitle>* По умолчанию категория 'Без категории'</mat-card-subtitle>
       <div *ngFor="let category of categories">
-        <mat-card-content>
-          {{category.id}} - {{category.title}}
-          {{category.description}}
+        <mat-card-content matTooltip="Описание: {{category.description}}">
+          {{category.id}}. {{category.title}}
+          <p>Количество привязанных событий: {{ categoryEventCounts[category.id] || 0 }}</p>
         </mat-card-content>
         <div *ngIf="isEditing && selectedCategory.id === category.id">
           <input [(ngModel)]="selectedCategory.title" name="title" placeholder="Название" required>

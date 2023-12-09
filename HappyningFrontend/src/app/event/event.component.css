@@ -24,7 +24,8 @@ button {
     align-content: center;
     display: list-item;
     margin-left: 15px;
-    background-color: rgb(244, 245, 247);
+    margin-bottom: 2px;
+    background-color: #e7e7e4ac;
     width: 90%;
     font-weight: 20;
     color: #2c2c2c;
@@ -48,4 +49,12 @@ button {
 .scrollable-card::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: linear-gradient(180deg, #d6e4e8, #D2DE32);
+}
+
+p {
+    font-size: 14px;
+    font-weight: lighter;
+    color: #bcb2b2;
+    margin: 10px;
+    text-align: center;
 }

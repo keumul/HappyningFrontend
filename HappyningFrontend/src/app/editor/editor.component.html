@@ -23,7 +23,7 @@
                 <div class="info-text">Местоположение</div>
                 <mat-card-content class="info-card">{{ selectedEvent.location }}</mat-card-content>
                 <div class="info-text">Дата</div>
-                <mat-card-content class="info-card">{{ selectedEvent.startDate | date : "MMM d - YYY" }}</mat-card-content>
+                <mat-card-content class="info-card">{{ selectedEvent.startDate | date : "MMM d h" }}</mat-card-content>
                 <div class="info-text">Допустимое количество участников</div>
                 <mat-card-content class="info-card">{{ selectedEvent.maxGuestAmount }}</mat-card-content>
                 <div class="info-text">Категория</div>
@@ -61,7 +61,7 @@
             <div class="info-text-input">Категория</div>
             <mat-form-field>
                 <mat-select [(ngModel)]="selectedEvent.categoryId">
-                    <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                    <mat-option *ngFor="let cat of categories" [value]="cat.id" matTooltip="{{ category.description }}">
                         {{ cat.title }}
                     </mat-option>
                 </mat-select>

@@ -12,25 +12,37 @@ import { Participant } from '../dto/participant.dto';
   styleUrls: ['./event.component.css'],
 })
 export class EventComponent implements OnInit {
-  events:Participant[] = [];
+  events: Participant[] = [];
   myevents: Event[] = [];
+  allEvents: Event[] = [];
   selectedEvent!: Event;
   eventRates: any[] = [];
   currentUser: any;
   eventsDetails?: { [eventId: number]: { title: string, startDate: Date } } = {};
   userId: number = 0;
+  startDateFilter: Date | null = null;
+  locationFilter: string | null = null;
+  categoryFilter: string | null = null;
 
   constructor(
     private eventService: EventService,
     private router: Router,
     private authService: AuthService,
     private participant: ParticipantService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userId = this.authService.getCurrentUser()?.id;
     this.loadMyEvents();
     this.loadEvents();
+    this.loadAllEvents();
+  }
+
+  loadAllEvents() {
+    this.eventService.getAllEvents().subscribe((data: Event[]) => {
+      this.allEvents = data;
+      this.applyFilters();
+    })
   }
 
   loadMyEvents() {
@@ -73,9 +85,13 @@ export class EventComponent implements OnInit {
     this.router.navigate([`event/${eventId}`]);
   }
 
-  loadEvent(id: number) {
-    this.eventService.getEventById(id).subscribe((data: Event[]) => {
-      // this.eventsDetails![id] = {title: data.}
-    })
+  applyFilters() {
+    this.allEvents = this.allEvents.filter(event => this.passesFilter(event));
+  }
+  
+  passesFilter(event: any): boolean {
+    return (!this.startDateFilter || event.event.startDate >= this.startDateFilter)
+      && (!this.locationFilter || event.event.location.includes(this.locationFilter))
+      && (!this.categoryFilter || event.event.category === this.categoryFilter);
   }
 }

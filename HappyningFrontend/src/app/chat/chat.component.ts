@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { Message } from '../dto/message.dto';
 import { Socket, io } from 'socket.io-client';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EventService } from '../services/event.service';
+import { Event } from '../dto/event.dto';
 
 @Component({
   selector: 'app-chat',
@@ -14,55 +17,111 @@ export class ChatComponent implements OnInit {
   newMessage: string = '';
   chatId: number = 0;
   currentUser: any;
-
+  lastMessageSentTime: number = 0;
+  currentLatency: number = 0;
+  organizerId: number = 0;
+  isOrganizer: boolean = false;
+  adminLatency: number = 0;
   private socket: Socket | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService) { }
+    private userService: UserService,
+    private _snackBar: MatSnackBar,
+    private eventService: EventService
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.chatId = params['eventId'];
       const URL = `http://localhost:5001/chat?chatId=${this.chatId}`;
-      this.socket = io(URL,
-        { transports: ['websocket'],
+      this.socket = io(URL, {
+        transports: ['websocket'],
         withCredentials: true,
         extraHeaders: {
           'Access-Control-Allow-Origin': 'http://localhost:4200'
-        }});
+        }
+      });
       this.socket?.on('loadMessages', (messages: Message[]) => {
         this.messages = messages;
+        console.log(this.messages);
+        
       });
-
       this.socket?.on('newMessage', (message: any) => {
         this.messages.push(message);
       });
-
     });
 
     this.userService.whoAmI().subscribe((user) => {
       this.currentUser = user;
-    })
+      this.getUserInfo();
+    });
+  }
+
+  getUserInfo() {
+    this.eventService.getEventById(this.chatId).subscribe((event: Event) => {
+      this.organizerId = event.organizerId;
+
+      if (+this.currentUser.id === this.organizerId) {
+        this.isOrganizer = true;
+      }
+    });
+  }
+
+  changeLatency() {
+    const currentTime = new Date().getTime();
+    const message = {
+      chat: this.chatId,
+      user: {
+        id: this.currentUser.id,
+        username: this.currentUser.username
+      },
+      message: `Временная задержка изменена на ${this.currentLatency} секунд`,
+      createdAt: new Date(),
+      latency: this.currentLatency
+    };
+
+    this.adminLatency = +this.currentLatency;
+    this.newMessage = '';
+    this.socket?.emit('writeMessage', message);
+    this.lastMessageSentTime = currentTime;
+
+    this._snackBar.open(`Временная задержка изменена на ${this.currentLatency} секунд`, '', {
+      duration: 3000,
+    });
   }
 
   sendMessage() {
     if (this.newMessage.trim()) {
-      const message = {
-        chat: this.chatId,
-        user: {
-          id: this.currentUser.id,
-          username: this.currentUser.username
-        },
-        message: this.newMessage,
-        createdAt: new Date()
-      };
+      const currentTime = new Date().getTime();
+      const timeSinceLastMessage = currentTime - this.lastMessageSentTime;
 
-      console.log(message);
+      for(let i = 0; i < this.messages.length; i++) {
+        if (this.messages[i].user.id === this.organizerId) {
+          this.adminLatency = this.messages[i].latency;
+        }
+      }
 
-      this.newMessage = '';
-      this.socket?.emit('writeMessage', message);
+      if (timeSinceLastMessage >= (this.adminLatency * 1000)) {
+        const message = {
+          chat: this.chatId,
+          user: {
+            id: this.currentUser.id,
+            username: this.currentUser.username
+          },
+          message: this.newMessage,
+          createdAt: new Date(),
+          latency: this.adminLatency
+        };
+
+        this.newMessage = '';
+        this.socket?.emit('writeMessage', message);
+        this.lastMessageSentTime = currentTime;
+      } else {
+        this._snackBar.open(`Подождите ${this.adminLatency} секунд перед отправкой сообщения`, '', {
+          duration: 3000,
+        });
+      }
     }
   }
-
 }

@@ -31,6 +31,7 @@ export class EventRegistrationComponent implements OnInit {
   notification!: Notifications[];
   qrCode: string = '';
   event!: Event;
+  openCaptcha: boolean = false;
 
   constructor(
     private participantService: ParticipantService,
@@ -51,7 +52,7 @@ export class EventRegistrationComponent implements OnInit {
 
     this.participantService
       .findAllEventParticipants(this.eventId)
-      .pipe(switchMap(() => this.notificationService.findAllNotifications()))
+      .pipe(switchMap(() => this.notificationService.findAllUserNotifications(this.userId)))
       .subscribe((data: Notifications[]) => {
         this.notification = data;
         this.updateQrCode();
@@ -87,6 +88,27 @@ export class EventRegistrationComponent implements OnInit {
       duration: 2000,
       panelClass: ['blue-snackbar']
     });
+  }
+
+  customCaptcha() {
+    const num1 = Math.floor(Math.random() * 10);
+    const num2 = Math.floor(Math.random() * 10);
+    const question = `${num1} + ${num2}`;
+    const answer = num1 + num2;
+    return { question, answer };
+  }
+
+  tryToAddParticipant() {
+    this.openCaptcha = true;
+    const { question, answer } = this.customCaptcha();
+    const userAnswer = prompt(`Пожалуйста, решите простое математическое уравнение: ${question}`);
+    if (userAnswer === null) return;
+    if (+userAnswer === answer) {
+      this.addParticipant();
+      this.openCaptcha = false;
+    } else {
+      this.openSnackBar('Неверный ответ');
+    }
   }
 
   addParticipant(): void {

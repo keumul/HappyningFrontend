@@ -3,7 +3,8 @@ import { UserService } from "../services/user.service";
 import { User } from "../dto/user.dto";
 import { CategoryService } from "../services/category.service";
 import { Category } from "../dto/category.dto";
-import { RateUser } from "../dto/rate-user.dto";
+import { Event } from "../dto/event.dto";
+import { EventService } from "../services/event.service";
 
 type NewType = OnInit;
 
@@ -14,18 +15,24 @@ type NewType = OnInit;
 })
 export class AdminHomeComponent implements NewType {
   users!: User[];
+  events!: Event[];
   categories!: Category[];
   selectedCategory: Category = { id: 0, title: '', description: '' };
   isEditing = false;
   filteredUsers: User[] = [];
   searchValue: string = '';
+  categoryEventCounts: { [categoryId: number]: number } = {};
 
-  constructor(private userService: UserService,
-    private categoryService: CategoryService) {}
+  constructor(
+    private userService: UserService,
+    private categoryService: CategoryService,
+    private eventSerice: EventService) {}
 
   ngOnInit(): void {
     this.getUsersList();
     this.loadCategories();
+    this.loadEvents();
+    this.calculateCategoryEventCounts();
   }
 
   getUsersList() {
@@ -51,10 +58,24 @@ export class AdminHomeComponent implements NewType {
     );
   }
 
+  loadEvents(): void {
+    this.eventSerice.getAllEvents().subscribe(
+      (data: Event[]) => {
+        this.events = data;
+        this.calculateCategoryEventCounts();
+      },
+      (error) => {
+        console.error('Error loading events', error);
+      }
+    );
+  }
+
   updateCategory(id: number): void {
     this.categoryService.updateCategory(id, this.selectedCategory).subscribe(
       () => {
         this.loadCategories();
+        this.loadEvents();
+        this.calculateCategoryEventCounts();
         this.selectedCategory = { id: 0, title: '', description: '' };
       },
       (error) => {
@@ -82,6 +103,8 @@ export class AdminHomeComponent implements NewType {
       this.categoryService.createCategory(this.selectedCategory).subscribe(
         () => {
           this.loadCategories();
+          this.loadEvents();
+          this.calculateCategoryEventCounts();
         },
         (error) => {
           console.error('Error creating category', error);
@@ -89,6 +112,16 @@ export class AdminHomeComponent implements NewType {
       );
     }
   }
+
+  calculateCategoryEventCounts(): void {
+    this.categoryEventCounts = {};
+    this.categories.forEach((category) => {
+      const eventsForCategory = this.events.filter((event) => event.categoryId === category.id);
+      this.categoryEventCounts[category.id] = eventsForCategory.length;
+      console.log(this.categoryEventCounts);
+    });
+  }
+  
 
   startEditing(category: Category): void {
     this.selectedCategory = { ...category };

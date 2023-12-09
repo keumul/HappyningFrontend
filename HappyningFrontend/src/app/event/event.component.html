@@ -1,13 +1,19 @@
 <mat-card class="scrollable-card">
   <mat-card-title>События</mat-card-title>
 
-  <mat-card-title class="subtitle">*вы организатор*</mat-card-title>
+  <mat-card-title class="subtitle">Вы организатор</mat-card-title>
+  <div *ngIf="myevents === null || myevents!.length === 0">
+    <p>Событий нет.</p>
+  </div>
   <button mat-button *ngFor="let event of myevents" (click)="redirectToEvent(event.id)">
     {{ event.title | ellipsis: 15 }}
     {{ event.startDate | date :"MMM d - h:mm a"}}
   </button>
 
-  <mat-card-title class="subtitle">*вы участник*</mat-card-title>
+  <mat-card-title class="subtitle" *ngIf="events">Вы участник</mat-card-title>
+  <div *ngIf="events === null || events!.length === 0">
+    <p>Событий нет.</p>
+  </div>
     <button mat-button *ngFor="let event of events" (click)="redirectToEvent(event.eventId)">
       {{ event.event.title | ellipsis: 15}}
       {{ event.event.startDate | date :"MMM d - h:mm a" }}
@@ -17,3 +23,25 @@
     <h3>Selected Event: {{ selectedEvent.title }}</h3>
   </div>
 </mat-card>
+
+<!-- <mat-card>
+  <mat-card-title>Фильтры</mat-card-title>
+  <mat-form-field>
+    <input matInput placeholder="Дата" type="date" [(ngModel)]="startDateFilter">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Местоположение" [(ngModel)]="locationFilter">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Категория" [(ngModel)]="categoryFilter">
+  </mat-form-field>
+  <button mat-button (click)="applyFilters()">Применить фильтр</button>
+</mat-card>
+
+<mat-card *ngIf="allEvents.length > 0">
+  <mat-card-title>Отфильтрованные события</mat-card-title>
+  <button mat-button *ngFor="let event of allEvents" (click)="redirectToEvent(event.id)">
+    {{ event.title | ellipsis: 15 }}
+    {{ event.startDate | date :"MMM d - h:mm a" }}
+  </button>
+</mat-card> -->

@@ -8,11 +8,11 @@
             <div class="message-header" *ngIf="message.user.id !== currentUser.id">
                 {{ message.user.username }}
             </div>
-                <span class="message-date">{{
-                    message.createdAt | date : "MMM d, h:mm a"
-                    }}</span>
-                <div class="message-content">{{ message.message }}</div>
-           
+            <span class="message-date">{{
+                message.createdAt | date : "MMM d, h:mm a"
+                }}</span>
+            <div class="message-content">{{ message.message }}</div>
+
         </div>
     </div>
     <div class="input-container">
@@ -20,5 +20,12 @@
         <button mat-button (click)="sendMessage()" class="send-button" [disabled]="newMessage === ''">
             Отправить
         </button>
+    </div>
+
+    <div *ngIf="isOrganizer" class="latency-main">
+        <div>Определите секундный интервал отправки 1 сообщения</div>
+        <input [(ngModel)]="currentLatency" type="number" class="latency" />
+        <span> секунд</span>
+        <button mat-button (click)="changeLatency()" class="latency-button">ОК</button>
     </div>
 </div>

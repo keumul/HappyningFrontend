@@ -8,7 +8,8 @@
                 </mat-card-header>
                 <div class="scrollable-card">
                     <div class="info-text">Описание</div>
-                    <mat-card-content class="info-card">{{ event.description }}</mat-card-content>
+                    <mat-card-content class="info-card" matTooltip="{{ event.description }}">{{ event.description |
+                        ellipsis: 100}}</mat-card-content>
                     <div class="info-text">Местонахождение</div>
                     <mat-card-content class="info-card">{{ event.location }}</mat-card-content>
                     <div class="info-text">Дата</div>
@@ -21,7 +22,7 @@
                         </button>
                     </div>
                     <div class="info-text">Категория</div>
-                    <mat-card-content class="info-card">{{ category.title }}</mat-card-content>
+                    <mat-card-content class="info-card" matTooltip="{{ category.description }}">{{ category.title }}</mat-card-content>
                 </div>
             </mat-card>
             <app-event-registration></app-event-registration>

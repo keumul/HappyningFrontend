@@ -13,7 +13,7 @@ export class NotificationComponent {
   constructor(private notificationService: NotificationService) { }
 
   markNotificationAsRead(id: number): void {
-    this.notificationService.pickNotification(id.toString()).subscribe(
+    this.notificationService.pickNotification(id).subscribe(
       (data) => {
         this.markAsRead.emit(id);
       },

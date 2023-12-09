@@ -14,20 +14,11 @@ export class NotificationService {
     return this.http.post(`${this.baseUrl}`, notificationDto);
   }
 
-  findAllNotifications(): Observable<any> {
-    return this.http.get(`${this.baseUrl}`);
+  findAllUserNotifications(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/user/${id}`);
   }
 
-  pickNotification(id: string): Observable<any> {
+  pickNotification(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/${id}`);
   }
-
-  revertNotification(id: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${id}/revert`);
-  }
-
-  removeNotification(id: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`);
-  }
-
 }

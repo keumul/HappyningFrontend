@@ -3,6 +3,7 @@ import { UserService } from '../services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { RateUser } from '../dto/rate-user.dto';
 import { NavigationEnd, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-rating',
@@ -17,43 +18,43 @@ export class UserRatingComponent implements OnInit {
   newComment: string = "";
   currentUser!: number;
 
-  constructor(private userService: UserService, 
+  constructor(private userService: UserService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private _snackBar: MatSnackBar,) { }
 
-    ngOnInit(): void {
-      this.route.params.subscribe(params => {
-        this.userId = params['userId'] ? +params['userId'] : undefined;
-        this.loadUserRating();
-      });
-    
-      this.router.events.subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          this.route.paramMap.subscribe(params => {
-            const userId = params.get('id');
-            this.userId = userId ? +userId : undefined;
-            this.loadUserRating();
-          });
-        }
-      });
+  ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.userId = params['userId'] ? +params['userId'] : undefined;
+      this.loadUserRating();
+    });
 
-      this.userService.whoAmI().subscribe((user) => {
-        this.currentUser = user.id;
-      });
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.route.paramMap.subscribe(params => {
+          const userId = params.get('id');
+          this.userId = userId ? +userId : undefined;
+          this.loadUserRating();
+        });
+      }
+    });
 
-      if(this.userId && this.userId != this.currentUser) {
+    this.userService.whoAmI().subscribe((user) => {
+      this.currentUser = user.id;
+      if (this.userId && this.userId != this.currentUser) {
         this.canRate = true;
       } else {
         this.canRate = false;
       }
+    });
 
-      this.loadUserRating();
-    }
-    
+    this.loadUserRating();
+  }
+
 
   loadUserRating() {
     if (this.userId) {
-      this.userService.viewUserRate(this.userId).subscribe( (data: RateUser[]) => {
+      this.userService.viewUserRate(this.userId).subscribe((data: RateUser[]) => {
         this.userRate = data;
       });
     } else {
@@ -67,20 +68,6 @@ export class UserRatingComponent implements OnInit {
     });
   }
 
-  // removeRate() {
-  //   if (this.userId) {
-  //     // Если есть id, удаляем рейтинг для конкретного пользователя
-  //     this.userService.removeUserRate(this.userId).subscribe(() => {
-  //       this.loadUserRating(); // Обновляем рейтинг после удаления
-  //     });
-  //   } else {
-  //     // В противном случае удаляем рейтинг текущего пользователя
-  //     this.userService.removeCurrentUserRate().subscribe(() => {
-  //       this.currentUserRate(); // Обновляем рейтинг после удаления
-  //     });
-  //   }
-  // }
-
   calculateAverageRating(): number {
     if (this.userRate && this.userRate.length > 0) {
       const totalRating = this.userRate.reduce((sum, rate) => sum + rate.rate, 0);
@@ -88,6 +75,13 @@ export class UserRatingComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, '', {
+      duration: 2000,
+      panelClass: ['blue-snackbar']
+    })
   }
 
   starsArray(): number[] {
@@ -100,15 +94,15 @@ export class UserRatingComponent implements OnInit {
         rate: this.newRating,
         message: this.newComment
       }).subscribe((response) => {
-        console.log('Rating submitted successfully', response);
+        this.openSnackBar('Вы успешно оставили отзыв');
         this.loadUserRating();
         this.newRating = 5;
         this.newComment = "";
       },
-      (error) => {
-        console.error('Error submitting rating', error);
-      }
-    );
+        (error) => {
+          this.openSnackBar('Что-то пошло не так');
+        }
+      );
     }
   }
 }

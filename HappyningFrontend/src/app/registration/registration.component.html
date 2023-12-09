@@ -1,4 +1,4 @@
-<form>
+<form *ngIf="!isLogin">
     <mat-card>
         <mat-card-header>
             <mat-card-title>Happyning</mat-card-title>
@@ -28,3 +28,5 @@
         <button mat-button (click)="registerUser()">Зарегистрироваться</button>
     </mat-card>
 </form>
+
+<app-login *ngIf="isLogin"></app-login>

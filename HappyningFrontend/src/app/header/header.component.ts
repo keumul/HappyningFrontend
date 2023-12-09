@@ -3,6 +3,8 @@ import { NotificationService } from '../services/notification.service';
 import { Notifications } from '../dto/notification.dto';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { User } from '../dto/user.dto';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -14,19 +16,24 @@ export class HeaderComponent implements OnInit {
   showNotifications = false;
   notificationCount = 0;
   isAdmin = false;
+  currentUser!: User;
 
   constructor(
     private notificationService: NotificationService,
     private authService: AuthService,
+    private userService: UserService,
     private router: Router) { }
 
   ngOnInit() {
+    this.userService.whoAmI().subscribe((user) => {
+      this.currentUser = user;
+      this.isAdmin = this.currentUser.isAdmin;
+    });
     this.loadNotifications();
-    this.isAdmin = this.authService.getCurrentUser()?.isAdmin;
   }
 
   loadNotifications() {
-    this.notificationService.findAllNotifications().subscribe(
+    this.notificationService.findAllUserNotifications(this.currentUser.id).subscribe(
       (data: Notifications) => {
 
         this.notifications = Array.isArray(data) ? data : [];
@@ -49,7 +56,6 @@ export class HeaderComponent implements OnInit {
       this.notificationCount--;
     }
     this.ngOnInit();
-    console.log(`Marking notification ${id} as read`);
   }
 
   openNotifications(): void {

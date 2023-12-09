@@ -1,38 +1,71 @@
-<div class="statistics-container">
-    <mat-card class="statistics-card">
-      <mat-card-title>Статистика успеваемости</mat-card-title>
-      <mat-card-subtitle>* В статистику входят только оцененные пользователи</mat-card-subtitle>
-      <button mat-button (click)="generateReport()">Сгенерировать отчет</button>
-      <mat-card-content>
-        <div class="statistic-item">
-          <span>Среднее рейтинговое значение: </span>
-          <span>{{ averageRating | number: '1.2-2' }}</span>
-        </div>
-        
-        <div class="statistic-item">
-          <span>Количество участников: </span>
-          <span>{{ totalUsers }}</span>
-        </div>
-  
-        <div class="statistic-item">
-          <span>Самая высокая успевамость (ID): </span>
-          <span>{{ highestRatedUser || 'Рейтинга нет' }}</span>
-        </div>
-  
-        <div class="statistic-item">
-          <span>Самая низкая успевамость (ID): </span>
-          <span>{{ lowestRatedUser || 'Рейтинга нет' }}</span>
-        </div>
-        <div style="display: block;">
-            <canvas baseChart 
-            [datasets]="barChartData" 
-            [labels]="barChartLabels" 
-            [options]="barChartOptions" 
-            [plugins]="barChartPlugins" 
-            [legend]="barChartLegend"></canvas>
+<mat-tab-group>
+  <div class="statistics-container">
+    <mat-tab label="Статистика успеваемости">
+      <mat-card class="statistics-card">
+        <mat-card-title>Статистика успеваемости</mat-card-title>
+        <mat-card-subtitle>* В статистику входят пользователи, имеющие не менее 1 оценки</mat-card-subtitle>
+        <button mat-button (click)="generateUserReport()">Сгенерировать отчет</button>
+        <mat-card-content>
+          <div class="statistic-item">
+            <span>Количество участников: </span>
+            <span>{{ totalUsers }}</span>
           </div>
-      </mat-card-content>
-     
-    </mat-card>
+
+          <div class="statistic-item">
+            <span>Самая высокая успевамость (ID): </span>
+            <span>{{ highestRatedUser || 'Рейтинга нет' }}</span>
+          </div>
+
+          <div class="statistic-item">
+            <span>Самая низкая успевамость (ID): </span>
+            <span>{{ lowestRatedUser || 'Рейтинга нет' }}</span>
+          </div>
+          <div style="display: block;">
+            <canvas baseChart 
+                  [datasets]="userRatingsChartData" 
+                  [labels]="userRatingsChartLabels" 
+                  [options]="userRatingsChartOptions"
+                  [plugins]="barChartPlugins" 
+                  [legend]="barChartLegend"></canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
   </div>
+
+  <mat-tab label="Статистика событий">
+  <mat-card class="statistics-card">
+        <mat-card-title>Статистика событий</mat-card-title>
+    <mat-card-subtitle>* В статистику входят события, на которые зарегистрировано не менее 1 пользователя</mat-card-subtitle>
+        <button mat-button (click)="generateEventReport()">Сгенерировать отчет</button>
+        <mat-card-content>
+          <div class="statistic-item">
+            <span>Общее количество событий: </span>
+            <span>{{ totalEvents }}</span>
+          </div>
+
+          <div class="statistic-item">
+            <span>Самое популярное событие: </span>
+            <span>{{ mostPopularEvent || 'Нет данных' }}</span>
+          </div>
+
+          <div class="statistic-item">
+            <span>Самое непопулярное событие: </span>
+            <span>{{ leastPopularEvent || 'Нет данных' }}</span>
+          </div>
+        </mat-card-content>
+    <mat-card class="statistics-card">
+      <div style="display: block;">
+        <canvas baseChart
+                [datasets]="eventsChartData"
+                [labels]="eventsChartLabels"
+                [options]="eventsChartOptions"
+                [plugins]="barChartPlugins"
+                [legend]="barChartLegend">
+        </canvas>
+      </div>
+    </mat-card>
+    </mat-card>
+  </mat-tab>
   
+</mat-tab-group>

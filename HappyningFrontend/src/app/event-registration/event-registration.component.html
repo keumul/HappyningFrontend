@@ -1,6 +1,6 @@
 <div class="event-container">
     <div class="message"> {{ message }} </div>
-    <button (click)="addParticipant()">Зарегистрироваться</button>
+    <button (click)="tryToAddParticipant()">Зарегистрироваться</button>
     <div>
       <button (click)="removeEventParticipant()">Отменить регистрацию</button>
       <div *ngIf="participants?.length">
