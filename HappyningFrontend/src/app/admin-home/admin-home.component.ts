@@ -20,7 +20,7 @@ export class AdminHomeComponent implements NewType {
   selectedCategory: Category = { id: 0, title: '', description: '' };
   isEditing = false;
   filteredUsers: User[] = [];
-  searchValue: string = '';
+  searchValue: number = 0;
   categoryEventCounts: { [categoryId: number]: number } = {};
 
   constructor(
@@ -85,6 +85,10 @@ export class AdminHomeComponent implements NewType {
   }
 
   deleteCategory(id: number): void {
+    if(this.categoryEventCounts[id] > 0) {
+      alert('Нельзя удалить категорию, к которой привязаны события');
+      return;
+    }
     this.categoryService.removeCategory(id).subscribe(
       () => {
         this.loadCategories();
@@ -139,8 +143,8 @@ export class AdminHomeComponent implements NewType {
     });
   }
 
-  applyFilter(filterValue: string) {
-    const filter = filterValue.toLowerCase();
+  applyFilter(filterValue: number) {
+    const filter = filterValue.toString().toLowerCase();
     this.filteredUsers = this.users.filter(user => user.id.toString().toLowerCase().includes(filter));
   } 
 }

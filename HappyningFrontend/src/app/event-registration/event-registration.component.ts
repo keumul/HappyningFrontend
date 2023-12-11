@@ -22,6 +22,7 @@ export class EventRegistrationComponent implements OnInit {
 
   participant!: Participant;
   participants?: Participant[];
+  participantsFullInfo: Participant[] = [];
   user!: User;
   eventId!: number;
   userId!: number;
@@ -32,6 +33,9 @@ export class EventRegistrationComponent implements OnInit {
   qrCode: string = '';
   event!: Event;
   openCaptcha: boolean = false;
+  isOrganizer: boolean = false;
+  filteredUsers: Participant[] = [];
+  searchValue: number = 0;
 
   constructor(
     private participantService: ParticipantService,
@@ -62,6 +66,10 @@ export class EventRegistrationComponent implements OnInit {
 
     this.eventService.getEventById(this.eventId).subscribe((data: Event) => {
       this.event = data;
+      if(this.userId === this.event.organizerId) {
+        this.isOrganizer = true;
+        this.displayParticipantList();
+      }
     });
   }
 
@@ -113,7 +121,6 @@ export class EventRegistrationComponent implements OnInit {
 
   addParticipant(): void {
     if (this.event.maxGuestAmount <= this.participants!.length) {
-      
       this.openSnackBar('Достигнуто максимальное количество участников');
       return;
     } else if (this.userId === this.event.organizerId) {
@@ -195,4 +202,25 @@ export class EventRegistrationComponent implements OnInit {
       }
     );
   }
+
+  displayParticipantList() {
+    this.participantService.findAllEventParticipants(this.eventId).subscribe(
+      (response: any) => {
+        this.participantsFullInfo = response;
+        this.filteredUsers = this.participantsFullInfo;
+      },
+      (error) => {
+        this.message = 'Что-то пошло не так';
+      }
+    );
+  }
+
+  applyFilter(filterValue: number) {
+    const filter = filterValue.toString().toLowerCase();
+    console.log(filter);
+    
+    this.filteredUsers = this.participantsFullInfo.filter(user => user.userId.toString().toLowerCase().includes(filter));
+    console.log(this.filteredUsers);
+    
+  } 
 }

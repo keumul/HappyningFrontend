@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { UserService } from '../services/user.service';
 import { User } from '../dto/user.dto';
 import { Notifications } from '../dto/notification.dto';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-event-card',
@@ -17,8 +18,10 @@ import { Notifications } from '../dto/notification.dto';
 
 export class EventCardComponent implements OnInit {
   event!: Event;
+  userId!: number;
   category!: Category;
   organizer!: User;
+  isOrganizer: boolean = false;
   notification!: Notifications[];
   auxDate!: Date;
   codeFromDatabase: string = '';
@@ -30,6 +33,7 @@ export class EventCardComponent implements OnInit {
     private eventService: EventService,
     private categoryService: CategoryService,
     private userService: UserService,
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -39,12 +43,16 @@ export class EventCardComponent implements OnInit {
     this.route.params.subscribe(params => {
       id = params['eventId'];
     });
+    this.userId = this.authService.getCurrentUser()?.id;
 
     this.eventService.getEventById(id).subscribe((data: Event) => {
       this.event = data;
       this.auxDate = new Date(this.event.startDate);
       this.loadCategory();
       this.loadOrganizer();
+      if(this.userId === this.event.organizerId) {
+        this.isOrganizer = true;
+      }
       if (!this.event.isPublic) {
         this.codeFromDatabase = this.event.secretCode;
         this.openOverlay();

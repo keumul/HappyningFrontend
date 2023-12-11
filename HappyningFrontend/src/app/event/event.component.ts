@@ -5,6 +5,8 @@ import { Event } from '../dto/event.dto';
 import { AuthService } from '../services/auth.service';
 import { ParticipantService } from '../services/participant.service';
 import { Participant } from '../dto/participant.dto';
+import { CategoryService } from '../services/category.service';
+import { Category } from '../dto/category.dto';
 
 @Component({
   selector: 'app-event',
@@ -14,7 +16,11 @@ import { Participant } from '../dto/participant.dto';
 export class EventComponent implements OnInit {
   events: Participant[] = [];
   myevents: Event[] = [];
+  originalEvents: Event[] = [];
+  filteredEvents: Event[] = [];
   allEvents: Event[] = [];
+  categories: Category[] = [];
+  category!: Category;
   selectedEvent!: Event;
   eventRates: any[] = [];
   currentUser: any;
@@ -23,12 +29,14 @@ export class EventComponent implements OnInit {
   startDateFilter: Date | null = null;
   locationFilter: string | null = null;
   categoryFilter: string | null = null;
-
+  isFilter = false;
+  showFilteredResult: boolean = false;
   constructor(
     private eventService: EventService,
     private router: Router,
     private authService: AuthService,
-    private participant: ParticipantService
+    private participant: ParticipantService,
+    private categoryService: CategoryService
   ) { }
 
   ngOnInit(): void {
@@ -36,11 +44,27 @@ export class EventComponent implements OnInit {
     this.loadMyEvents();
     this.loadEvents();
     this.loadAllEvents();
+    this.loadCategories();
+    this.clearFilters();
+
+    this.showFilteredResult = false;
+  }
+  
+  filterOn() {
+      this.isFilter = !this.isFilter;
+      this.clearFilters();
+  }
+
+  loadCategories() {
+    this.categoryService.findAllCategories().subscribe((data: any) => {
+      this.categories = data;
+    })
   }
 
   loadAllEvents() {
     this.eventService.getAllEvents().subscribe((data: Event[]) => {
       this.allEvents = data;
+      this.originalEvents = data.slice();
       this.applyFilters();
     })
   }
@@ -86,12 +110,41 @@ export class EventComponent implements OnInit {
   }
 
   applyFilters() {
-    this.allEvents = this.allEvents.filter(event => this.passesFilter(event));
+    this.showFilteredResult = true;
+    this.filteredEvents = this.allEvents.filter(event => this.passesFilter(event));
   }
-  
+
   passesFilter(event: any): boolean {
-    return (!this.startDateFilter || event.event.startDate >= this.startDateFilter)
-      && (!this.locationFilter || event.event.location.includes(this.locationFilter))
-      && (!this.categoryFilter || event.event.category === this.categoryFilter);
+    const eventStartDate = new Date(event.startDate);
+    const filterStartDate = this.startDateFilter?.toISOString();
+    
+    console.log('Filtering:', event);
+    console.log('StartDate Filter:', this.startDateFilter);
+    console.log('Location Filter:', this.locationFilter);
+    console.log('Category Filter:', this.categoryFilter);
+  
+    const passes = 
+      (!filterStartDate || eventStartDate >= new Date(filterStartDate)) &&
+      (!this.locationFilter || event.location.includes(this.locationFilter)) &&
+      (!this.categoryFilter || event.categoryId === this.categoryFilter);
+  
+    console.log('Passes Filter:', passes);
+    return passes;
+  }
+
+  loadCategory(id: number) {
+    this.categoryService.findCategory(id).subscribe((data: any) => {
+      this.category = data;
+    })
+  }
+
+  clearFilters() {
+    this.startDateFilter = null;
+    this.locationFilter = null;
+    this.categoryFilter = null;
+    this.allEvents = this.originalEvents.slice();
+    this.applyFilters();
+    this.filteredEvents = [];
+    this.showFilteredResult = false;
   }
 }

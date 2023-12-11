@@ -1,4 +1,7 @@
-<mat-card class="scrollable-card">
+<mat-checkbox class="checkbox" (change)="filterOn()"><mat-icon>filter_alt</mat-icon>
+</mat-checkbox>
+
+<mat-card class="scrollable-card" *ngIf="!isFilter">
   <mat-card-title>События</mat-card-title>
 
   <mat-card-title class="subtitle">Вы организатор</mat-card-title>
@@ -14,34 +17,50 @@
   <div *ngIf="events === null || events!.length === 0">
     <p>Событий нет.</p>
   </div>
-    <button mat-button *ngFor="let event of events" (click)="redirectToEvent(event.eventId)">
-      {{ event.event.title | ellipsis: 15}}
-      {{ event.event.startDate | date :"MMM d - h:mm a" }}
-    </button>
+  <button mat-button *ngFor="let event of events" (click)="redirectToEvent(event.eventId)">
+    {{ event.event.title | ellipsis: 15}}
+    {{ event.event.startDate | date :"MMM d - h:mm a" }}
+  </button>
 
   <div *ngIf="selectedEvent">
     <h3>Selected Event: {{ selectedEvent.title }}</h3>
   </div>
 </mat-card>
 
-<!-- <mat-card>
-  <mat-card-title>Фильтры</mat-card-title>
-  <mat-form-field>
-    <input matInput placeholder="Дата" type="date" [(ngModel)]="startDateFilter">
+<mat-card *ngIf="isFilter" class="main-filters">
+  <mat-card-title><mat-icon>filter_alt</mat-icon></mat-card-title>
+  <mat-form-field class="filters">
+    <mat-label class="filters">Дата события</mat-label>
+    <input matInput [(ngModel)]="startDateFilter" name="Дата" [matDatepicker]="picker">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field class="filters">
     <input matInput placeholder="Местоположение" [(ngModel)]="locationFilter">
   </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="Категория" [(ngModel)]="categoryFilter">
+  <mat-form-field class="filters">
+    <mat-label class="filters">Выберите категорию</mat-label>
+    <mat-select [(ngModel)]="categoryFilter">
+      <mat-option *ngFor="let cat of categories" [value]="cat.id" [matTooltip]="cat.description" class="filters">
+        {{ cat.title }}
+      </mat-option>
+    </mat-select>
   </mat-form-field>
-  <button mat-button (click)="applyFilters()">Применить фильтр</button>
-</mat-card>
-
-<mat-card *ngIf="allEvents.length > 0">
-  <mat-card-title>Отфильтрованные события</mat-card-title>
-  <button mat-button *ngFor="let event of allEvents" (click)="redirectToEvent(event.id)">
-    {{ event.title | ellipsis: 15 }}
-    {{ event.startDate | date :"MMM d - h:mm a" }}
+  <button mat-button (click)="applyFilters()" style="background-color: rgb(236, 247, 210);"
+    [disabled]="!startDateFilter && !locationFilter && !categoryFilter" class="filters">
+    Применить фильтры
   </button>
-</mat-card> -->
+  <div *ngIf="startDateFilter || locationFilter || categoryFilter" class="filters-input">
+    <button mat-button (click)="clearFilters()" style="background-color: rgb(219, 220, 218);"
+      [disabled]="!startDateFilter && !locationFilter && !categoryFilter" class="filters">
+      Сбросить фильтры
+    </button>
+    <mat-card-title>Cобытия</mat-card-title>
+    <div class="filtered-events-card">
+      <button mat-button *ngFor="let event of filteredEvents" (click)="redirectToEvent(event.id)" class="filters">
+        {{ event.title | ellipsis: 15 }}
+        {{ event.startDate | date :"MMM d - h:mm a" }}
+      </button>
+    </div>
+  </div>
+</mat-card>

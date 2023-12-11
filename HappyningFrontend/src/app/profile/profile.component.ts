@@ -9,18 +9,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  user!: User;
   currentUser!: User;
   ageMessage!: string;
+  message!: string;
   exitMessage!: string;
-  isExitMessageShown!: boolean;
 
   constructor(
     private userService: UserService,
-    private _snackBar: MatSnackBar) {}
+    private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.userService.whoAmI().subscribe((user) => {
       this.currentUser = user;
+      this.user = user;
       this.calculateAgeMessage();
     });
   }
@@ -31,7 +33,6 @@ export class ProfileComponent implements OnInit {
       panelClass: ['blue-snackbar']
     })
   }
-
 
   calculateAgeMessage(): void {
     if (this.currentUser.bday) {
@@ -48,8 +49,20 @@ export class ProfileComponent implements OnInit {
   }
 
   updateUser(): void {
+
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(this.currentUser.email)) {
+      this.message = 'Введите корректный email.';
+      return;
+    }
+
     this.userService.updateUser(this.currentUser.id, this.currentUser).subscribe(() => {
       this.openSnackBar('Данные успешно обновлены');
-    });
+      this.message = '';
+    },
+      (error) => {
+        this.message = error.error.message;
+      }
+    )
   }
 }

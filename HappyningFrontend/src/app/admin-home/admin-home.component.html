@@ -4,10 +4,11 @@
 
   <div class="side-components">
     <mat-card class="users">
-      <div class="search">
-        <input [(ngModel)]="searchValue" placeholder="ID" class="search-input">
-        <button mat-button (click)="applyFilter(searchValue)" class="search-button"><mat-icon>search</mat-icon></button>
+      <div class="search">ID
+        <input [(ngModel)]="searchValue" class="search-input" type="number" min="0">
+        <button mat-icon-button (click)="applyFilter(searchValue)" class="search-button"><mat-icon>search</mat-icon></button>
       </div>
+      <div class="user-table">
       <table>
         <thead>
           <tr>
@@ -28,14 +29,15 @@
           </tr>
         </tbody>
       </table>
+    </div>
     </mat-card>
 
     <mat-card class="categories">
       <mat-card-header>Редактор категорий</mat-card-header>
       <mat-card-subtitle>* По умолчанию категория 'Без категории'</mat-card-subtitle>
       <div *ngFor="let category of categories">
-        <mat-card-content matTooltip="Описание: {{category.description}}">
-          {{category.id}}. {{category.title}}
+        <mat-card-content matTooltip="{{category.title}} - {{category.description}}">
+          {{category.id}}. {{category.title | ellipsis: 20}}
           <p>Количество привязанных событий: {{ categoryEventCounts[category.id] || 0 }}</p>
         </mat-card-content>
         <div *ngIf="isEditing && selectedCategory.id === category.id">

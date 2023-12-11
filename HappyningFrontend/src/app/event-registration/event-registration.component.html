@@ -15,5 +15,31 @@
       </div>
     </div>
     <img class="qrcode" src="{{qrCode}}" alt="">
+    <mat-card *ngIf="isOrganizer">
+      <h2 class="organizer-list-title">Расширенный список</h2>
+      <div class="search"><span>UserID</span>
+        <input [(ngModel)]="searchValue" placeholder="UserID" class="search-input" type="number" min="0">
+        <button mat-icon-button (click)="applyFilter(searchValue)" class="search-button"><mat-icon>search</mat-icon></button>
+      </div>
+      <div class="organizer-list-table">
+      <table>
+        <thead>
+          <tr>
+            <th>UserID</th>
+            <th>EventID</th>
+            <th>Информация</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let participant of filteredUsers">
+            <td>{{ participant.userId }}</td>
+            <td>{{ eventId }}</td>
+            <td>{{ userDetails![participant.userId]?.username }} - {{ userDetails![participant.userId]?.email }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </mat-card>
+     
   </div>
   

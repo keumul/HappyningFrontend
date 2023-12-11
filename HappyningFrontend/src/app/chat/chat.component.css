@@ -32,13 +32,13 @@
     border-radius: 10px;
     margin-bottom: 10px;
     padding: 10px;
+    max-width: 400px;
 }
 
 .currentUser {
     background-color: rgba(220, 232, 201, 0.587);
     font-weight: lighter;
     align-self: flex-end;
-    
 }
 
 .otherUser {

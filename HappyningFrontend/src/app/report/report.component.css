@@ -12,6 +12,14 @@ mat-card-subtitle {
   text-align: center;
 }
 
+p {
+  font-size: 14px;
+  font-weight: lighter;
+  color: #bcb2b2;
+  margin: 10px;
+  text-align: center;
+}
+
 button {
   align-self: center;
   background-color: #D2DE32;

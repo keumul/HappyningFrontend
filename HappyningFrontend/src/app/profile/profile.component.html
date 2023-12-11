@@ -19,14 +19,17 @@
 
             <mat-form-field>
                 <mat-label>Почта</mat-label>
-                <input matInput [(ngModel)]="currentUser.email" type="email">
+                <input matInput [(ngModel)]="currentUser.email" type="email" email>
             </mat-form-field>
 
             <mat-form-field>
                 <mat-label>Пароль</mat-label>
-                <input matInput [(ngModel)]="currentUser.password" type="password" required>
+                <input matInput [(ngModel)]="currentUser.password" type="password">
             </mat-form-field>
 
+            <p class="age-message">
+                {{message}}
+            </p>
             <button mat-raised-button (click)="updateUser()">Сохранить</button>
         </mat-card-content>
 

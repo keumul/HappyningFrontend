@@ -20,7 +20,6 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private notificationService: NotificationService,
-    private authService: AuthService,
     private userService: UserService,
     private router: Router) { }
 
@@ -28,8 +27,8 @@ export class HeaderComponent implements OnInit {
     this.userService.whoAmI().subscribe((user) => {
       this.currentUser = user;
       this.isAdmin = this.currentUser.isAdmin;
+      this.loadNotifications();
     });
-    this.loadNotifications();
   }
 
   loadNotifications() {

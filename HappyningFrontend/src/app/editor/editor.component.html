@@ -14,20 +14,24 @@
         <mat-card class="main-card">
             <div *ngIf="selectedEvent">
                 <mat-card-header class="event-title">
-                    <div>{{ selectedEvent.title }}</div>
+                    <div matTooltip="{{ selectedEvent.title }}">{{ selectedEvent.title | ellipsis: 40}}</div>
                 </mat-card-header>
                 <div class="info-text">Описание</div>
                 <div class="scrollable-card">
-                    <mat-card-content class="info-card">{{ selectedEvent.description }}</mat-card-content>
+                    <mat-card-content class="info-card" matTooltip="{{ selectedEvent.description }}">
+                        {{ selectedEvent.description | ellipsis: 70}}
+                    </mat-card-content>
                 </div>
                 <div class="info-text">Местоположение</div>
-                <mat-card-content class="info-card">{{ selectedEvent.location }}</mat-card-content>
+                <mat-card-content class="info-card" matTooltip="{{ selectedEvent.location }}">
+                    {{ selectedEvent.location | ellipsis: 70}}
+                </mat-card-content>
                 <div class="info-text">Дата</div>
                 <mat-card-content class="info-card">{{ selectedEvent.startDate | date : "MMM d h" }}</mat-card-content>
                 <div class="info-text">Допустимое количество участников</div>
                 <mat-card-content class="info-card">{{ selectedEvent.maxGuestAmount }}</mat-card-content>
                 <div class="info-text">Категория</div>
-                <mat-card-content class="info-card">{{ category.title }}</mat-card-content>
+                <mat-card-content class="info-card" matTooltip="{{ category.description }}">{{ category.title | ellipsis: 70}}</mat-card-content>
                 <div class="info-text">Уровень доступа</div>
                 <mat-card-content class="info-card">{{ accessLevel }}</mat-card-content>
             </div>
@@ -61,8 +65,8 @@
             <div class="info-text-input">Категория</div>
             <mat-form-field>
                 <mat-select [(ngModel)]="selectedEvent.categoryId">
-                    <mat-option *ngFor="let cat of categories" [value]="cat.id" matTooltip="{{ category.description }}">
-                        {{ cat.title }}
+                    <mat-option *ngFor="let cat of categories" [value]="cat.id" matTooltip="{{ cat.description }}">
+                        {{ cat.title | ellipsis: 20}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
