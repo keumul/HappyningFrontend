@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private notificationService: NotificationService,
     private userService: UserService,
+    private authService: AuthService,
     private router: Router) { }
 
   ngOnInit() {
@@ -67,7 +68,7 @@ export class HeaderComponent implements OnInit {
   }
 
   menuExitAccount() {
-    localStorage.removeItem('currentUser');
+    this.authService.logout();
     this.router.navigate(['/auth']);
   }
 

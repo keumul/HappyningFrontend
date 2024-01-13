@@ -43,8 +43,8 @@ import { ReportComponent } from './report/report.component';
 import { NgChartsModule } from 'ng2-charts';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
-import { EventFilterPipe } from './filter.pipe';
 import { MatTabsModule } from '@angular/material/tabs';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -63,12 +63,12 @@ import { MatTabsModule } from '@angular/material/tabs';
     EditorComponent,
     EventRegistrationComponent,
     EllipsisPipe,
-    EventFilterPipe,
     UserComponent,
     ChatComponent,
     NotificationComponent,
     AdminHomeComponent,
-    ReportComponent
+    ReportComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,

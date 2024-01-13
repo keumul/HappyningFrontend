@@ -1,5 +1,6 @@
-<app-header></app-header>
-<div class="main">
+<app-header *ngIf="isAdmin"></app-header>
+<app-error *ngIf="!isAdmin"></app-error>
+<div class="main" *ngIf="isAdmin">
   <app-report class="reports"></app-report>
 
   <div class="side-components">

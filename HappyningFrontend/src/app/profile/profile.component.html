@@ -6,7 +6,7 @@
     <div class="main">
         <mat-card-content class="inputs">
             <div class="info">
-                <p><span class="aux">Имя:</span> {{ currentUser.username }}</p>
+                <p matTooltip="{{ currentUser.username }}"><span class="aux">Имя:</span> {{ currentUser.username | ellipsis: 20 }}</p>
                 <p><span class="aux">Почта:</span> {{ currentUser.email }}</p>
                 <p><span class="aux">День рождения:</span> {{ currentUser.bday | date : "MMM d - YYY"}}</p>
                 <p class="age-message">{{ageMessage}}</p>

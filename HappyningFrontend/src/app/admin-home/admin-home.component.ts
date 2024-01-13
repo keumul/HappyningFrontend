@@ -5,6 +5,8 @@ import { CategoryService } from "../services/category.service";
 import { Category } from "../dto/category.dto";
 import { Event } from "../dto/event.dto";
 import { EventService } from "../services/event.service";
+import { AuthService } from "../services/auth.service";
+import { Router } from "@angular/router";
 
 type NewType = OnInit;
 
@@ -22,17 +24,35 @@ export class AdminHomeComponent implements NewType {
   filteredUsers: User[] = [];
   searchValue: number = 0;
   categoryEventCounts: { [categoryId: number]: number } = {};
+  isAdmin: boolean = false;
+  isUser: boolean = false;
 
   constructor(
     private userService: UserService,
     private categoryService: CategoryService,
-    private eventSerice: EventService) {}
+    private eventSerice: EventService,
+    private authService: AuthService,
+    private router: Router) {}
 
   ngOnInit(): void {
+    this.checkCredentials();
     this.getUsersList();
     this.loadCategories();
     this.loadEvents();
     this.calculateCategoryEventCounts();
+  }
+
+  checkCredentials() {
+    try {
+        if (this.authService.getCurrentUser()?.isAdmin) {
+          this.isAdmin = true;
+        } else {
+          this.isAdmin = false;
+          this.isUser = true;
+        }
+      } catch (error) {
+      console.log(error);
+    }
   }
 
   getUsersList() {

@@ -156,11 +156,12 @@ export class EditorComponent implements OnInit {
   }
 
   createEvent() {
-    if (this.selectedEvent.startDate < new Date(moment.now())) {
+    if (this.event.startDate < new Date(moment.now())) {
+      console.log(this.event.startDate, new Date(moment.now()));
+      
       this.openSnackBar('Нельзя создать событие в прошлом');
       return;
     }
-
     if(!this.event.isPublic && this.event.secretCode == '') {
       this.openSnackBar('При создании частного события необходимо указать секретный код');
       return;
@@ -190,9 +191,11 @@ export class EditorComponent implements OnInit {
         if (this.selectedEvent.title.length >= 20) {
           this.openSnackBar('Заголовок недопустимой длины (максимум 20 символов)');
           return;
-        } else {
+        }
+        else {
           this.openSnackBar(error.error.message);
         }
+
       }
     );
   }
