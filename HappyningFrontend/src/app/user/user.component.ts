@@ -28,23 +28,20 @@ export class UserComponent implements OnInit {
   calculateAge(birthdate: Date): number {
     const today = new Date();
     const birthdateDate = new Date(birthdate);
-  
+
     let age = today.getFullYear() - birthdateDate.getFullYear();
     const monthDiff = today.getMonth() - birthdateDate.getMonth();
-  
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdateDate.getDate())) {
       age--;
     }
-  
+
     return age;
   }
 
   displayAge() {
     var age = this.calculateAge(this.currentUser.bday);
+    return age + "y.o.";
+  }
 
-    var yearsText = ( age % 10 === 1 && age % 100 !== 11) ? "год" : (age % 10 >= 2 && age % 10 <= 4 && (age % 100 < 10 || age % 100 >= 20)) ? "года" : "лет";
-
-    return age + " " + yearsText;
-}
-  
 }

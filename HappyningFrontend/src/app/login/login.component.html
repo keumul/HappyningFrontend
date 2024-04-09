@@ -1,4 +1,4 @@
-<form>
+<!-- <form>
     <mat-card>
         <mat-card-header>
             <mat-card-title>Happyning</mat-card-title>
@@ -15,4 +15,83 @@
           <div class="error">{{errorMessage}}</div>
         <button mat-button (click)="checkCredentials()">Вход</button>
     </mat-card>
-</form>
+</form> -->
+
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <a class="flex items-center justify-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+      href="#">
+      <span
+        class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">Happy</span>ning
+    </a>
+    <h4 class="mt-13 text-center font-bold leading-9 tracking-tight text-gray-700">Sign in to your account</h4>
+  </div>
+
+
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form class="space-y-6" action="#" method="POST">
+      <div *ngIf="!isActivationCode">
+        <div>
+          <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+          <div class="mt-2">
+            <input id="username" name="username" type="username" autocomplete="username" [(ngModel)]="username" required
+              class="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-800 
+          ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
+          focus:ring-inset focus:ring-indigo-300 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mt-4">
+            <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+            <div class="text-sm">
+              <a href="#" class="font-bold text-indigo-400 hover:text-indigo-400">Forgot password?</a>
+            </div>
+          </div>
+          <div class="mt-2">
+            <input id="password" name="password" type="password" [(ngModel)]="password" autocomplete="current-password"
+              required class="block w-full rounded-md border-0 py-1.5 text-gray-900 pl-3
+          ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
+          focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+        <div class="text-pink-400">{{errorMessage}}</div>
+        <div >
+          <button type="submit" (click)="activationCodeStatus()" class="flex w-full justify-center mt-10 rounded-md 
+        bg-gradient-to-r from-green-400 via-pink-400 to-purple-400 px-3 py-1.5 
+        text-sm font-semibold leading-6 text-white shadow-sm 
+        hover:bg-gradient-to-r hover:from-green-300 hover:via-pink-300 hover:to-purple-300 
+        focus-visible:outline focus-visible:outline-2">Sign in</button>
+        </div>
+      </div>
+
+      <div *ngIf="isActivationCode">
+        <div>
+          <label for="activationCode" class="block text
+        -sm font-medium leading-6 text-gray-900">Activation code</label>
+          <div class="mt-2">
+            <input id="activationCode" name="activationCode" type="activationCode" autocomplete="activationCode"
+              [(ngModel)]="activationCode" required class="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-800 
+          ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
+          focus:ring-inset focus:ring-indigo-300 sm:text-sm sm:leading-6">
+          </div>
+          <label for="activationCode" class="block text
+        -sm font-medium leading-6 text-indigo-400">Check your email and copy/paste activation code</label>
+        </div>
+        <div class="text-pink-400" >{{errorMessage}}</div>
+        <div>
+          <button type="submit" (click)="checkCredentials(activationCode)" class="flex w-full justify-center mt-10 rounded-md
+        bg-gradient-to-r from-green-400 via-pink-400 to-purple-400 px-3 py-1.5
+        text-sm font-semibold leading-6 text-white shadow-sm
+        hover:bg-gradient-to-r hover:from-green-300 hover:via-pink-300 hover:to-purple-300
+        focus-visible:outline focus-visible:outline-2">Submit</button>
+        </div>
+      </div>
+
+    </form>
+
+    <p class="mt-10 text-center text-sm text-gray-900">
+      Not a member?
+      <a routerLink="/registration" class="font-semibold leading-6 text-indigo-400 hover:text-indigo-400">Start a 14 day free trial</a>
+    </p>
+  </div>

@@ -16,22 +16,16 @@ export class ProfileComponent implements OnInit {
   exitMessage!: string;
 
   constructor(
-    private userService: UserService,
-    private _snackBar: MatSnackBar) { }
+    private userService: UserService) { }
 
   ngOnInit(): void {
     this.userService.whoAmI().subscribe((user) => {
       this.currentUser = user;
       this.user = user;
       this.calculateAgeMessage();
+      console.log(this.currentUser);
+      
     });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, '', {
-      duration: 2000,
-      panelClass: ['blue-snackbar']
-    })
   }
 
   calculateAgeMessage(): void {
@@ -41,7 +35,7 @@ export class ProfileComponent implements OnInit {
       const age = today.getFullYear() - birthDate.getFullYear();
 
       if (age < 16) {
-        this.ageMessage = 'Настоятельно рекомендуем перед посещением любого мероприятия ставить в известность ответственных взрослых!';
+        this.ageMessage = 'Recommended age is 16+';
       } else {
         this.ageMessage = '';
       }
@@ -52,12 +46,11 @@ export class ProfileComponent implements OnInit {
 
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(this.currentUser.email)) {
-      this.message = 'Введите корректный email.';
+      this.message = 'Enter a valid email address';
       return;
     }
 
     this.userService.updateUser(this.currentUser.id, this.currentUser).subscribe(() => {
-      this.openSnackBar('Данные успешно обновлены');
       this.message = '';
     },
       (error) => {

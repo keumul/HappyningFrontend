@@ -1,4 +1,4 @@
-.chat-container {
+/* .chat-container {
     font-weight: lighter;
     display: flex;
     flex-direction: column;
@@ -100,4 +100,24 @@ button {
     font-weight: 20;
     width: 50px;
     height: 20px;
+} */
+
+/* .currentUser {
+    background-color: #F3F4F6;
+    box-shadow: inset;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    padding: 5px;
+    max-width: 400px;
+    align-self: flex-end;
 }
+
+.otherUser {
+    background-color: #E5E7EB;
+    box-shadow: inset;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    padding: 5px;
+    max-width: 400px;
+    align-self: flex-start;
+} */

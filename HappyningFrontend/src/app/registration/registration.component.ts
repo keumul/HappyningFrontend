@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-registration',
@@ -9,26 +10,29 @@ import { Router } from '@angular/router';
 })
 export class RegistrationComponent implements OnInit {
   isLogin: boolean = false;
-  successMessage?: string;
   errorMessage?: string;
   username!: string;
   password!: string;
   email!: string;
   bday!: Date;
+  role: string = "user";
+  currentDate = new Date();
+  bdayForm!: FormGroup;
 
   ngOnInit(): void {
     this.errorMessage = ''
-    this.successMessage = ''
   }
   constructor(private authService: AuthService) { }
 
   registerUser() {
     try {
       if (this.bday >= new Date()) {
-        this.errorMessage = 'Некорректная дата'
+        this.errorMessage = 'Invalid birthday'
         return
       }
-      this.authService.registerUser(this.username, this.password, this.email, this.bday).subscribe(data => { 
+      console.log(this.bday);
+      this.bday = new Date(this.bday);
+      this.authService.registerUser(this.username, this.password, this.email, this.bday, this.role).subscribe(data => {
         this.errorMessage = ''
         this.username = ''
         this.password = ''
@@ -36,16 +40,13 @@ export class RegistrationComponent implements OnInit {
         this.bday = new Date()
         this.isLogin = true;
       }, err => {
-        if (err.status == 403) {
-          this.errorMessage = 'Такой пользователь уже существует'
-          return
-        } else if (err.status == 400) {
-          this.errorMessage = 'Некорректные данные'
-          return
-        } 
+        this.errorMessage = err.error.message
+        console.log(err);
+        
       })
     } catch (error) {
       console.log(error);
+      
     }
 
   }

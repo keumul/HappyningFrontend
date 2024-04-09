@@ -1,5 +1,46 @@
-<app-header></app-header>
-<mat-card>
+<body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" style="background-image: url('');">
+  <div class="h-full">
+
+    <app-header></app-header>
+    <hr class="mt-6 mb-6">
+    <div class="mt-5 relative isolate overflow-hidden bg-white px-6 py-24 sm:py-16 lg:overflow-visible lg:px-0">
+      <div
+        class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+        <div
+          class="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+          <div class="lg:max-w-lg">
+            <div
+              class="text-4xl flex items-center no-underline hover:no-underline font-bold lg:text-4xl leading-7 text-gray-700">
+              It's&nbsp;
+              <span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500 ">
+                {{currentUser.username}}
+              </span>
+            </div>
+            <label class="text-lg font-bold text-green-500"> &#10022; Organizer</label>
+            <div class="max-w-xl text-base text-gray-700 lg:max-w-lg">
+              <ul role="list" class="mt-8 space-y-8 text-gray-600">
+                <li class="flex gap-x-3">
+                  &#9993; {{currentUser.email}}
+                </li>
+                <li class="flex gap-x-3 text-gray">
+                  🎂 {{currentUser.bday | date: 'dd.MM.yyyy'}}
+                  <span class="text-pink-400 font-bold">{{displayAge()}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="-ml-12 -mt-24 p-12 lg:sticky lg:top-4 lg:col-start-2 
+        lg:row-span-2 lg:row-start-1">
+          <app-user-rating></app-user-rating>
+        </div>
+        <div class="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full">
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<!-- <mat-card>
   <div class="main">
     <div class="user-info">
       <h2 class="username">{{ currentUser.username }}</h2>
@@ -10,4 +51,4 @@
     </div>
     <app-user-rating></app-user-rating>
   </div>
-</mat-card>
+</mat-card> -->

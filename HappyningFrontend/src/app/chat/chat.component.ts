@@ -76,7 +76,7 @@ export class ChatComponent implements OnInit {
         id: this.currentUser.id,
         username: this.currentUser.username
       },
-      message: `Временная задержка изменена на ${this.currentLatency} секунд`,
+      message: `The time delay has been changed to ${this.currentLatency} seconds`,
       createdAt: new Date(),
       latency: this.currentLatency
     };
@@ -86,7 +86,7 @@ export class ChatComponent implements OnInit {
     this.socket?.emit('writeMessage', message);
     this.lastMessageSentTime = currentTime;
 
-    this._snackBar.open(`Временная задержка изменена на ${this.currentLatency} секунд`, '', {
+    this._snackBar.open(`The time delay has been changed to ${this.currentLatency} seconds`, '', {
       duration: 3000,
     });
   }
@@ -118,7 +118,7 @@ export class ChatComponent implements OnInit {
         this.socket?.emit('writeMessage', message);
         this.lastMessageSentTime = currentTime;
       } else {
-        this._snackBar.open(`Подождите ${this.adminLatency} секунд перед отправкой сообщения`, '', {
+        this._snackBar.open(`Wait ${this.adminLatency} seconds before sending a message`, '', {
           duration: 3000,
         });
       }

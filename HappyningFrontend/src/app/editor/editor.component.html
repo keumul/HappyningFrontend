@@ -1,4 +1,4 @@
-<app-header></app-header>
+<!-- <app-header></app-header>
 <mat-card>
     <div class="main">
         <mat-card class="main-list">
@@ -23,8 +23,7 @@
                     </mat-card-content>
                 </div>
                 <div class="info-text">Местоположение</div>
-                <mat-card-content class="info-card" matTooltip="{{ selectedEvent.location }}">
-                    {{ selectedEvent.location | ellipsis: 70}}
+                <mat-card-content class="info-card" matTooltip="{{ selectedEvent.locationId }}">
                 </mat-card-content>
                 <div class="info-text">Дата</div>
                 <mat-card-content class="info-card">{{ selectedEvent.startDate | date : "MMM d h" }}</mat-card-content>
@@ -47,7 +46,7 @@
                 <div class="info-text-input">Описание</div>
                 <input [(ngModel)]="selectedEvent.description" name="description" required>
                 <div class="info-text-input">Местоположение</div>
-                <input [(ngModel)]="selectedEvent.location" name="location" required>
+                <input [(ngModel)]="selectedEvent.locationId" name="location" required>
                 <div class="info-text-input">Дата</div>
                 <input [(ngModel)]="selectedEvent.startDate" type="datetime-local" name="startDate" required>
                 <div class="info-text-input">Допустимое кол-во участников</div>
@@ -72,4 +71,324 @@
             </mat-form-field>
         </mat-card>
     </div>
-</mat-card>
+</mat-card> -->
+
+
+<body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed">
+  <div class="h-full">
+
+    <app-header></app-header>
+    <hr class="mt-6 mb-6">
+    <form>
+      <div class="space-y-12">
+        <div class="border-b border-gray-900/10 pb-3">
+          <p class="text-3xl font-bold text-gray-700">Event Laboratory
+            <br><label class="block text-base font-bold leading-6 text-green-500">&#10022; Create, update and view your
+              events</label>
+          </p>
+
+          <div class="mt-10 flex lg:mt-0">
+            <span class="hidden sm:block">
+              <button type="button" (click)="openEventsList()" 
+              class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold 
+                text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100
+                hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 
+                focus-visible:outline-offset-2
+                rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300
+                ">
+                <svg xmlns="http://www.w3.org/2000/svg" class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 26 26"
+                  fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M19,2H18V1a1,1,0,0,0-2,0V2H8V1A1,1,0,0,0,6,1V2H5A5.006,5.006,0,0,0,0,7V19a5.006,5.006,0,0,0,5,5H19a5.006,5.006,0,0,0,5-5V7A5.006,5.006,0,0,0,19,2ZM2,7A3,3,0,0,1,5,4H19a3,3,0,0,1,3,3V8H2ZM19,22H5a3,3,0,0,1-3-3V10H22v9A3,3,0,0,1,19,22Z" />
+                  <circle cx="12" cy="15" r="1.5" />
+                  <circle cx="7" cy="15" r="1.5" />
+                  <circle cx="17" cy="15" r="1.5" />
+                </svg>
+                Events
+              </button>
+            </span>
+
+            <span class="ml-3 hidden sm:block">
+              <button type="button" (click)="editEvent(selectedEvent.id)" class="inline-flex items-center rounded-md bg-white px-3 py-2 
+                text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset 
+                ring-gray-300 hover:bg-gray-100 
+                hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
+                <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+                  aria-hidden="true">
+                  <path
+                    d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
+                </svg>
+                Edit
+              </button>
+            </span>
+
+            <span class="sm:ml-3">
+              <button type="button" (click)="preDelete()" 
+              class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold 
+              text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-200
+              hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 
+              focus-visible:outline-offset-2
+              rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
+                <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-red-100" viewBox="0 0 27 27" aria-hidden="true">
+                  <path
+                    d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
+                </svg>
+                Delete
+              </button>
+            </span>
+
+            <span class="sm:ml-3">
+              <button type="button" (click)="createEvent()" class="inline-flex items-center rounded-md text-transparent bg-gradient-to-r from-green-300 via-pink-400 to-purple-400
+                  hover:from-green-200 hover:to-pink-300 text-white font-bold py-2 px-4 rounded focus:ring transform transition 
+                  hover:scale-105 duration-300
+                  px-3 py-2 text-sm font-semibold text-white shadow-sm 
+                  hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
+                  focus-visible:outline-indigo-600">
+                <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd"
+                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                    clip-rule="evenodd" />
+                </svg>
+                Create
+              </button>
+            </span>
+          </div>
+
+          <!-- EVENTS LIST -->
+
+          <div *ngIf="isEventsListOpen" class="mt-5 font-bold">
+            <label>Select an event, the fields will be filled in automatically!
+              <br>You can change the selected event</label>
+            <div class="flex rounded-md flex-col max-w-md">
+              <button class="text-gray-600 rounded-md ring-1 mb-1 
+              ring-gray-300 ring-inset bg-white px-3 py-2 
+              hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 
+              focus-visible:outline-offset-2
+              rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300"
+                *ngFor="let event of events" (click)="onSelectEvent(event)">
+                {{ event.title | ellipsis: 16 }}
+              </button>
+            </div>
+          </div>
+
+          <!-- ERROR -->
+
+          <div *ngIf="isErrorMessage" class="mt-5 flex-col">
+            <label class="block mt-10 text-sm font-bold leading-6 text-red-500">
+              &#9940; {{ errorMessage }}
+            </label>
+            <button (click)="closeMessage()" class="text-gray-500 font-bold rounded-md p-2 pb-1 pt-1 
+            text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50
+            hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 
+            focus-visible:outline-offset-2
+            rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
+              OK</button>
+          </div>
+
+          <!-- SUCCES -->
+
+          <div *ngIf="isSuccessMessage" class="mt-5 flex-col">
+            <label class="block mt-10 text-sm font-bold leading-6 text-green-500">
+              &#10003; {{ successMessage }}
+            </label>
+            <button (click)="closeMessage()" class="text-gray-500 font-bold rounded-md p-2 pb-1 pt-1 
+            text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50
+            hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 
+            focus-visible:outline-offset-2
+            rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
+              OK</button>
+          </div>
+
+          <!-- EVENT CARD -->
+          <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+            <!-- TITLE -->
+            <div class="sm:col-span-4">
+              <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Title</label>
+              <div class="mt-2">
+                <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 
+                  focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                  <span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">happyning.event /</span>
+                  <input type="text" name="username" id="username" autocomplete="username"
+                    [(ngModel)]="selectedEvent.title" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 
+                placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Party">
+                </div>
+              </div>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="col-span-full">
+              <label for="about" class="block text-sm font-medium leading-6 text-gray-900">About</label>
+              <div class="mt-2">
+                <textarea id="about" name="about" rows="3"
+                  placeholder="A wonderful event, suitable for active guys, very good straight super duper"
+                  [(ngModel)]="selectedEvent.description" class="block pl-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
+              ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
+              focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+              </div>
+              <p class="mt-3 text-sm leading-6 text-gray-600">Describe the event in more detail to attract participants
+              </p>
+            </div>
+
+            <!-- DATE -->
+
+            <div class="sm:col-span-2 sm:col-start-1">
+              <label for="startDate" class="block text-sm font-medium leading-6 text-gray-900">Start Date</label>
+              <input type="datetime-local" id="startDate" name="startDate" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 
+              placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" [(ngModel)]="selectedEvent.startDate">
+            </div>
+            <div class="sm:col-span-2">
+              <label for="endDate" class="block text-sm font-medium leading-6 text-gray-900">End Date</label>
+              <input type="datetime-local" id="endDate" name="endDate" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 
+              placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" [(ngModel)]="selectedEvent.endDate">
+            </div>
+
+            <!-- LIMITS (guests, age)-->
+
+            <div class="sm:col-start-1">
+              <label class="block text-sm font-medium leading-6 text-gray-900">Limits</label>
+            </div>
+            <div class="sm:col-span-2 sm:col-start-1">
+              <input type="number" id="maxGuestAmount" name="maxGuestAmount" class="block rounded-md flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300
+              placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                [(ngModel)]="selectedEvent.maxGuestAmount">
+              <label for="maxGuestAmount" class="block text-sm font-medium leading-6 text-gray-500">Guest limit</label>
+            </div>
+            <div class="sm:col-span-2">
+              <input type="number" id="ageLimit" name="ageLimit" class="block rounded-md flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300
+              placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" [(ngModel)]="selectedEvent.ageLimit">
+              <label for="ageLimit" class="block text-sm font-medium leading-6 text-gray-500">Age limit</label>
+              <span>Recommended: 16+</span>
+            </div>
+
+            <!-- CATEGORY + FORMAT-->
+
+            <div class="sm:col-span-2 sm:col-start-1">
+              <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Category</label>
+              <div class="mt-2">
+                <select id="categorySelect" name="category" autocomplete="category-title" (click)="showSubcategories()"
+                  [(ngModel)]="selectedEvent.categoryId" class="block pl-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
+                  ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
+                  sm:max-w-xs sm:text-sm sm:leading-6">
+                  <option *ngFor="let cat of categories" [value]="cat.id">{{cat.title}}</option>
+                </select>
+              </div>
+
+              <div *ngIf="isSubcategoriesOpen" class="mt-2">
+                <select id="categorySelect" name="category" autocomplete="category-title" (click)="showSubcategories()"
+                  [(ngModel)]="selectedEvent.categoryId" class="block pl-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
+              ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
+              sm:max-w-xs sm:text-sm sm:leading-6">
+                  <option *ngFor="let subcat of subcategories" [value]="subcat.id">
+                    {{subcat.title}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="format" class="block text-sm font-medium leading-6 text-gray-900">Format</label>
+              <div class="mt-2">
+                <select id="formatSelect" name="format" autocomplete="format-title" [(ngModel)]="selectedEvent.formatId"
+                  class="block pl-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
+                  ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
+                  sm:max-w-xs sm:text-sm sm:leading-6">
+                  <option *ngFor="let fromat of formats" [value]="format.id">{{format.title}}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- IS PUBLIC + SECRET CODE-->
+            <div class="col-span-full">
+              <fieldset>
+                <legend class="text-sm font-semibold leading-6 text-gray-900">Access level</legend>
+                <p class="mt-1 text-sm leading-6 text-gray-600">You can make the event public (any user can register
+                  except those who are banned) or private (only a user who knows the secret access code can register).
+                </p>
+                <div class="mt-6 space-y-6">
+                  <div class="flex items-center gap-x-3">
+                    <input id="public" name="access_level" type="radio" [(ngModel)]="accessLevel" [value]="'Public'"
+                      (ngModelChange)="changeAccessMode()"
+                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                    <label for="public" class="block text-sm font-medium leading-6 text-gray-900">Public</label>
+                  </div>
+                  <div class="flex items-center gap-x-3">
+                    <input id="private" name="access_level" type="radio" [(ngModel)]="accessLevel" [value]="'Private'"
+                      (ngModelChange)="changeAccessMode()"
+                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                    <label for="private" class="block text-sm font-medium leading-6 text-gray-900">Private</label>
+                  </div>
+                </div>
+
+                <input *ngIf="accessLevel == 'Private'" name="secret" class="block mt-3 pl-3 w-full rounded-md border-0 py-1.5 
+                text-gray-900 shadow-sm ring-1" placeholder="Secret code" type="text"
+                  [(ngModel)]="selectedEvent.secretCode">
+              </fieldset>
+
+            </div>
+
+            <!-- LOCATION -->
+
+            <div class="sm:col-span-2 sm:col-start-1">
+              <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Country</label>
+              <div class="mt-2">
+                <select name="country" id="country" autocomplete="country" (click)="showCitiesByCountry()"
+                  [(ngModel)]="countryId" class="block pl-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
+              ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
+              sm:max-w-xs sm:text-sm sm:leading-6">
+                  <option *ngFor="let country of countries" [value]="country.id">
+                    {{country.countryName}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
+              <div class="mt-2">
+                <select name="city" id="city" autocomplete="city" (click)="showCountryByCity()" [(ngModel)]="cityId"
+                  class="block pl-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
+                        ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
+                        sm:max-w-xs sm:text-sm sm:leading-6">
+                  <option *ngFor="let city of cities" [value]="city.id">{{city.cityName}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="sm:col-span-6">
+              <label for="details" class="block text-sm font-medium leading-6 text-gray-900">Street address</label>
+              <div class="mt-2">
+                <input type="text" name="details" id="details" placeholder="1234 Main St" [(ngModel)]="address"
+                  autocomplete="details" class="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900
+                   shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
+                   focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              </div>
+            </div>
+
+            <!-- PHOTO -->
+            <div class="col-span-full">
+              <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Photo</label>
+              <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                <div class="text-center">
+                  <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor"
+                    aria-hidden="true">
+                    <path fill-rule="evenodd"
+                      d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
+                      clip-rule="evenodd" />
+                  </svg>
+                  <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                    <label for="file-upload"
+                      class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                      <span>Upload a file</span>
+                      <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                    </label>
+                    <p class="pl-1">or drag and drop</p>
+                  </div>
+                  <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>

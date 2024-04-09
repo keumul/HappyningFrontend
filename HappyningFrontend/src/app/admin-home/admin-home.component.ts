@@ -19,7 +19,7 @@ export class AdminHomeComponent implements NewType {
   users!: User[];
   events!: Event[];
   categories!: Category[];
-  selectedCategory: Category = { id: 0, title: '', description: '' };
+  selectedCategory: Category = { id: 0, title: '', description: '', parentId: 0};
   isEditing = false;
   filteredUsers: User[] = [];
   searchValue: number = 0;
@@ -44,7 +44,7 @@ export class AdminHomeComponent implements NewType {
 
   checkCredentials() {
     try {
-        if (this.authService.getCurrentUser()?.isAdmin) {
+        if (this.authService.getCurrentUser()?.role === 'admin') {
           this.isAdmin = true;
         } else {
           this.isAdmin = false;
@@ -96,7 +96,7 @@ export class AdminHomeComponent implements NewType {
         this.loadCategories();
         this.loadEvents();
         this.calculateCategoryEventCounts();
-        this.selectedCategory = { id: 0, title: '', description: '' };
+        this.selectedCategory = { id: 0, title: '', description: '', parentId: 0};
       },
       (error) => {
         console.error('Error updating category', error);
@@ -112,7 +112,7 @@ export class AdminHomeComponent implements NewType {
     this.categoryService.removeCategory(id).subscribe(
       () => {
         this.loadCategories();
-        this.selectedCategory = { id: 0, title: '', description: '' };
+        this.selectedCategory = { id: 0, title: '', description: '', parentId: 0};
       },
       (error) => {
         console.error('Error deleting category', error);
@@ -153,7 +153,7 @@ export class AdminHomeComponent implements NewType {
   }
 
   cancelEditing(): void {
-    this.selectedCategory = { id: 0, title: '', description: '' };
+    this.selectedCategory = { id: 0, title: '', description: '', parentId: 0};
     this.isEditing = false;
   }
 

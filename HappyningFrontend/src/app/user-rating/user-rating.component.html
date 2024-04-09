@@ -1,4 +1,61 @@
-<div class="main">
+
+
+<div>
+  <div *ngIf="userRate !== null && userRate!.length > 0">
+    <p class="text-2xl font-bold text-gray-500">Organizer rate:
+      <span class="text-green-500">{{ calculateAverageRating() }}</span></p>
+        <ng-container *ngFor="let star of starsArray()">
+          <span class="text-gray-300 text-2xl" [class.filled]="star <= calculateAverageRating()">★</span>
+        </ng-container>     
+  </div>
+
+  <div *ngIf="userRate !== null && userRate!.length > 0" class="mt-4">
+    <ng-container *ngFor="let rate of userRate">
+      <div class="bg-white rounded shadow-md p-4 mb-4">
+        <p class="font-bold text-green-500">{{ rate.rate }} ★</p>
+        <label class="text-gray-400">
+          By <span class="text-gray-500">{{ usersInfoMap.get(rate.raterId)?.username }}</span></label>
+        <label class="text-gray-400">
+          at <span class="text-gray-500">{{ eventsInfoMap.get(rate.eventId)?.title }}</span></label>
+        <p matTooltip="{{ rate.message }}" class="ellipsis">"{{ rate.message }}"</p>
+      </div>
+    </ng-container>
+  </div>
+
+  <div *ngIf="userRate === null || userRate!.length === 0">
+    <p class="mt-4 text-green-500">No rate.</p>
+  </div>
+</div>
+
+<div *ngIf="canRate" class="comment-card bg-white rounded shadow-md p-4">
+  <p class="font-bold text-2xl text-gray-600">Rate this organizer!</p>
+  <div class="mt-4">
+    <label class="block text-gray-700">Event</label>
+    <label class="block text-gray-500">Select the event of this organizer that your review will relate to</label>
+    <select class="form-select p-2 block text-gray-800 w-full rounded-md 
+    shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2
+    focus-within:ring-inset focus-within:ring-indigo-600" [(ngModel)]="event" required>
+      <option *ngFor="let event of events" [value]="event.id">{{ event.title }}</option>
+    </select>
+  </div>
+  <div class="mt-4">
+    <label class="block text-gray-700">Rate</label>
+    <input class="form-input p-2 block text-gray-800 w-full rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 
+    focus-within:ring-inset focus-within:ring-indigo-600" 
+    [(ngModel)]="newRating" min="1" max="5" type="number" required>
+  </div>
+  <div class="mt-4">
+    <label class="block text-gray-700">Comment</label>
+    <textarea class="form-textarea p-2 block text-gray-800 w-full rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 
+    focus-within:ring-inset focus-within:ring-indigo-600
+    " [(ngModel)]="newComment" rows="4" required></textarea>
+  </div>
+  <button class="mt-4 bg-gray-500 hover:bg-indigo-400 text-white font-bold py-2 px-4 rounded" 
+  (click)="submitRating()">Submit</button>
+</div>
+
+
+<!-- <div class="main">
   <mat-card class="comment-card" *ngIf="canRate">
     <mat-card-content>
       <h3>Оцените организатора</h3>
@@ -37,4 +94,4 @@
   </div>
 </mat-card>
 
-</div>
+</div> -->

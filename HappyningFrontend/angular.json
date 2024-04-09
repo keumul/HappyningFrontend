@@ -89,8 +89,11 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
+              "src/styles.css",
+              "src/styles.css",
+              "./node_modules/david-ui-angular/styles/_styles.css"
             ],
+            
             "scripts": []
           }
         }

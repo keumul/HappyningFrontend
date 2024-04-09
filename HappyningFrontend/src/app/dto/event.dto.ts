@@ -1,12 +1,15 @@
 export interface Event {
     id: number;
     title: string;
-    description: string;
-    location: string;
     startDate: Date;
-    organizerId: number;
-    categoryId: number;
+    endDate: Date;
+    description: string;
     maxGuestAmount: number;
-    secretCode: string;
     isPublic: boolean;
+    locationId: number;
+    categoryId: number;
+    formatId: number;
+    secretCode: string;
+    ageLimit: number;
+    organizerId: number;
 }

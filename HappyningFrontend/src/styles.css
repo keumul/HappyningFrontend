@@ -1,43 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%;}
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-body {
-    background: linear-gradient(-45deg, #fcfcfc,#dbe6f0,#def2cc, rgb(222, 228, 135));
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
-  }
-  
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-
-body::-webkit-scrollbar {
-  width: 8px;
-}
-
-body::-webkit-scrollbar-track {
-  background: #cccccc;
-}
-
-body::-webkit-scrollbar-thumb {
-  background-color: #aeaeae;
-  transition: background-color 0.3s ease;
-}
-
-body::-webkit-scrollbar-thumb:hover {
-  background-color: #bdc72c;
-}
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities"
 
 
 

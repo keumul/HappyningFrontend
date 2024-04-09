@@ -45,6 +45,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ErrorComponent } from './error/error.component';
+import { DUIButton, DUIAlert } from "david-ui-angular";
+import { FooterComponent } from './footer/footer.component';
+import { EventListComponent } from './event-list/event-list.component';
+import { PhotoComponent } from './photo/photo.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +72,10 @@ import { ErrorComponent } from './error/error.component';
     NotificationComponent,
     AdminHomeComponent,
     ReportComponent,
-    ErrorComponent
+    ErrorComponent,
+    FooterComponent,
+    EventListComponent,
+    PhotoComponent
   ],
   imports: [
     BrowserModule,
@@ -95,7 +102,10 @@ import { ErrorComponent } from './error/error.component';
     NgChartsModule,
     MatToolbarModule,
     MatMenuModule,
-    MatTabsModule
+    MatTabsModule,
+
+    DUIButton,
+    DUIAlert
   ],
   providers: [
     [

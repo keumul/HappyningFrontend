@@ -69,11 +69,11 @@ export class HeaderComponent implements OnInit {
 
   menuExitAccount() {
     this.authService.logout();
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/login']);
   }
 
   areYouSure() {
-    if (confirm("Вы уверены, что хотите выйти?")) {
+    if (confirm("Are you sure you want to log out?")) {
       this.menuExitAccount();
     }
   }

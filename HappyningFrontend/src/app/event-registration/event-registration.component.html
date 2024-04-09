@@ -1,11 +1,129 @@
-<div class="event-container">
+<body>
+  <div class="col-start-1">
+    <div class="col-span-2">
+      <button class="inline-flex items-center rounded-md text-transparent 
+    bg-gradient-to-r from-green-300 via-pink-400 to-purple-400
+    hover:from-green-200 hover:to-pink-300 text-white font-bold 
+    py-2 px-4 rounded focus:ring transform transition 
+    hover:scale-105 duration-300
+    px-3 py-2 text-sm font-semibold text-white shadow-sm 
+    hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
+    focus-visible:outline-indigo-600" (click)="tryToAddParticipant()" *ngIf="!isOrganizer">
+        Register!
+      </button>
+
+      <button *ngIf="isRegistered" class="inline-flex ml-2 items-center rounded-md 
+      bg-white px-3 py-2 
+    text-sm font-semibold text-gray-800 shadow-sm ring-1 ring-inset 
+    ring-gray-300 hover:bg-gray-200 
+    hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+    rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300"
+        (click)="removeEventParticipant()">
+        Cancel registration
+      </button>
+
+      <button *ngIf="!isOrganizer" class="inline-flex ml-2 items-center rounded-md bg-white px-3 py-2 
+      text-sm font-semibold text-gray-800 shadow-sm ring-1 ring-inset 
+      ring-gray-300 hover:bg-gray-200 
+      hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+      rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300" (click)="openList()">
+        Show participants
+      </button>
+      <button *ngIf="isRegistered" class="inline-flex ml-2 mr-2 items-center rounded-md bg-white px-3 py-2 
+      text-sm font-semibold text-gray-800 shadow-sm ring-1 ring-inset 
+      ring-gray-300 hover:bg-gray-200 
+      hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+      rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300" (click)="showQrCode()">
+        QR-code
+      </button>
+
+      <button *ngIf="isRegistered || isOrganizer" (click)="openChat()" 
+      class="inline-flex items-center rounded-md bg-white px-3 py-2 
+      text-sm font-semibold text-gray-800 shadow-sm ring-1 ring-inset 
+      ring-gray-300 hover:bg-gray-200 
+      hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+      rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">Chat</button>
+      
+      <button *ngIf="isOrganizer" (click)="openList()"
+      class="inline-flex ml-2 items-center rounded-md bg-white px-3 py-2
+      text-sm font-semibold text-gray-800 shadow-sm ring-1 ring-inset 
+      ring-gray-300 hover:bg-gray-200 
+      hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+      rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
+      Organizer information
+      </button>
+      <app-chat *ngIf="isChatOpen"></app-chat>
+      <img class="qrcode" src="{{qrCode}}" alt="" *ngIf="isQRCode">
+    </div>
+
+    <div class="col-span-1 shadow-md p-3 rounded-md" *ngIf="isOpenList && !isOrganizer">
+      <ul role="list" *ngFor="let participant of participants">
+        <li class="flex justify-between">
+          <div class="min-w-0 flex-auto">
+            <p class="text-base font-semibold leading-6 text-gray-900">
+              {{ userDetails![participant.userId]?.username}}</p>
+            <p class="text-sm leading-5 text-gray-500">
+              {{ userDetails![participant.userId]?.email }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+
+    <div *ngIf="isOpenList && isOrganizer" class="mt-8">
+      <p class="text-lg text-gray-700 font-bold">Organizer information</p>
+      <label class="text-green-500 text-sm">&#10022; You can find the required user by Id and check the validity of the information in the QR code of the participant</label>
+      <div class="text-gray-600"><span>UserID</span>
+        <input [(ngModel)]="searchValue" placeholder="UserID" 
+        class="p-1 mr-1 ml-1 ring-1 ring-inset ring-gray-300 rounded-md w-24" type="number" min="0">
+        <button (click)="applyFilter(searchValue)">
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="18" height="18" viewBox="0 0 30 30">
+            <path
+              d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z">
+            </path>
+          </svg>
+        </button>
+      </div>
+      <div>
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" 
+              class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                UserID</th>
+              <th scope="col" 
+              class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                EventID</th>
+              <th scope="col" 
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Other</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let participant of filteredUsers">
+              <td class="px-2 py-4 whitespace-nowrap text-gray-600">{{ participant.userId }}</td>
+              <td class="px-2 py-4 whitespace-nowrap text-gray-600">{{ eventId }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="text-gray-600">Username:</span> {{ userDetails![participant.userId]?.username }}
+                <br><span class="text-gray-600">Mail:</span> {{ userDetails![participant.userId]?.email }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+
+
+<!-- <div class="event-container">
     <div class="message"> {{ message }} </div>
-    <button (click)="tryToAddParticipant()">Зарегистрироваться</button>
+    <button (click)="tryToAddParticipant()">Register</button>
     <div>
-      <button (click)="removeEventParticipant()">Отменить регистрацию</button>
+      <button (click)="removeEventParticipant()">Cancel registration</button>
       <div *ngIf="participants?.length">
-        <h2>Список участников</h2>
-        <mat-card class="participants">
+        <h2>Participants list</h2>
+        <mat-card class="p-5">
           <ul>
             <li *ngFor="let participant of participants">
               {{ userDetails![participant.userId]?.username }} - {{ userDetails![participant.userId]?.email }}
@@ -42,4 +160,4 @@
     </mat-card>
      
   </div>
-  
+   -->

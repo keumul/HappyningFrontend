@@ -1,42 +1,42 @@
-<div>
-
-    <div class='header'>
-        <p class='header-data'>Сегодня {{currentDay}} {{monthNames[currentMonth]}}</p>
-        <div class='header-button'>
-            <button mat-button (click)="decreaseMonth()">&lt;</button>
-            <button mat-button (click)="setCurrentMonth()">{{displayMonth}}</button>
-            <button mat-button (click)="increaseMonth()">&gt;</button>
+<main class="bg-blue-900/50 rounded-lg p-6">
+    <div class="header flex items-center justify-between mb-4">
+        <p class="header-data text-xl font-bold text-white">Сегодня {{currentDay}} {{monthNames[currentMonth]}}</p>
+        <div class="header-button">
+            <button class="btn mr-2" (click)="decreaseMonth()">&lt;</button>
+            <button class="btn mr-2" (click)="setCurrentMonth()">{{displayMonth}}</button>
+            <button class="btn" (click)="increaseMonth()">&gt;</button>
         </div>
     </div>
 
-</div>
-<table class='calendar-table' *ngIf="calendar">
-    <thead>
-        <tr>
-            <th>Понедельник</th>
-            <th>Вторник</th>
-            <th>Среда</th>
-            <th>Четверг</th>
-            <th>Пятница</th>
-            <th>Суббота</th>
-            <th>Воскресенье</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let row of calendar | chunk: 7; let i = index">
-            <td class="calendar-day" [ngClass]="{'past-date': c.isPastDate, 'today': c.isToday}"
-                *ngFor="let c of row; let j = index" id="scrollable-card">
-                <div class="calendar-day-header" [ngClass]="{'blue-date': c.isToday}">
-                    <strong>{{c.date.getDate()}}</strong> <strong
-                        *ngIf="c.isToday || (i==0 && j==0) || (c.date.getDate() == 1)">
-                        {{monthNames[c.date.getMonth()]}}</strong>
-                </div>
-                <div class="event" *ngFor="let event of events">
-                    <ng-container *ngIf="isEventInCell(event, c.date)">
-                       <button mat-button class="event-button" (click)="redirectToEvent(event.id)">{{ event.title | ellipsis:6 }}</button> 
-                    </ng-container>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
+    <table class="calendar-table w-full rounded-lg overflow-hidden" *ngIf="calendar">
+        <thead>
+            <tr>
+                <th class="px-4 py-2">Понедельник</th>
+                <th class="px-4 py-2">Вторник</th>
+                <th class="px-4 py-2">Среда</th>
+                <th class="px-4 py-2">Четверг</th>
+                <th class="px-4 py-2">Пятница</th>
+                <th class="px-4 py-2">Суббота</th>
+                <th class="px-4 py-2">Воскресенье</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of calendar | chunk: 7; let i = index">
+                <td class="calendar-day px-4 py-2" [ngClass]="{'past-date': c.isPastDate, 'today': c.isToday}"
+                    *ngFor="let c of row; let j = index" id="scrollable-card">
+                    <div class="calendar-day-header flex justify-between items-center">
+                        <strong>{{c.date.getDate()}}</strong>
+                        <strong *ngIf="c.isToday || (i==0 && j==0) || (c.date.getDate() == 1)"
+                            class="text-blue-500">{{monthNames[c.date.getMonth()]}}</strong>
+                    </div>
+                    <div class="event" *ngFor="let event of events">
+                        <ng-container *ngIf="isEventInCell(event, c.date)">
+                            <button class="btn mt-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
+                                (click)="redirectToEvent(event.id)">{{ event.title | ellipsis:6 }}</button>
+                        </ng-container>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>

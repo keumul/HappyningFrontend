@@ -5,9 +5,12 @@ import { AuthService } from '../services/auth.service';
 import { Event } from '../dto/event.dto';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../dto/category.dto';
+import { Format } from '../dto/format.dto';
 import * as moment from 'moment';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationService } from '../services/notification.service';
+import { Country } from '../dto/country.dto';
+import { City } from '../dto/city.dto';
+import { LocationService } from '../services/location.service';
 
 @Component({
   selector: 'app-editor',
@@ -15,28 +18,48 @@ import { NotificationService } from '../services/notification.service';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
+
   auxId!: number;
   event!: Event;
   events!: any[];
   category!: Category;
-  categories!: Category[];
+  categories: Category[] = [];
+  subcategories: Category[] = [];
+  format!: Format;
+  formats!: Format[];
   auxDate!: Date;
   startDate!: string;
+  endDate!: string;
   newDate!: Date;
-  message!: string;
   selectedEvent!: Event;
-  accessLevel!: string;
+  accessLevel: string = 'Public';
   canCheck = true;
-  secretCode!: string;
+  isEventsListOpen = false;
+  isSubcategoriesOpen = false;
+  countryId!: number;
+  countries!: Country[];
+  cityId!: number;
+  cities!: City[];
+  address!: string;
+  locations!: { id: number, details: string, cityId: number }[];
+  isPrivate = true;
+  isPublic = true;
+  limit = 0;
+  message!: string;
+  errorMessage!: string;
+  successMessage!: string;
+  isErrorMessage = false;
+  isSuccessMessage = false;
 
   constructor(private eventService: EventService,
     private authService: AuthService,
     private categoryService: CategoryService,
     private router: Router,
-    private _snackBar: MatSnackBar,
-    private notificationService: NotificationService) { }
+    private notificationService: NotificationService,
+    private locationService: LocationService) { }
 
   ngOnInit(): void {
+    this.limit = 0;
     this.canCheck = true;
     let userId = this.authService.getCurrentUser()?.id;
     this.eventService.getUserEvents(userId).subscribe(data => {
@@ -49,11 +72,14 @@ export class EditorComponent implements OnInit {
           title: '',
           description: '',
           startDate: new Date(0),
-          location: '',
+          endDate: new Date(0),
+          locationId: 1,
           organizerId: this.authService.getCurrentUser()?.id,
           categoryId: 1,
+          formatId: 1,
+          ageLimit: 21,
           maxGuestAmount: 100,
-          isPublic: false,
+          isPublic: true,
         });
       }
       this.clearInput();
@@ -61,19 +87,23 @@ export class EditorComponent implements OnInit {
 
     this.auxId = this.events.length + Math.random() * 10000;
     this.loadCategories();
+    this.loadSubcategories(1);
+    this.loadFormats();
+    this.loadCountries();
+    this.loadCities();
+    this.loadLocations();
 
-    if(this.selectedEvent.isPublic) {
-      this.accessLevel = 'Публичный';
+    console.log("I AM HERE 3");
+
+    if (this.selectedEvent.isPublic) {
+      this.accessLevel = 'Public';
     } else {
-      this.accessLevel = 'Частный';
+      this.accessLevel = 'Private';
     }
   }
 
-  openSnackBar(message: string) {
-    this._snackBar.open(message, '', {
-      duration: 2000,
-      panelClass: ['blue-snackbar']
-    })
+  openEventsList() {
+    this.isEventsListOpen = !this.isEventsListOpen;
   }
 
   onSelectEvent(event: any) {
@@ -82,11 +112,17 @@ export class EditorComponent implements OnInit {
     this.auxDate = new Date(this.selectedEvent.startDate);
     this.startDate = moment().format('YYYY.MM.DD HH:MM');
     this.loadCategory(this.selectedEvent.categoryId);
+    this.loadFormat(this.selectedEvent.formatId);
     this.loadCategories();
+    this.loadSubcategories(this.selectedEvent.categoryId);
+    this.loadFormats();
+    this.loadCountries();
+    this.loadCities();
+    this.loadLocations();
     if (this.selectedEvent && this.selectedEvent.isPublic) {
-      this.accessLevel = 'Публичный';
+      this.accessLevel = 'Public';
     } else {
-      this.accessLevel = 'Частный';
+      this.accessLevel = 'Private';
     }
   }
 
@@ -102,8 +138,87 @@ export class EditorComponent implements OnInit {
 
   loadCategories() {
     this.categoryService.findAllCategories().subscribe((data: any) => {
-      this.categories = data;
+      if (this.limit < 1) {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].parentId == null) {
+            this.categories.push(data[i]);
+          }
+        }
+        this.limit++;
+      }
+    });
+  }
+
+  loadLocations() {
+    this.locationService.getAllLocations().subscribe((data: any) => {
+      this.locations = data;
     })
+  }
+
+  loadSubcategories(id: number) {
+    this.categoryService.findSubcategories(id).subscribe((data: any) => {
+
+      if (data.length > 0) {
+        this.subcategories = data;
+        this.isSubcategoriesOpen = true;
+      } else {
+        this.selectedEvent.categoryId = id;
+        this.isSubcategoriesOpen = false;
+      }
+    })
+
+  }
+
+  showSubcategories() {
+    this.loadSubcategories(this.selectedEvent.categoryId);
+  }
+
+  loadFormat(id: number) {
+    this.categoryService.findFormat(id).subscribe((data: any) => {
+      this.format = data;
+    })
+  }
+
+  loadFormats() {
+    this.categoryService.findAllFormats().subscribe((data: any) => {
+      this.formats = data;
+    })
+  }
+
+  loadCountries() {
+    this.locationService.getAllCountries().subscribe((data: any) => {
+      this.countries = data;
+    })
+  }
+
+  loadCities() {
+    this.locationService.getAllCities().subscribe((data: any) => {
+      this.cities = data;
+    })
+  }
+
+  showCitiesByCountry() {
+    this.locationService.getCitiesByCountry(this.countryId).subscribe((data: any) => {
+      this.cities = data;
+    },
+      (error) => {
+        console.log("Error: " + error);
+        this.errorMessage = "Error: cities not found";
+      }
+    )
+  }
+
+  showCountryByCity() {
+    if (this.cityId == 0) {
+      return;
+    }
+    this.locationService.getCityById(this.cityId).subscribe((data: City) => {
+      this.countryId = data.countryId;
+    },
+      (error) => {
+        this.errorMessage = "Error: country not found";
+      }
+    )
   }
 
   clearInput() {
@@ -113,10 +228,13 @@ export class EditorComponent implements OnInit {
       title: '',
       description: '',
       startDate: new Date(0),
-      location: '',
+      endDate: new Date(0),
+      locationId: 0,
       organizerId: this.authService.getCurrentUser()?.id,
       categoryId: this.selectedEvent.categoryId || 1,
+      formatId: 1,
       maxGuestAmount: 100,
+      ageLimit: 21,
       isPublic: false,
       secretCode: '',
     };
@@ -129,85 +247,150 @@ export class EditorComponent implements OnInit {
       title: this.selectedEvent.title,
       description: this.selectedEvent.description,
       startDate: new Date(this.selectedEvent.startDate),
-      location: this.selectedEvent.location,
+      endDate: new Date(this.selectedEvent.endDate),
+      locationId: this.selectedEvent.locationId,
       organizerId: this.selectedEvent.organizerId,
       categoryId: this.selectedEvent.categoryId,
+      formatId: this.selectedEvent.formatId,
       maxGuestAmount: this.selectedEvent.maxGuestAmount,
+      ageLimit: this.selectedEvent.ageLimit,
       isPublic: this.selectedEvent.isPublic,
       secretCode: this.selectedEvent.secretCode,
     }).subscribe(
       (response: any) => {
-        this.openSnackBar('Событие успешно изменено');
+        this.isErrorMessage = false;
+        this.successMessage = "Event successfully updated!";
+        this.isSuccessMessage = true;
         this.ngOnInit();
       },
       (error) => {
         if (this.selectedEvent.title.length > 20) {
-          this.openSnackBar('Заголовок недопустимой длины (максимум 20 символов)');
+          this.isErrorMessage = true;
+          this.errorMessage = "Title is too long";
           return;
         } if (this.selectedEvent.startDate < new Date(moment.now())) {
-          this.openSnackBar('Нельзя проводить событие в прошлом');
+          this.isErrorMessage = true;
+          this.errorMessage = "Date is too early";
           return;
         }
         else {
-          this.openSnackBar(error.error.message);
+          this.errorMessage = "Error: something went wrong while updating the event";
+          this.isErrorMessage = true;
         }
       }
     );
   }
 
+  changeAccessMode() {
+    if (this.accessLevel === 'Public') {
+      this.selectedEvent.isPublic = true;
+      this.selectedEvent.secretCode = 'NO_SECRET_CODE';
+      this.event.isPublic = true;
+    } else if (this.accessLevel === 'Private') {
+      this.selectedEvent.isPublic = false;
+      this.event.isPublic = false;
+    }
+  }
+
   createEvent() {
     if (this.event.startDate < new Date(moment.now())) {
-      console.log(this.event.startDate, new Date(moment.now()));
-      
-      this.openSnackBar('Нельзя создать событие в прошлом');
+      this.errorMessage = "Date is too early";
+      this.isErrorMessage = true;
       return;
     }
-    if(!this.event.isPublic && this.event.secretCode == '') {
-      this.openSnackBar('При создании частного события необходимо указать секретный код');
+    if (!this.event.isPublic && this.event.secretCode == null) {
+      this.errorMessage = "Secret code is empty";
+      this.isErrorMessage = true;
       return;
     }
+
+    console.log(this.event.secretCode);
+
+
+    this.createLocation();
     this.eventService.createEvent({
       title: this.event.title,
       description: this.event.description,
       startDate: new Date(this.event.startDate),
-      location: this.event.location,
+      endDate: new Date(this.event.endDate),
+      locationId: this.locations[this.locations.length - 1].id + 1,
       organizerId: this.event.organizerId,
       categoryId: this.event.categoryId,
+      formatId: this.event.formatId,
       maxGuestAmount: this.event.maxGuestAmount,
+      ageLimit: this.event.ageLimit,
       isPublic: this.event.isPublic,
-      secretCode: this.event.secretCode,
+      secretCode: this.event.secretCode || 'NO_SECRET',
     }).subscribe(
       (response: any) => {
         this.notificationService.createNotification({
-          userId: this.authService.getCurrentUser()?.id,
+          userId: +this.authService.getCurrentUser()?.id,
           eventId: response.id,
-          message: 'Вы создали событие',
+          message: 'Event created!',
           isRead: false,
         }).subscribe();
-        this.openSnackBar('Событие успешно создано');
+        this.successMessage = "Event successfully created!";
+        this.isSuccessMessage = true;
+        this.isErrorMessage = false;
         this.ngOnInit();
       },
       (error) => {
         if (this.selectedEvent.title.length >= 20) {
-          this.openSnackBar('Заголовок недопустимой длины (максимум 20 символов)');
+          this.isErrorMessage = true;
+          this.isSuccessMessage = false;
+          this.errorMessage = "Title is too long";
           return;
         }
         else {
-          this.openSnackBar(error.error.message);
+          this.errorMessage = "Error: something went wrong while creating the event";
+          this.isErrorMessage = true;
+          this.isSuccessMessage = false;
+          console.log("Error: " + error.message);
         }
-
       }
     );
+  }
+
+  preDelete() {
+    if (confirm("Are you sure you want to delete this event?")) {
+      this.deleteEvent(this.selectedEvent.id);
+    }
   }
 
   deleteEvent(eventId: number) {
     this.eventService.removeEvent(eventId).subscribe(
       (response: any) => {
-        this.openSnackBar('Событие успешно удалено');
+        this.successMessage = "Event successfully deleted!";
+        this.isSuccessMessage = true;
+        this.isErrorMessage = false;
         this.ngOnInit();
       },
       (error) => {
-        this.openSnackBar(error.error.message);
+        this.errorMessage = "Error: something went wrong while deleting the event";
+        this.isErrorMessage = true;
+        this.isSuccessMessage = false;
+      }
+    );
+  }
+
+  createLocation() {
+    if (this.cityId == undefined) {
+      this.cityId = this.cities[0].id;
+    }
+    this.locationService.createLocation(
+      +this.cityId,
+      this.address,
+      +this.cityId
+    ).subscribe(
+      (response: any) => {
+        this.isErrorMessage = false;
+        console.log("Location successfully created");
+      },
+      (error) => {
+        this.errorMessage = "Error: something went wrong while creating the location";
+        this.isErrorMessage = true;
+        this.isSuccessMessage = false;
+        console.log("Error: " + error.message);
       }
     );
   }
@@ -217,6 +400,10 @@ export class EditorComponent implements OnInit {
       this.selectedEvent.isPublic = true;
     }
   }
-  
+
+  closeMessage() {
+    this.isErrorMessage = false;
+    this.isSuccessMessage = false;
+  }
 }
 

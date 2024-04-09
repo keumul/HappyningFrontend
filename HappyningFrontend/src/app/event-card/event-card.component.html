@@ -1,5 +1,73 @@
-<app-header></app-header>
-<mat-card>
+<body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" style="background-image: url('');">
+  <div class="h-full">
+    <app-header></app-header>
+  </div>
+  <hr class="mt-6 mb-6">
+  <div>
+    <div class="px-4 sm:px-0">
+      <p class="text-3xl leading-7 text-indigo-400 text-shadow-md font-bold">{{event.title}}</p>
+      <p class="mt-1 max-w-2xl text-base leading-6 text-gray-500">This event is available to persons
+        <span class="font-bold text-lg text-pink-400">{{event.ageLimit}}+</span>
+      </p>
+    </div>
+    <app-event-registration></app-event-registration>
+    <div class="mt-10">
+      <p class="text-lg text-gray-700 font-bold">Event information</p>
+      <div class="border-t border-gray-100">
+        <dl class="divide-y divide-gray-100">
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Title</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ event.title }}</dd>
+          </div>
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Address</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {{ location.details }} - {{ city.cityName }} - {{ country.countryName }} </dd>
+          </div>
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Date</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">From
+              <span class="text-green-500">{{ event.startDate | date :"MMM d - h:mm a" }}</span> To
+              <span class="text-green-500">{{ event.endDate | date :"MMM d - h:mm a"}}</span>
+            </dd>
+          </div>
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">About</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {{ event.description | ellipsis: 100}}
+            </dd>
+          </div>
+
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Organizer</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ organizer.username }}
+              <br><span class="text-gray-500 text-xs">You can view the organizer's </span>
+              <button class="rounded-md text-indigo-500
+          text-sm leading-6 hover:text-indigo-400 
+          focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
+          focus-visible:outline-indigo-600" (click)="navigateToUserProfile(organizer.id)">
+                profile</button>
+            </dd>
+          </div>
+
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Category</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ category.title }}:
+              <span class="text-pink-400">{{ category.description }}</span>
+            </dd>
+          </div>
+          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Format</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ organizer.username }},
+              <span class="text-blue-400">{{ organizer.email }}</span>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</body>
+<!-- <mat-card>
     <div class="main">
         <div class="event-container">
             <mat-card class="main-card">
@@ -11,12 +79,12 @@
                     <mat-card-content class="info-card" matTooltip="{{ event.description }}">{{ event.description |
                         ellipsis: 100}}</mat-card-content>
                     <div class="info-text">Местонахождение</div>
-                    <mat-card-content class="info-card">{{ event.location }}</mat-card-content>
+                    <mat-card-content class="info-card">{{ event.locationId }}</mat-card-content>
                     <div class="info-text">Дата</div>
                     <mat-card-content class="info-card">{{ event.startDate | date :"MMM d - h:mm a"}}</mat-card-content>
                     <div class="info-text">Организатор</div>
                     <div class="organizer">
-                        <mat-card-content class="info-card-organizer">{{ organizer.username}}</mat-card-content>
+                        <mat-card-content class="info-card-organizer">{{ organizer.username }}</mat-card-content>
                         <button mat-icon-button (click)="navigateToUserProfile(organizer.id)">
                             <mat-icon>contact_emergency</mat-icon>
                         </button>
@@ -37,4 +105,4 @@
             <button (click)="closeOverlay()">Отмена</button>
         </div>
     </div>
-</mat-card>
+</mat-card> -->

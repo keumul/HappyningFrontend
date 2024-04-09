@@ -36,7 +36,9 @@ export class EventRegistrationComponent implements OnInit {
   isOrganizer: boolean = false;
   filteredUsers: Participant[] = [];
   searchValue: number = 0;
-
+  isOpenList: boolean = false;
+  isQRCode: boolean = false;
+  isChatOpen: boolean = false;
   constructor(
     private participantService: ParticipantService,
     private authService: AuthService,
@@ -109,22 +111,25 @@ export class EventRegistrationComponent implements OnInit {
   tryToAddParticipant() {
     this.openCaptcha = true;
     const { question, answer } = this.customCaptcha();
-    const userAnswer = prompt(`Пожалуйста, решите простое математическое уравнение: ${question}`);
+    const userAnswer = prompt(`Please, solve a simple mathematical example: ${question}`);
     if (userAnswer === null) return;
     if (+userAnswer === answer) {
       this.addParticipant();
       this.openCaptcha = false;
     } else {
-      this.openSnackBar('Неверный ответ');
+      this.openSnackBar('Incorrect answer');
     }
   }
 
+  openChat() {
+    this.isChatOpen = !this.isChatOpen;
+  }
   addParticipant(): void {
     if (this.event.maxGuestAmount <= this.participants!.length) {
-      this.openSnackBar('Достигнуто максимальное количество участников');
+      this.openSnackBar('The maximum number of participants in the event has been reached');
       return;
     } else if (this.userId === this.event.organizerId) {
-      this.openSnackBar('Вы не можете зарегистрироваться на свое же событие :)');
+      this.openSnackBar('You cannot register for your own event');
       return;
     } else {
       this.participantService.addParticipant({
@@ -132,13 +137,13 @@ export class EventRegistrationComponent implements OnInit {
         userId: this.userId
       }).subscribe(
         (response: any) => {
-          this.openSnackBar('Вы успешно зарегистрировались на это событие');
+          this.openSnackBar('You have successfully registered for this event');
           this.findAllEventParticipants();
           this.ngOnInit();
           this.registrationService.isRegistered = true;
         },
         (error) => {
-          this.openSnackBar('Вы уже зарегистрированы на это событие');
+          this.openSnackBar('You are already registered for this event');
         }
       );
     }
@@ -175,16 +180,22 @@ export class EventRegistrationComponent implements OnInit {
   removeEventParticipant(): void {
     this.participantService.removeEventParticipant(this.eventId).subscribe(
       (response: any) => {
-        this.openSnackBar('Вы успешно отменили регистрацию на это событие');
+        this.openSnackBar('You are successfully removed from the event');
         this.findAllEventParticipants();
         this.isRegistered = false;
         this.updateQrCode();
-
+        this.isChatOpen = false;
+        this.isOpenList = false;
+        this.isQRCode = false;
       },
       (error) => {
-        this.message = 'Вы еще не зарегистрированы на это событие';
+        this.message = 'You are not registered for this event';
       }
     );
+  }
+
+  showQrCode() {
+    this.isQRCode = !this.isQRCode;
   }
 
 
@@ -210,7 +221,7 @@ export class EventRegistrationComponent implements OnInit {
         this.filteredUsers = this.participantsFullInfo;
       },
       (error) => {
-        this.message = 'Что-то пошло не так';
+        this.message = 'Something went wrong, please try again later.';
       }
     );
   }
@@ -223,4 +234,8 @@ export class EventRegistrationComponent implements OnInit {
     console.log(this.filteredUsers);
     
   } 
+
+  openList() {
+    this.isOpenList = !this.isOpenList;
+  }
 }

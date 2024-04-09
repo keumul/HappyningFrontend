@@ -1,0 +1,114 @@
+
+
+
+
+
+
+
+
+<!-- <mat-checkbox class="checkbox" (change)="filterOn()"><mat-icon>filter_alt</mat-icon>
+</mat-checkbox>
+
+<mat-card class="scrollable-card" *ngIf="!isFilter">
+  <mat-card-title>События</mat-card-title>
+
+  <mat-card-title class="subtitle">Вы организатор</mat-card-title>
+  <div *ngIf="myevents === null || myevents!.length === 0">
+    <p>Событий нет.</p>
+  </div>
+  <button mat-button *ngFor="let event of myevents" (click)="redirectToEvent(event.id)">
+    {{ event.title | ellipsis: 15 }}
+    {{ event.startDate | date :"MMM d - h:mm a"}}
+  </button>
+
+  <mat-card-title class="subtitle" *ngIf="events">Вы участник</mat-card-title>
+  <div *ngIf="events === null || events!.length === 0">
+    <p>Событий нет.</p>
+  </div>
+  <button mat-button *ngFor="let event of events" (click)="redirectToEvent(event.eventId)">
+    {{ event.event.title | ellipsis: 15}}
+    {{ event.event.startDate | date :"MMM d - h:mm a" }}
+  </button>
+
+  <div *ngIf="selectedEvent">
+    <h3>Selected Event: {{ selectedEvent.title }}</h3>
+  </div>
+</mat-card>
+
+<mat-card *ngIf="isFilter" class="main-filters">
+  <mat-card-title><mat-icon>filter_alt</mat-icon></mat-card-title>
+  <mat-form-field class="filters">
+    <mat-label class="filters">Дата события</mat-label>
+    <input matInput [(ngModel)]="startDateFilter" name="Дата" [matDatepicker]="picker">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="filters">
+    <input matInput placeholder="Местоположение" [(ngModel)]="locationFilter">
+  </mat-form-field>
+  <mat-form-field class="filters">
+    <mat-label class="filters">Выберите категорию</mat-label>
+    <mat-select [(ngModel)]="categoryFilter">
+      <mat-option *ngFor="let cat of categories" [value]="cat.id" [matTooltip]="cat.description" class="filters">
+        {{ cat.title }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-button (click)="applyFilters()" style="background-color: rgb(236, 247, 210);"
+    [disabled]="!startDateFilter && !locationFilter && !categoryFilter" class="filters">
+    Применить фильтры
+  </button>
+  <div *ngIf="startDateFilter || locationFilter || categoryFilter" class="filters-input">
+    <button mat-button (click)="clearFilters()" style="background-color: rgb(219, 220, 218);"
+      [disabled]="!startDateFilter && !locationFilter && !categoryFilter" class="filters">
+      Сбросить фильтры
+    </button>
+    <mat-card-title>Cобытия</mat-card-title>
+    <div class="filtered-events-card">
+      <button mat-button *ngFor="let event of filteredEvents" (click)="redirectToEvent(event.id)" class="filters">
+        {{ event.title | ellipsis: 15 }}
+        {{ event.startDate | date :"MMM d - h:mm a" }}
+      </button>
+    </div>
+  </div>
+</mat-card> -->
+
+
+<!--Right Col-->
+<!--EVENTS LIST-->
+
+<body>
+  <div class="flex justify-end">
+    <div class="mx-auto max-w-2xl py-8 sm:py-8 lg:max-w-7xl">
+      <p class="text-2xl font-bold tracking-tight text-indigo-400">More events</p>
+
+      <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        <div *ngFor="let event of events; let i = index" (click)="redirectToEvent(event.id)">
+
+          <div
+            class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+            <img
+              src="https://www.intofilm.org/intofilm-production/scaledcropped/970x546https%3A/www.intofilm.org/intofilm-production/1502/girlhood-ep-studiocanal.jpg/girlhood-ep-studiocanal.jpg"
+              alt="Event" class="h-full w-full object-cover object-center lg:h-full lg:w-full">
+          </div>
+
+          <div class="mt-4 flex justify-between font-bold text-pink-400">
+            <div>
+              <p class="text-gray-500 text-2xl font-bold">
+                
+                  {{event.title}}
+              </p>
+              <span *ngIf="locationDetails && locationDetails[i]">{{ locationDetails[i].cityName
+                }}</span>,
+              <span *ngIf="locationDetails && locationDetails[i]">{{
+                locationDetails[i].countryName }}</span>
+            </div>
+            <p aria-hidden="true" class="text-2xl text-green-400 inset-4">
+              {{event.startDate | date :"MMM d - h:mm a"}}</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

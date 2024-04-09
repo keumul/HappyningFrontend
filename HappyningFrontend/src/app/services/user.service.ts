@@ -31,8 +31,8 @@ export class UserService {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
-  rateUser(id: number, dto: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/rate/${id}`, dto);
+  rateUser(userId: number, eventId: number, dto: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/rate/${userId}/${eventId}`, dto);
   }
 
   findAllUserRates(): Observable<any> {
