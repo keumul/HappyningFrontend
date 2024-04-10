@@ -14,6 +14,7 @@ export class ProfileComponent implements OnInit {
   ageMessage!: string;
   message!: string;
   exitMessage!: string;
+  isEvents = false;
 
   constructor(
     private userService: UserService) { }
@@ -26,6 +27,10 @@ export class ProfileComponent implements OnInit {
       console.log(this.currentUser);
       
     });
+  }
+
+  openEvents() {
+    this.isEvents = !this.isEvents;
   }
 
   calculateAgeMessage(): void {

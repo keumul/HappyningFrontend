@@ -5,83 +5,22 @@
     <hr class="mt-6 mb-6">
     <!--Main-->
     <form>
-      <div class="pt-20 md:pt-13 mx-auto flex flex-wrap flex-col md:flex-row items-center justify-between">
-        <!--Left Col-->
-        <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden font-bold">
-          <p class="my-4 text-3xl md:text-10xl text-indigo font-bold leading-tight text-center md:text-left">
-            What kind of
-            <span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">
-              event
-            </span>
-            are you looking for?
-          </p>
-          <p class="leading-normal text-base md:text-lg mb-8 text-center md:text-left text-green-500">
-            &#10022; Use the filter to make it easier to find an event
-          </p>
-
-          <form class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
-            <div class="mb-4">
-              <label class="block text-blue-300 py-2 font-bold mb-2" for="emailaddress">
-                Filters
-              </label>
-              <input
-                class="shadow appearance-none border rounded w-full p-3 text-gray-700 
-                leading-tight focus:ring transform transition hover:scale-105 duration-300 
-                ease-in-out"
-                id="location" type="text" placeholder="location" 
-                [(ngModel)]="locationFilter" 
-                />
-<!-- 
-                <div class="mt-2">
-                  <select id="locationSelect" name="location" autocomplete="location-title"
-                    [(ngModel)]="locationFilter" class="block pl-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
-                    ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
-                    sm:max-w-xs sm:text-sm sm:leading-6">
-                    <option *ngFor="let cat of categories" [value]="cat.id">{{cat.title}}</option>
-                  </select>
-                </div>
-
-                <div class="mt-2">
-                  <select id="categorySelect" name="category" autocomplete="category-title"
-                    [(ngModel)]="categoryFilter" class="block pl-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
-                    ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
-                    sm:max-w-xs sm:text-sm sm:leading-6">
-                    <option *ngFor="let cat of categories" [value]="cat.id">{{cat.title}}</option>
-                  </select>
-                </div> -->
-            </div>
-
-            <div class="flex items-center justify-between pt-4">
-              <button
-                class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
-                type="button">
-                Search
-              </button>
-            </div>
-          </form>
-
-        </div>
-
-        
-        <app-event-list></app-event-list>
-
-
-        <div class="mx-auto md:pt-16">
-          <p class="text-blue-400 font-bold pb-8 lg:pb-6 text-center">
-            Download our app:
-          </p>
-          <div class="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in">
-            <img src="App Store.svg" class="h-12 pr-12 transform hover:scale-125 duration-300 ease-in-out" />
-            <img src="Play Store.svg" class="h-12 transform hover:scale-125 duration-300 ease-in-out" />
-          </div>
-        </div>
-
-        <!--Footer-->
-        <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
-          <app-footer></app-footer>
+      <app-event-list></app-event-list>
+      <div class="mx-auto md:pt-16">
+        <p class="text-blue-400 font-bold pb-8 lg:pb-6 text-center">
+          Download our app:
+        </p>
+        <div class="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in">
+          <img src="App Store.svg" class="h-12 pr-12 transform hover:scale-125 duration-300 ease-in-out" />
+          <img src="Play Store.svg" class="h-12 transform hover:scale-125 duration-300 ease-in-out" />
         </div>
       </div>
-    </form>
+
+      <!--Footer-->
+      <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
+        <app-footer></app-footer>
+      </div>
+  </form>
   </div>
 </body>
 

@@ -13,6 +13,9 @@ import { Location } from '../dto/location.dto';
 import { City } from '../dto/city.dto';
 import { Country } from '../dto/country.dto';
 import { Format } from '../dto/format.dto';
+import { Complaint } from '../dto/complaint.dto';
+import { ComplaintService } from '../services/complaint.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-event-card',
@@ -36,7 +39,10 @@ export class EventCardComponent implements OnInit {
   location!: Location;
   city!: City;
   country!: Country;
-
+  complaintsCategory!: Complaint[];
+  complaint!: number;
+  isComplaint: boolean = false;
+  
   constructor(
     private eventService: EventService,
     private categoryService: CategoryService,
@@ -44,10 +50,13 @@ export class EventCardComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private complaintService: ComplaintService,
+    private _snackBar: MatSnackBar,
   ) { }
 
   async ngOnInit() {
+    this.loadComplaintsCategory();
     var id = 0;
     this.route.params.subscribe(params => {
       id = params['eventId'];
@@ -107,6 +116,25 @@ export class EventCardComponent implements OnInit {
     } else {
       console.log('Unvalid code!');
     }
+  }
+
+  loadComplaintsCategory() {
+    this.complaintService.findAllComplaintsCategories().subscribe((data: Complaint[]) => {
+      this.complaintsCategory = data;
+    });
+  }
+
+
+  sendComplaint() {
+    this.complaintService.createEventComplaint(this.event.id, this.complaint).subscribe(() => {
+      this._snackBar.open('Complaint sent', '', {
+        duration: 3000,
+      });
+    })
+  }
+
+  openComplaintDialog() {
+    this.isComplaint = !this.isComplaint;
   }
 
   async loadLocationDetails(id: number) {

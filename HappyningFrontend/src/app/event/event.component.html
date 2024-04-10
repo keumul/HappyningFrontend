@@ -1,139 +1,45 @@
-<!-- <mat-checkbox class="checkbox" (change)="filterOn()"><mat-icon>filter_alt</mat-icon>
-</mat-checkbox>
-
-<mat-card class="scrollable-card" *ngIf="!isFilter">
-  <mat-card-title>События</mat-card-title>
-
-  <mat-card-title class="subtitle">Вы организатор</mat-card-title>
+<div class="mt-10 mb-10">
+  <p *ngIf="events" class="text-sm text-gray-400">You are the organizer</p>
   <div *ngIf="myevents === null || myevents!.length === 0">
-    <p>Событий нет.</p>
+    <p class="font-bold text-base">No events.</p>
   </div>
-  <button mat-button *ngFor="let event of myevents" (click)="redirectToEvent(event.id)">
-    {{ event.title | ellipsis: 15 }}
-    {{ event.startDate | date :"MMM d - h:mm a"}}
-  </button>
-
-  <mat-card-title class="subtitle" *ngIf="events">Вы участник</mat-card-title>
-  <div *ngIf="events === null || events!.length === 0">
-    <p>Событий нет.</p>
-  </div>
-  <button mat-button *ngFor="let event of events" (click)="redirectToEvent(event.eventId)">
-    {{ event.event.title | ellipsis: 15}}
-    {{ event.event.startDate | date :"MMM d - h:mm a" }}
-  </button>
-
-  <div *ngIf="selectedEvent">
-    <h3>Selected Event: {{ selectedEvent.title }}</h3>
-  </div>
-</mat-card>
-
-<mat-card *ngIf="isFilter" class="main-filters">
-  <mat-card-title><mat-icon>filter_alt</mat-icon></mat-card-title>
-  <mat-form-field class="filters">
-    <mat-label class="filters">Дата события</mat-label>
-    <input matInput [(ngModel)]="startDateFilter" name="Дата" [matDatepicker]="picker">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-  <mat-form-field class="filters">
-    <input matInput placeholder="Местоположение" [(ngModel)]="locationFilter">
-  </mat-form-field>
-  <mat-form-field class="filters">
-    <mat-label class="filters">Выберите категорию</mat-label>
-    <mat-select [(ngModel)]="categoryFilter">
-      <mat-option *ngFor="let cat of categories" [value]="cat.id" [matTooltip]="cat.description" class="filters">
-        {{ cat.title }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <button mat-button (click)="applyFilters()" style="background-color: rgb(236, 247, 210);"
-    [disabled]="!startDateFilter && !locationFilter && !categoryFilter" class="filters">
-    Применить фильтры
-  </button>
-  <div *ngIf="startDateFilter || locationFilter || categoryFilter" class="filters-input">
-    <button mat-button (click)="clearFilters()" style="background-color: rgb(219, 220, 218);"
-      [disabled]="!startDateFilter && !locationFilter && !categoryFilter" class="filters">
-      Сбросить фильтры
-    </button>
-    <mat-card-title>Cобытия</mat-card-title>
-    <div class="filtered-events-card">
-      <button mat-button *ngFor="let event of filteredEvents" (click)="redirectToEvent(event.id)" class="filters">
-        {{ event.title | ellipsis: 15 }}
-        {{ event.startDate | date :"MMM d - h:mm a" }}
-      </button>
-    </div>
-  </div>
-</mat-card> -->
-
-
-<!--Right Col-->
-<!--EVENTS LIST-->
-<div class="group relative flex justify-end">
-  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8 ">
-    <h1 class="text-2xl font-bold tracking-tight text-indigo-400">Сейчас актуально</h1>
-
-    <div *ngFor="let event of allEvents" (click)="redirectToEvent(event.id)">
-
-      <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-        <div class="group relative">
-          <div
-            class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-            <img
-              src="https://www.intofilm.org/intofilm-production/scaledcropped/970x546https%3A/www.intofilm.org/intofilm-production/1502/girlhood-ep-studiocanal.jpg/girlhood-ep-studiocanal.jpg"
-              alt="Front of men&#039;s Basic Tee in black."
-              class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-          </div>
-          
-          <div class="mt-4 flex justify-between">
-            <div>
-
-              <h2 class="text-sm text-gray-500">
-                <a href="#">
-                  <span aria-hidden="true" class="absolute inset-0"></span>
-                  {{event.title}}
-                </a>
-              </h2>
-              <p class="mt-1 text-sm text-pink-400">ул.Пукинская, Минск</p>
-            </div>
-            <p class="text-2xl font-medium text-green-400 ">13:00</p>
-          </div>
-          <!-- 
-                 <div>
-                  
-                    <h2 class="text-sm text-gray-500">
-                      <a href="#">
-                        <span aria-hidden="true" class="absolute inset-0"></span>
-                        Вечеринка у Стейси
-                      </a>
-                    </h2>
-                    <p class="mt-1 text-sm text-pink-400">ул.Пукинская, Минск</p>
-                  </div>
-                  <p class="text-2xl font-medium text-green-400 ">13:00</p>
-                </div>
-              </div>
-
-              <div class="group relative">
-              <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                <img src="https://www.mykingandbay.com/files/king-and-bay-fall-winter-2022-collection-blog-12-1.jpg" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-              </div>
-              <div class="mt-4 flex justify-between">
-                <div>
-                  <h2 class="text-sm text-gray-500">
-                    <a href="#">
-                      <span aria-hidden="true" class="absolute inset-0"></span>
-                      Вечеринка Илона Макса
-                    </a>
-                  </h2>
-                  <p class="mt-1 text-sm text-pink-400">ул.Собакн, Барон</p>
-                </div>
-                <p class="text-2xl font-medium text-green-400 ">00:00</p>
-              </div>
-            </div> -->
-
-
-          <!-- More products... -->
-        </div>
+  <button *ngFor="let event of myevents" (click)="redirectToEvent(event.id)"
+  class="flex flex-col items-start justify-start text-gray-600 ring-1 ring-gray-200 
+  rounded-md p-2 mb-2 w-96">
+    <span class="text-base text-indigo-400 font-bold">{{ event.title | ellipsis: 15 }}</span>
+    <div class="flex items-center">
+      <div>
+        <span>From </span>
+        <span class="text-green-500">{{ event.startDate | date :"MMM d - h:mm a"}}</span>
+      </div>
+      <div class="ml-2">
+        <span>to </span>
+        <span class="text-green-500">{{ event.endDate | date :"MMM d - h:mm a"}}</span>
       </div>
     </div>
+  </button>
+
+  <div *ngIf="events === null || events!.length === 0">
+    <p>No events.</p>
+  </div>
+<div class="mt-8">
+  <p *ngIf="events" class="text-sm text-gray-400">You are the participant</p>
+  <button *ngFor="let event of events" (click)="redirectToEvent(event.eventId)"
+    class="flex flex-col items-start justify-start text-gray-600 ring-1 ring-gray-200 rounded-md p-2 mb-2 w-96">
+    <span class="text-base text-indigo-400 font-bold">{{ event.event.title | ellipsis: 15 }}</span>
+    <div class="flex items-center">
+      <div>
+        <span>From </span>
+        <span class="text-green-500">{{ event.event.startDate | date :"MMM d - h:mm a"}}</span>
+      </div>
+      <div class="ml-2">
+        <span>to </span>
+        <span class="text-green-500">{{ event.event.endDate | date :"MMM d - h:mm a"}}</span>
+      </div>
+    </div>
+  </button>
+</div>
+  <div *ngIf="selectedEvent">
+    <p>Selected Event: {{ selectedEvent.title }}</p>
   </div>
 </div>

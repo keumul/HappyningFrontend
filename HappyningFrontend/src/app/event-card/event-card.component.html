@@ -5,11 +5,34 @@
   <hr class="mt-6 mb-6">
   <div>
     <div class="px-4 sm:px-0">
-      <p class="text-3xl leading-7 text-indigo-400 text-shadow-md font-bold">{{event.title}}</p>
+      <div class="flex justify-between">
+        <p class="text-3xl leading-7 text-indigo-400 text-shadow-md font-bold">{{event.title}}</p>
+        <button (click)="openComplaintDialog()" 
+        class="text-pink-500 font-bold text-lg">🛇</button>
+      </div>
       <p class="mt-1 max-w-2xl text-base leading-6 text-gray-500">This event is available to persons
         <span class="font-bold text-lg text-pink-400">{{event.ageLimit}}+</span>
       </p>
     </div>
+
+    <div *ngIf="isComplaint" class="bg-pink-100 rounded-md mb-5 shadow-sm p-2 max-w-md items-center text-pink-500">
+      <p class="text-pink-500 font-bold text-lg">Is there something wrong with this event?</p>
+      <label class="text-gray-500">&#10022; You can submit a complaint, which will be reviewed by the
+        moderator.</label><br>
+      <label class="mt-3">Select a violation category</label>
+      <div class="flex">
+        <select id="categorySelect" name="category" autocomplete="category-title" [(ngModel)]="complaint" class="block pl-3 w-full rounded-md border-0 
+            py-1.5 text-gray-900 shadow-sm ring-1 
+              ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
+              sm:max-w-xs sm:text-sm sm:leading-6">
+          <option *ngFor="let cat of complaintsCategory" [value]="cat.id">{{cat.title}} {{cat.description}}
+          </option>
+        </select>
+
+        <button (click)="sendComplaint()" class="ml-3 font-bold text-lg">Send</button>
+      </div>
+    </div>
+
     <app-event-registration></app-event-registration>
     <div class="mt-10">
       <p class="text-lg text-gray-700 font-bold">Event information</p>

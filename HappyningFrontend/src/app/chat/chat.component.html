@@ -4,39 +4,57 @@
         <div class="text-base font-bold">The interval between sending messages (sec)</div>
         <label class="text-green-500">
             &#10022; You can set a time interval in which you can send messages to this chat</label><br>
-        <input [(ngModel)]="currentLatency" type="number" 
-        class="w-20 pl-3 rounded-md border-0 py-1 text-gray-900
+        <input [(ngModel)]="currentLatency" type="number" class="w-20 pl-3 rounded-md border-0 py-1 text-gray-900
         shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
-        focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+        focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
         <span> seconds</span>
-        <button (click)="changeLatency()" 
-        class="w-12 ml-2 items-center text-center rounded-md bg-white px-3 py-2 
+        <button (click)="changeLatency()" class="w-12 ml-2 items-center text-center rounded-md bg-white px-3 py-2 
       text-sm font-bold text-gray-500 shadow-sm ring-1 ring-inset 
       ring-gray-300 hover:bg-gray-200 
       hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 
       focus-visible:outline-offset-2
       rounded focus:outline-none transition duration-200 ease-in-out 
       active:bg-gray-300">OK
-    </button>
+        </button>
+    </div>
+
+    <div *ngIf="isComplaint" class="bg-pink-100 rounded-md shadow-sm p-2 max-w-md items-center text-pink-500">
+        <p class="text-pink-500 font-bold text-lg">Is there something wrong with the message?</p>
+        <p class="text-gray-700 font-bold text-base">"{{selectMessage.message}}"</p>
+        <label class="text-gray-500">&#10022; You can submit a complaint, which will be reviewed by the
+            moderator.</label><br>
+        <label class="mt-3">Select a violation category</label>
+        <div class="flex">
+            <select id="categorySelect" name="category" autocomplete="category-title" [(ngModel)]="complaint" class="block pl-3 w-full rounded-md border-0 
+            py-1.5 text-gray-900 shadow-sm ring-1 
+              ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
+              sm:max-w-xs sm:text-sm sm:leading-6">
+                <option *ngFor="let cat of complaintsCategory" [value]="cat.id">{{cat.title}} {{cat.description}}
+                </option>
+            </select>
+
+            <button (click)="sendComplaint()" class="ml-3 font-bold text-lg">Send</button>
+        </div>
     </div>
 
     <div class="flex flex-col h-full mt-10">
-        <div class="flex-grow overflow-y-auto max-h-410 scrollbar-thin scrollbar-thumb-gradient">
+        <div class="flex-grow overflow-y-auto max-w-lg h-64">
             <div *ngFor="let message of messages" [ngClass]="{ 
             'bg-gray-100 flex-row': message.user.id === currentUser.id, 
             'bg-gray-200 flex-row-revesrse': message.user.id !== currentUser.id }"
                 class="p-2 mb-2 rounded-md max-w-lg">
-                <div *ngIf="message.user.id === currentUser.id" 
-                class="font-bold text-green-500">You</div>
-                <div *ngIf="message.user.id !== currentUser.id" 
-                class="font-bold text-green-500">
-                    {{ message.user.username }}</div>
+                <div class="flex justify-between">
+                    <div *ngIf="message.user.id === currentUser.id" class="font-bold text-green-500">You</div>
+                    <div *ngIf="message.user.id !== currentUser.id" class="font-bold text-green-500">
+                        {{ message.user.username }}</div>
+                    <button (click)="openComplaintDialog(message)" class="text-pink-500 font-bold">🛇</button>
+                </div>
                 <span class="text-sm text-gray-400">{{ message.createdAt | date : "MMM d, h:mm a" }}</span>
                 <div class="text-gray-700">"{{ message.message }}"</div>
             </div>
         </div>
         <div class="flex items-center max-w-lg">
-            <input [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" class="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900
+            <input [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" class="block w-full pl-3 mt-3 rounded-md border-0 py-1.5 text-gray-900
             shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
             focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
             <button (click)="sendMessage()" class="font-bold text-gray-700 text-sm hover:text-pink-400 ml-4"

@@ -16,21 +16,15 @@ import { Category } from '../dto/category.dto';
 export class EventComponent implements OnInit {
   events: Participant[] = [];
   myevents: Event[] = [];
-  originalEvents: Event[] = [];
-  filteredEvents: Event[] = [];
   allEvents: Event[] = [];
   categories: Category[] = [];
   category!: Category;
   selectedEvent!: Event;
   eventRates: any[] = [];
   currentUser: any;
-  eventsDetails?: { [eventId: number]: { title: string, startDate: Date } } = {};
+  eventsDetails?: { [eventId: number]: { title: string, startDate: Date, endDate: Date } } = {};
   userId: number = 0;
-  startDateFilter: Date | null = null;
-  locationFilter: string | null = null;
-  categoryFilter: string | null = null;
-  isFilter = false;
-  showFilteredResult: boolean = false;
+
   constructor(
     private eventService: EventService,
     private router: Router,
@@ -45,15 +39,8 @@ export class EventComponent implements OnInit {
     this.loadEvents();
     this.loadAllEvents();
     this.loadCategories();
-    this.clearFilters();
-
-    this.showFilteredResult = false;
   }
   
-  filterOn() {
-      this.isFilter = !this.isFilter;
-      this.clearFilters();
-  }
 
   loadCategories() {
     this.categoryService.findAllCategories().subscribe((data: any) => {
@@ -64,8 +51,6 @@ export class EventComponent implements OnInit {
   loadAllEvents() {
     this.eventService.getAllEvents().subscribe((data: Event[]) => {
       this.allEvents = data;
-      this.originalEvents = data.slice();
-      this.applyFilters();
     })
   }
 
@@ -109,42 +94,9 @@ export class EventComponent implements OnInit {
     this.router.navigate([`event/${eventId}`]);
   }
 
-  applyFilters() {
-    this.showFilteredResult = true;
-    this.filteredEvents = this.allEvents.filter(event => this.passesFilter(event));
-  }
-
-  passesFilter(event: any): boolean {
-    const eventStartDate = new Date(event.startDate);
-    const filterStartDate = this.startDateFilter?.toISOString();
-    
-    console.log('Filtering:', event);
-    console.log('StartDate Filter:', this.startDateFilter);
-    console.log('Location Filter:', this.locationFilter);
-    console.log('Category Filter:', this.categoryFilter);
-  
-    const passes = 
-      (!filterStartDate || eventStartDate >= new Date(filterStartDate)) &&
-      (!this.locationFilter || event.location.includes(this.locationFilter)) &&
-      (!this.categoryFilter || event.categoryId === this.categoryFilter);
-  
-    console.log('Passes Filter:', passes);
-    return passes;
-  }
-
   loadCategory(id: number) {
     this.categoryService.findCategory(id).subscribe((data: any) => {
       this.category = data;
     })
-  }
-
-  clearFilters() {
-    this.startDateFilter = null;
-    this.locationFilter = null;
-    this.categoryFilter = null;
-    this.allEvents = this.originalEvents.slice();
-    this.applyFilters();
-    this.filteredEvents = [];
-    this.showFilteredResult = false;
   }
 }

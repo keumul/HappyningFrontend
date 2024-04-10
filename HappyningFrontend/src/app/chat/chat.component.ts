@@ -6,6 +6,8 @@ import { Socket, io } from 'socket.io-client';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EventService } from '../services/event.service';
 import { Event } from '../dto/event.dto';
+import { ComplaintService } from '../services/complaint.service';
+import { Complaint } from '../dto/complaint.dto';
 
 @Component({
   selector: 'app-chat',
@@ -13,6 +15,7 @@ import { Event } from '../dto/event.dto';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
+  selectMessage!: Message;
   messages: Message[] = [];
   newMessage: string = '';
   chatId: number = 0;
@@ -22,16 +25,21 @@ export class ChatComponent implements OnInit {
   organizerId: number = 0;
   isOrganizer: boolean = false;
   adminLatency: number = 0;
+  complaintsCategory!: Complaint[];
+  complaint!: number;
+  isComplaint: boolean = false;
   private socket: Socket | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
     private _snackBar: MatSnackBar,
-    private eventService: EventService
+    private eventService: EventService,
+    private complaintService: ComplaintService
   ) {}
 
   ngOnInit() {
+    this.loadComplaintsCategory();
     this.route.params.subscribe(params => {
       this.chatId = params['eventId'];
       const URL = `http://localhost:5001/chat?chatId=${this.chatId}`;
@@ -56,6 +64,27 @@ export class ChatComponent implements OnInit {
       this.currentUser = user;
       this.getUserInfo();
     });
+  }
+
+  loadComplaintsCategory() {
+    this.complaintService.findAllComplaintsCategories().subscribe((data: Complaint[]) => {
+      this.complaintsCategory = data;
+    });
+  }
+
+  sendComplaint() {
+    console.log(this.selectMessage);
+    
+    this.complaintService.createMessageComplaint(this.selectMessage.id, this.complaint).subscribe(() => {
+      this._snackBar.open('Complaint sent', '', {
+        duration: 3000,
+      });
+    })
+  }
+
+  openComplaintDialog(message: Message) {
+    this.selectMessage = message;
+    this.isComplaint = !this.isComplaint;
   }
 
   getUserInfo() {

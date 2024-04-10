@@ -22,29 +22,36 @@ export class EditorComponent implements OnInit {
   auxId!: number;
   event!: Event;
   events!: any[];
+
   category!: Category;
   categories: Category[] = [];
   subcategories: Category[] = [];
+
   format!: Format;
   formats!: Format[];
+
   auxDate!: Date;
   startDate!: string;
   endDate!: string;
   newDate!: Date;
+
   selectedEvent!: Event;
   accessLevel: string = 'Public';
   canCheck = true;
   isEventsListOpen = false;
   isSubcategoriesOpen = false;
+
   countryId!: number;
   countries!: Country[];
   cityId!: number;
   cities!: City[];
   address!: string;
   locations!: { id: number, details: string, cityId: number }[];
+  
   isPrivate = true;
   isPublic = true;
   limit = 0;
+
   message!: string;
   errorMessage!: string;
   successMessage!: string;
@@ -92,8 +99,6 @@ export class EditorComponent implements OnInit {
     this.loadCountries();
     this.loadCities();
     this.loadLocations();
-
-    console.log("I AM HERE 3");
 
     if (this.selectedEvent.isPublic) {
       this.accessLevel = 'Public';

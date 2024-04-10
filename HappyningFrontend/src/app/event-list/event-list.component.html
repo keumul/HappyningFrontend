@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 <!-- <mat-checkbox class="checkbox" (change)="filterOn()"><mat-icon>filter_alt</mat-icon>
 </mat-checkbox>
 
@@ -78,6 +70,119 @@
 <!--EVENTS LIST-->
 
 <body>
+  <div class="pt-20 md:pt-13 mx-auto flex flex-wrap flex-col md:flex-row items-center justify-between">
+    <!--Left Col-->
+    <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden font-bold">
+      <p class="my-4 text-3xl md:text-10xl text-indigo font-bold leading-tight text-center md:text-left">
+        What kind of
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">
+          event
+        </span>
+        are you looking for?
+      </p>
+      <p class="leading-normal text-base md:text-lg mb-8 text-center md:text-left text-green-500">
+        &#10022; Use the filter to make it easier to find an event
+      </p>
+
+      <form class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+          <label class="block text-blue-300 py-2 font-bold mb-2" for="emailaddress">
+            Filters
+          </label>
+          <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 
+            leading-tight focus:ring transform transition hover:scale-105 duration-300 
+            ease-in-out" id="location" type="text" placeholder="location" [(ngModel)]="locationFilter" />
+          <button (click)="openFilter()">More filter</button>
+          <div *ngIf="isFilter">
+            <div class="sm:col-span-2 sm:col-start-1">
+              <!-- COUNTRY -->
+              <div class="mt-2">
+                <label for="country" class="block text-sm font-bold leading-6 text-blue-300">Country</label>
+                <select name="country" id="country" autocomplete="country" (click)="showCitiesByCountry()"
+                  [(ngModel)]="countryId" class="shadow appearance-none border rounded w-full p-3 text-gray-700 
+                 leading-tight focus:ring transform transition">
+                  <option value="Select country" disabled selected>Select country</option>
+                  <option *ngFor="let country of countries" [value]="country.id">
+                    {{country.countryName}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- CITY -->
+            <div class="sm:col-span-2">
+              <div class="mt-2">
+                <label for="city" class="block text-sm font-bold leading-6 text-blue-300">City</label>
+                <select name="city" id="city" (click)="showCountryByCity()" [(ngModel)]="cityId" class="shadow appearance-none border rounded w-full p-3 text-gray-700 
+                 leading-tight focus:ring transform transition">
+                  <option value="" disabled selected>Select city</option>
+                  <option *ngFor="let city of cities" [value]="city.id">{{city.cityName}}</option>
+                </select>
+                <label class="text-gray-300 text-xs font-medium">{{cityText}}</label>
+              </div>
+            </div>
+
+            <!-- DATE -->
+            <div class="sm:col-span-2">
+              <div class="mt-2">
+                <div class="sm:col-span-2 sm:col-start-1">
+                  <label for="startDate" class="block text-sm font-bold leading-6 text-blue-300">Start Date</label>
+                  <input type="datetime-local" id="startDate" name="startDate" 
+                  class="block flex-1 border-0 bg-white rounded-sm py-1.5 pl-1 text-gray-600
+                  placeholder:text-blue-400 focus:ring-0 sm:text-sm sm:leading-6" [(ngModel)]="startDateFilter">
+                </div>
+                <div class="sm:col-span-2">
+                  <label for="endDate" class="block text-sm font-bold leading-6 text-blue-300">End Date</label>
+                  <input type="datetime-local" id="endDate" name="endDate" 
+                  class="block flex-1 border-0 bg-white rounded-sm py-1.5 pl-1 text-gray-600 
+                  placeholder:text-blue-400 focus:ring-0 sm:text-sm sm:leading-6" [(ngModel)]="endDateFilter">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- CATEGORIES + FORMATS -->
+          <!-- <div class="mt-2">
+              <label for="category" class="block text-sm font-bold leading-6 text-blue-300">Category</label>
+              <select id="categorySelect" name="category" autocomplete="category-title" (click)="showSubcategories()"
+                [(ngModel)]="category.id" class="shadow appearance-none border rounded w-full p-3 text-gray-700 
+                 leading-tight focus:ring transform transition">
+                <option *ngFor="let cat of categories" [value]="cat.id">{{cat.title}}</option>
+              </select>
+            </div>
+
+            <div *ngIf="isSubcategoriesOpen" class="mt-2">
+              <select id="categorySelect" name="category" autocomplete="category-title" (click)="showSubcategories()"
+                [(ngModel)]="categoryId" class="shadow appearance-none border rounded w-full p-3 text-gray-700 
+                 leading-tight focus:ring transform transition">
+                <option *ngFor="let subcat of subcategories" [value]="subcat.id">
+                  {{subcat.title}}</option>
+              </select>
+            </div>
+
+            <div class="sm:col-span-2">
+              <div class="mt-2">
+                <label for="format" class="block text-sm font-bold leading-6 text-blue-300">Format</label>
+                <select id="formatSelect" name="format" autocomplete="format-title" [(ngModel)]="formatId" class="shadow appearance-none border rounded w-full p-3 text-gray-700 
+                 leading-tight focus:ring transform transition">
+                  <option *ngFor="let fromat of formats" [value]="format.id">{{format.title}}</option>
+                </select>
+              </div>
+            </div> -->
+
+
+        </div>
+
+        <div class="flex items-center justify-between pt-4">
+          <button
+            class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
+            type="button" (click)="applyFilters()">
+            Search
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div class="flex justify-end">
     <div class="mx-auto max-w-2xl py-8 sm:py-8 lg:max-w-7xl">
       <p class="text-2xl font-bold tracking-tight text-indigo-400">More events</p>
@@ -95,17 +200,14 @@
           <div class="mt-4 flex justify-between font-bold text-pink-400">
             <div>
               <p class="text-gray-500 text-2xl font-bold">
-                
-                  {{event.title}}
+                {{event.title}}
               </p>
               <span *ngIf="locationDetails && locationDetails[i]">{{ locationDetails[i].cityName
                 }}</span>,
-              <span *ngIf="locationDetails && locationDetails[i]">{{
-                locationDetails[i].countryName }}</span>
+              <span *ngIf="locationDetails && locationDetails[i]">{{ locationDetails[i].countryName }}</span>
             </div>
             <p aria-hidden="true" class="text-2xl text-green-400 inset-4">
               {{event.startDate | date :"MMM d - h:mm a"}}</p>
-
           </div>
         </div>
       </div>

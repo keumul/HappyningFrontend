@@ -1,10 +1,11 @@
 export interface Message {
-    chat: number;
-    user: {
-        id: number;
-        username: string;
-      };
-    message: string;
-    createdAt: Date;
-    latency: number;
+  id: number;
+  chat: number;
+  user: {
+    id: number;
+    username: string;
+  };
+  message: string;
+  createdAt: Date;
+  latency: number;
 }

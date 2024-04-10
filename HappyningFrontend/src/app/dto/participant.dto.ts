@@ -3,6 +3,7 @@ export interface Participant {
     userId: number;
     event: {
         title: string,
-        startDate: Date
+        startDate: Date,
+        endDate: Date,
     }
 }
