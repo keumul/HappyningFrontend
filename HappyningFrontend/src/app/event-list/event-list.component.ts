@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Event } from '../dto/event.dto';
 import { Location } from '../dto/location.dto';
 import { City } from '../dto/city.dto';
@@ -15,6 +15,8 @@ import { CategoryService } from '../services/category.service';
   styleUrls: ['./event-list.component.css'],
 })
 export class EventListComponent implements OnInit {
+  @ViewChild('navbarContainer') navbarContainer!: ElementRef;
+
   events!: Event[];
   locations!: Location;
   city!: City;
@@ -32,17 +34,15 @@ export class EventListComponent implements OnInit {
 
   category!: Category;
   categories: Category[] = [];
-  subcategories: Category[] = [];
-  isSubcategoriesOpen = false;
-  formatId!: number;
-  categoryId!: number;
-  subcategoryId!: number;
   format!: Format;
   formats!: Format[];
 
   startDateFilter!: Date;
   endDateFilter!: Date;
 
+  isChooseCategory = false;
+
+  scrollStep: number = 150;
   constructor(
     private eventService: EventService,
     private locationService: LocationService,
@@ -183,18 +183,15 @@ export class EventListComponent implements OnInit {
 
   async loadAllEvents() {
     try {
-      const data = await this.eventService.getAllEvents().toPromise();
+      var data = await this.eventService.getAllEvents().toPromise();
       const today = new Date();
+      
       if (data !== undefined ) {
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].endDate < today) {
-            data.splice(i, 1);
-          }
-        }
+        data = data.filter(item => new Date(item.endDate) >= today);
         this.events = data as Event[];
         this.locationDetails = await this.loadAllLocationDetails();
       } else {
-        console.error('No data received from getAllEvents()');
+        this.events = [];
       }
     } catch (error) {
       console.error('Error loading events:', error);
@@ -236,6 +233,28 @@ export class EventListComponent implements OnInit {
     }
   }
 
+  async filterEventsByCategory(id: number) {
+    this.loadCategory(id);
+    this.events = [];
+    const data = await this.eventService.getAllEvents().toPromise();
+    data!.forEach((event: Event) => {
+      if (event.categoryId === id) {
+        this.events.push(event);
+      }
+    })
+  }
+
+  async filterEventsByFormat(id: number) {
+    this.loadFormat(id);
+    this.events = [];
+    const data = await this.eventService.getAllEvents().toPromise();
+    data!.forEach((event: Event) => {
+      if (event.formatId === id) {
+        this.events.push(event);
+      }
+    })
+  }
+
   async loadCategory(id: number) {
     this.categoryService.findCategory(id).subscribe((data: any) => {
       this.category = data;
@@ -245,31 +264,8 @@ export class EventListComponent implements OnInit {
   async loadCategories() {
     this.categories = [];
     this.categoryService.findAllCategories().subscribe((data: any) => {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].parentId == null) {
-          this.categories.push(data[i]);
-        }
-      }
+      this.categories = data;
     });
-    console.log(this.categories);
-
-  }
-
-  async loadSubcategories(id: number) {
-    this.categoryService.findSubcategories(id).subscribe((data: any) => {
-      if (data.length > 0) {
-        this.subcategories = data;
-        this.isSubcategoriesOpen = true;
-      } else {
-        this.categoryId = id;
-        this.isSubcategoriesOpen = false;
-      }
-    })
-    console.log(this.subcategories);
-  }
-
-  async showSubcategories() {
-    this.loadSubcategories(this.category.id);
   }
 
   async loadFormat(id: number) {
@@ -284,15 +280,12 @@ export class EventListComponent implements OnInit {
     })
   }
 
-  async sortEvents() {
-    const data = await this.eventService.getAllEvents().toPromise();
-  
-    data!.sort((a, b) => {
-      const dateA = new Date(a.creationDate).getTime();
-      const dateB = new Date(b.creationDate).getTime();
-      return dateA - dateB;
-    });
-
-    this.events = data!;
+  scrollLeft() {
+    this.navbarContainer.nativeElement.scrollLeft -= this.scrollStep;
   }
+
+  scrollRight() {
+    this.navbarContainer.nativeElement.scrollLeft += this.scrollStep;
+  }
+
 }

@@ -1,77 +1,47 @@
-<!-- <mat-checkbox class="checkbox" (change)="filterOn()"><mat-icon>filter_alt</mat-icon>
-</mat-checkbox>
-
-<mat-card class="scrollable-card" *ngIf="!isFilter">
-  <mat-card-title>События</mat-card-title>
-
-  <mat-card-title class="subtitle">Вы организатор</mat-card-title>
-  <div *ngIf="myevents === null || myevents!.length === 0">
-    <p>Событий нет.</p>
-  </div>
-  <button mat-button *ngFor="let event of myevents" (click)="redirectToEvent(event.id)">
-    {{ event.title | ellipsis: 15 }}
-    {{ event.startDate | date :"MMM d - h:mm a"}}
-  </button>
-
-  <mat-card-title class="subtitle" *ngIf="events">Вы участник</mat-card-title>
-  <div *ngIf="events === null || events!.length === 0">
-    <p>Событий нет.</p>
-  </div>
-  <button mat-button *ngFor="let event of events" (click)="redirectToEvent(event.eventId)">
-    {{ event.event.title | ellipsis: 15}}
-    {{ event.event.startDate | date :"MMM d - h:mm a" }}
-  </button>
-
-  <div *ngIf="selectedEvent">
-    <h3>Selected Event: {{ selectedEvent.title }}</h3>
-  </div>
-</mat-card>
-
-<mat-card *ngIf="isFilter" class="main-filters">
-  <mat-card-title><mat-icon>filter_alt</mat-icon></mat-card-title>
-  <mat-form-field class="filters">
-    <mat-label class="filters">Дата события</mat-label>
-    <input matInput [(ngModel)]="startDateFilter" name="Дата" [matDatepicker]="picker">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-  <mat-form-field class="filters">
-    <input matInput placeholder="Местоположение" [(ngModel)]="locationFilter">
-  </mat-form-field>
-  <mat-form-field class="filters">
-    <mat-label class="filters">Выберите категорию</mat-label>
-    <mat-select [(ngModel)]="categoryFilter">
-      <mat-option *ngFor="let cat of categories" [value]="cat.id" [matTooltip]="cat.description" class="filters">
-        {{ cat.title }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <button mat-button (click)="applyFilters()" style="background-color: rgb(236, 247, 210);"
-    [disabled]="!startDateFilter && !locationFilter && !categoryFilter" class="filters">
-    Применить фильтры
-  </button>
-  <div *ngIf="startDateFilter || locationFilter || categoryFilter" class="filters-input">
-    <button mat-button (click)="clearFilters()" style="background-color: rgb(219, 220, 218);"
-      [disabled]="!startDateFilter && !locationFilter && !categoryFilter" class="filters">
-      Сбросить фильтры
-    </button>
-    <mat-card-title>Cобытия</mat-card-title>
-    <div class="filtered-events-card">
-      <button mat-button *ngFor="let event of filteredEvents" (click)="redirectToEvent(event.id)" class="filters">
-        {{ event.title | ellipsis: 15 }}
-        {{ event.startDate | date :"MMM d - h:mm a" }}
-      </button>
-    </div>
-  </div>
-</mat-card> -->
-
-
-<!--Right Col-->
-<!--EVENTS LIST-->
-
 <body>
+  <!-- Categories + filters navbar -->
+  <nav>
+    <div class="mx-auto sm:px-6 lg:px-8 relative">
+      <div #navbarContainer class="flex h-12 justify-between overflow-x-auto">
+
+        <div class="arrow-left flex items-center justify-center text-gray-400 hover:text-gray-500 absolute left-0 top-0 bottom-0 ml-2" (click)="scrollLeft()">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </div>
+
+        <div class="arrow-right flex items-center justify-center text-gray-400 hover:text-gray-500 absolute right-0 top-0 bottom-0 mr-2" (click)="scrollRight()">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+
+        <div class="flex flex-1 justify-between"> 
+          <button class="text-gray-500 font-bold
+          hover:bg-indigo-400 
+          hover:text-white hover:font-bold rounded-md focus:bg-indigo-400 
+          focus:text-white focus:font-bold
+          px-20 py-2 text-sm" aria-current="page" (click)="loadAllEvents()">All</button>
+
+          <button *ngFor="let category of categories" [(ngModel)]="category.id"
+            (click)="filterEventsByCategory(category.id)" 
+            class="text-gray-500 hover:bg-green-400
+            hover:text-white hover:font-medium rounded-md focus:bg-green-400 
+            focus:text-white focus:font-medium
+            px-20 py-2 text-sm font-medium">{{category.title | ellipsis: 15}}</button>
+
+          <button *ngFor="let format of formats" [(ngModel)]="format.id" 
+          (click)="filterEventsByFormat(format.id)"
+            class="text-gray-500 hover:bg-pink-400
+            hover:text-white hover:font-medium rounded-md focus:bg-pink-400 
+            focus:text-white focus:font-medium
+            px-20 py-2 text-sm font-medium">{{format.title}}</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
   <div class="pt-20 md:pt-13 mx-auto flex flex-wrap flex-col md:flex-row items-center justify-between">
-    <!--Left Col-->
     <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden font-bold">
       <p class="my-4 text-3xl md:text-10xl text-indigo font-bold leading-tight text-center md:text-left">
         What kind of
@@ -92,7 +62,7 @@
           <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 
             leading-tight focus:ring transform transition hover:scale-105 duration-300 
             ease-in-out" id="location" type="text" placeholder="location" [(ngModel)]="locationFilter" />
-          <button (click)="openFilter()">More filter</button>
+          <button (click)="openFilter()" class="mt-6">More filter</button>
           <div *ngIf="isFilter">
             <div class="sm:col-span-2 sm:col-start-1">
               <!-- COUNTRY -->
@@ -127,57 +97,24 @@
               <div class="mt-2">
                 <div class="sm:col-span-2 sm:col-start-1">
                   <label for="startDate" class="block text-sm font-bold leading-6 text-blue-300">Start Date</label>
-                  <input type="datetime-local" id="startDate" name="startDate" 
-                  class="block flex-1 border-0 bg-white rounded-sm py-1.5 pl-1 text-gray-600
+                  <input type="datetime-local" id="startDate" name="startDate" class="block flex-1 border-0 bg-white rounded-sm py-1.5 pl-1 text-gray-600
                   placeholder:text-blue-400 focus:ring-0 sm:text-sm sm:leading-6" [(ngModel)]="startDateFilter">
                 </div>
                 <div class="sm:col-span-2">
                   <label for="endDate" class="block text-sm font-bold leading-6 text-blue-300">End Date</label>
-                  <input type="datetime-local" id="endDate" name="endDate" 
-                  class="block flex-1 border-0 bg-white rounded-sm py-1.5 pl-1 text-gray-600 
+                  <input type="datetime-local" id="endDate" name="endDate" class="block flex-1 border-0 bg-white rounded-sm py-1.5 pl-1 text-gray-600 
                   placeholder:text-blue-400 focus:ring-0 sm:text-sm sm:leading-6" [(ngModel)]="endDateFilter">
                 </div>
               </div>
             </div>
           </div>
-          <!-- CATEGORIES + FORMATS -->
-          <!-- <div class="mt-2">
-              <label for="category" class="block text-sm font-bold leading-6 text-blue-300">Category</label>
-              <select id="categorySelect" name="category" autocomplete="category-title" (click)="showSubcategories()"
-                [(ngModel)]="category.id" class="shadow appearance-none border rounded w-full p-3 text-gray-700 
-                 leading-tight focus:ring transform transition">
-                <option *ngFor="let cat of categories" [value]="cat.id">{{cat.title}}</option>
-              </select>
-            </div>
-
-            <div *ngIf="isSubcategoriesOpen" class="mt-2">
-              <select id="categorySelect" name="category" autocomplete="category-title" (click)="showSubcategories()"
-                [(ngModel)]="categoryId" class="shadow appearance-none border rounded w-full p-3 text-gray-700 
-                 leading-tight focus:ring transform transition">
-                <option *ngFor="let subcat of subcategories" [value]="subcat.id">
-                  {{subcat.title}}</option>
-              </select>
-            </div>
-
-            <div class="sm:col-span-2">
-              <div class="mt-2">
-                <label for="format" class="block text-sm font-bold leading-6 text-blue-300">Format</label>
-                <select id="formatSelect" name="format" autocomplete="format-title" [(ngModel)]="formatId" class="shadow appearance-none border rounded w-full p-3 text-gray-700 
-                 leading-tight focus:ring transform transition">
-                  <option *ngFor="let fromat of formats" [value]="format.id">{{format.title}}</option>
-                </select>
-              </div>
-            </div> -->
-
-
-        </div>
-
-        <div class="flex items-center justify-between pt-4">
-          <button
-            class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
-            type="button" (click)="applyFilters()">
-            Search
-          </button>
+          <div class="flex items-center justify-between pt-4">
+            <button
+              class="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
+              type="button" (click)="applyFilters()">
+              Search
+            </button>
+          </div>
         </div>
       </form>
     </div>
