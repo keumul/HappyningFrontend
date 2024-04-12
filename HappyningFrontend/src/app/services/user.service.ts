@@ -50,4 +50,12 @@ export class UserService {
   removeUserRate(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/rate/${id}`);
   }
+
+  addModerator(id: number): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/moderator/${id}`,{});
+  }
+
+  removeModerator(id: number): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/user/${id}`,{});
+  }
 }

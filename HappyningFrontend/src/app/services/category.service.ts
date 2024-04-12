@@ -12,8 +12,8 @@ export class CategoryService {
 
   constructor(private http: HttpClient) {}
 
-  createCategory(dto: Category): Observable<any> {
-    return this.http.post<any>(this.categoryUrl, dto);
+  createCategory(id:number, dto: Category): Observable<any> {
+    return this.http.post<any>(`${this.categoryUrl}/${id}`, dto);
   }
 
   findAllCategories(): Observable<any> {
@@ -28,8 +28,8 @@ export class CategoryService {
     return this.http.get<any>(`${this.categoryUrl}/${id}`);
   }
 
-  updateCategory(id: number, dto: Category): Observable<any> {
-    return this.http.patch<any>(`${this.categoryUrl}/${id}`, dto);
+  updateCategory(id: number, parentId: number, dto: Category): Observable<any> {
+    return this.http.patch<any>(`${this.categoryUrl}/${id}/${parentId}`, dto);
   }
 
   removeCategory(id: number): Observable<any> {

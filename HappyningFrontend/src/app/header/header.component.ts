@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.userService.whoAmI().subscribe((user) => {
       this.currentUser = user;
-      this.isAdmin = this.currentUser.isAdmin;
+      this.isAdmin = this.currentUser.role === 'admin';
       this.loadNotifications();
     });
   }
