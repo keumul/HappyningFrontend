@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { EventService } from '../services/event.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -47,10 +47,9 @@ export class EditorComponent implements OnInit {
   cities!: City[];
   address!: string;
   locations!: { id: number, details: string, cityId: number }[];
-  
+
   isPrivate = true;
   isPublic = true;
-  limit = 0;
 
   message!: string;
   errorMessage!: string;
@@ -58,41 +57,45 @@ export class EditorComponent implements OnInit {
   isErrorMessage = false;
   isSuccessMessage = false;
 
+  selectedImage: File | undefined;
+  base64Image: string | undefined;
+  image: string | undefined;
+  isFileSelected: boolean = false;
+  bytes: any | undefined;
+
+  isImageEditorOpen = false;
+
   constructor(private eventService: EventService,
     private authService: AuthService,
     private categoryService: CategoryService,
     private router: Router,
     private notificationService: NotificationService,
-    private locationService: LocationService) { }
+    private locationService: LocationService,
+    private el: ElementRef) { }
 
   ngOnInit(): void {
-    this.limit = 0;
     this.canCheck = true;
     let userId = this.authService.getCurrentUser()?.id;
     this.eventService.getUserEvents(userId).subscribe(data => {
       this.events = data;
-      if (this.events.length > 0) {
-        this.onSelectEvent(this.events[0]);
-      } else {
-        this.onSelectEvent({
-          id: this.auxId,
-          title: '',
-          description: '',
-          startDate: new Date(0),
-          endDate: new Date(0),
-          locationId: 1,
-          organizerId: this.authService.getCurrentUser()?.id,
-          categoryId: 1,
-          formatId: 1,
-          ageLimit: 21,
-          maxGuestAmount: 100,
-          isPublic: true,
-        });
-      }
+      this.onSelectEvent({
+        title: '',
+        description: '',
+        startDate: new Date(0),
+        endDate: new Date(0),
+        locationId: 1,
+        organizerId: this.authService.getCurrentUser()?.id,
+        categoryId: 1,
+        formatId: 1,
+        ageLimit: 21,
+        maxGuestAmount: 100,
+        isPublic: true,
+      });
+      this.image = "";
+      this.isImageEditorOpen = false;
       this.clearInput();
     });
 
-    this.auxId = this.events.length + Math.random() * 10000;
     this.loadCategories();
     this.loadSubcategories(1);
     this.loadFormats();
@@ -112,7 +115,9 @@ export class EditorComponent implements OnInit {
   }
 
   onSelectEvent(event: any) {
+    this.image = "";
     this.canCheck = false;
+    this.isImageEditorOpen = true;
     this.selectedEvent = event;
     this.auxDate = new Date(this.selectedEvent.startDate);
     this.startDate = moment().format('YYYY.MM.DD HH:MM');
@@ -124,6 +129,7 @@ export class EditorComponent implements OnInit {
     this.loadCountries();
     this.loadCities();
     this.loadLocations();
+    this.showPhoto();
     if (this.selectedEvent && this.selectedEvent.isPublic) {
       this.accessLevel = 'Public';
     } else {
@@ -142,14 +148,12 @@ export class EditorComponent implements OnInit {
   }
 
   loadCategories() {
+    this.categories = [];
     this.categoryService.findAllCategories().subscribe((data: any) => {
-      if (this.limit < 1) {
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].parentId == null) {
-            this.categories.push(data[i]);
-          }
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].parentId == null) {
+          this.categories.push(data[i]);
         }
-        this.limit++;
       }
     });
   }
@@ -242,6 +246,7 @@ export class EditorComponent implements OnInit {
       ageLimit: 21,
       isPublic: false,
       secretCode: '',
+      photo: 0,
     };
     this.startDate = new Date(0).toISOString().slice(0, 16);
     this.selectedEvent = this.event;
@@ -261,6 +266,7 @@ export class EditorComponent implements OnInit {
       ageLimit: this.selectedEvent.ageLimit,
       isPublic: this.selectedEvent.isPublic,
       secretCode: this.selectedEvent.secretCode,
+      photo: this.selectedEvent.photo,
     }).subscribe(
       (response: any) => {
         this.isErrorMessage = false;
@@ -308,8 +314,7 @@ export class EditorComponent implements OnInit {
       this.isErrorMessage = true;
       return;
     }
-
-    console.log(this.event.secretCode);
+    console.log(this.locations[this.locations.length - 1].id + 1);
 
 
     this.createLocation();
@@ -326,6 +331,7 @@ export class EditorComponent implements OnInit {
       ageLimit: this.event.ageLimit,
       isPublic: this.event.isPublic,
       secretCode: this.event.secretCode || 'NO_SECRET',
+      photo: this.event.photo || 0,
     }).subscribe(
       (response: any) => {
         this.notificationService.createNotification({
@@ -409,6 +415,55 @@ export class EditorComponent implements OnInit {
   closeMessage() {
     this.isErrorMessage = false;
     this.isSuccessMessage = false;
+  }
+
+  onFileSelected(event: any) {
+    this.selectedImage = event.target.files[0];
+    this.encodeImage();
+    this.isFileSelected = true;
+  }
+
+  cancelUploadPhoto() {
+    this.isFileSelected = false;
+    this.selectedImage = undefined;
+    this.base64Image = undefined;
+  }
+
+  encodeImage() {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.base64Image = reader.result as string;
+    };
+    reader.readAsDataURL(this.selectedImage as File);
+  }
+
+  uploadImage(id: number) {
+    this.bytes = btoa(this.base64Image!);
+    this.eventService.uploadImage(id, { photo: this.bytes }).subscribe((data: any) => {
+      this.selectedEvent.photo = data.id;
+    });
+  }
+
+  showPhoto() {
+    let id = this.selectedEvent.id;
+    this.eventService.showImage(id).subscribe((data) => {
+      this.image = data;
+    });
+  }
+
+
+
+
+  async goToImageEditor(event: Event, url: any) {
+    await this.onSelectEvent(event);
+    const go = document.querySelector('#goToImageEditor');
+    const view = document.querySelector('#imageEditorView');
+    go!.addEventListener('click', (evt) => {
+      evt.preventDefault();
+  
+      view!.scrollIntoView({behavior: 'smooth'});
+  });
+    window.location = url;
   }
 }
 

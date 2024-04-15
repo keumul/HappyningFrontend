@@ -8,12 +8,10 @@ import { UserComponent } from './user/user.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
-import { PhotoComponent } from './photo/photo.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
-  { path: 'photo', component: PhotoComponent },
   { path: 'home', component: HomeComponent },
   { path: 'admin', component: AdminHomeComponent },
   { path: 'profile', component: ProfileComponent },

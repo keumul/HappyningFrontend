@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PhotoDto } from '../dto/photo.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +8,7 @@ import { PhotoDto } from '../dto/photo.dto';
 export class EventService {
   private eventUrl = 'http://localhost:5000/api/events';
   private participantUrl = 'http://localhost:5000/api/participants';
+  private photoUrl = 'http://localhost:5000/api/photos';
 
   constructor(private http: HttpClient) {}
 
@@ -52,8 +52,21 @@ export class EventService {
     return this.http.delete<any>(`${this.eventUrl}/rate/${id}`);
   }
 
-  uploadImage(id: number, dto: PhotoDto): Observable<any> {
-    return this.http.post<any>(`http://localhost:5000/api/photos/upload/${id}`, dto);
+  uploadImage(id: number, dto: any): Observable<any> {
+    return this.http.post<any>(`${this.photoUrl}/upload/${id}`, dto);
+  }
+
+  getImages(id: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.photoUrl}/${id}`);
+  }
+
+  showImage(id: number): Observable<string> {
+    const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
+    return this.http.get(`${this.photoUrl}/show/${id}`, {headers: headers, responseType: 'text' });
+  }
+
+  deleteImage(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.photoUrl}/${id}`);
   }
 
 }

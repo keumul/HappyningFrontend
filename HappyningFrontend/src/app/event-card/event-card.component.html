@@ -10,6 +10,7 @@
         <button (click)="openComplaintDialog()" 
         class="text-pink-500 font-bold text-lg">🛇</button>
       </div>
+      <img *ngIf="image" src="{{image}}" class="img" alt="Cover">
       <p class="mt-1 max-w-2xl text-base leading-6 text-gray-500">This event is available to persons
         <span class="font-bold text-lg text-pink-400">{{event.ageLimit}}+</span>
       </p>
@@ -50,8 +51,8 @@
           <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt class="text-sm font-medium leading-6 text-gray-900">Date</dt>
             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">From
-              <span class="text-green-500">{{ event.startDate | date :"MMM d - h:mm a" }}</span> To
-              <span class="text-green-500">{{ event.endDate | date :"MMM d - h:mm a"}}</span>
+              <span class="text-green-500">{{ event.startDate | date :"MMM d - h:mm a YYYY" }}</span> To
+              <span class="text-green-500">{{ event.endDate | date :"MMM d - h:mm a YYYY"}}</span>
             </dd>
           </div>
           <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -90,42 +91,3 @@
     </div>
   </div>
 </body>
-<!-- <mat-card>
-    <div class="main">
-        <div class="event-container">
-            <mat-card class="main-card">
-                <mat-card-header class="event-title">
-                    {{ event.title }}
-                </mat-card-header>
-                <div class="scrollable-card">
-                    <div class="info-text">Описание</div>
-                    <mat-card-content class="info-card" matTooltip="{{ event.description }}">{{ event.description |
-                        ellipsis: 100}}</mat-card-content>
-                    <div class="info-text">Местонахождение</div>
-                    <mat-card-content class="info-card">{{ event.locationId }}</mat-card-content>
-                    <div class="info-text">Дата</div>
-                    <mat-card-content class="info-card">{{ event.startDate | date :"MMM d - h:mm a"}}</mat-card-content>
-                    <div class="info-text">Организатор</div>
-                    <div class="organizer">
-                        <mat-card-content class="info-card-organizer">{{ organizer.username }}</mat-card-content>
-                        <button mat-icon-button (click)="navigateToUserProfile(organizer.id)">
-                            <mat-icon>contact_emergency</mat-icon>
-                        </button>
-                    </div>
-                    <div class="info-text">Категория</div>
-                    <mat-card-content class="info-card" matTooltip="{{ category.description }}">{{ category.title }}</mat-card-content>
-                </div>
-            </mat-card>
-            <app-event-registration></app-event-registration>
-        </div>
-        <app-chat></app-chat>
-    </div>
-
-    <div class="overlay" *ngIf="isOverlayVisible">
-        <div class="overlay-content">
-            <input [(ngModel)]="enteredCode" placeholder="Введите код доступа" />
-            <button (click)="onOverlaySubmit()">OK</button>
-            <button (click)="closeOverlay()">Отмена</button>
-        </div>
-    </div>
-</mat-card> -->

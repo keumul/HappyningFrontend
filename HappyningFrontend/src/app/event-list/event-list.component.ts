@@ -41,8 +41,12 @@ export class EventListComponent implements OnInit {
   endDateFilter!: Date;
 
   isChooseCategory = false;
+  image: any;
+  images: { [eventId: number]: string } = {};
 
   scrollStep: number = 150;
+
+
   constructor(
     private eventService: EventService,
     private locationService: LocationService,
@@ -56,6 +60,7 @@ export class EventListComponent implements OnInit {
     this.loadCities();
     this.loadCategories();
     this.loadFormats();
+    this.showPhotos();
   }
 
   async loadLocations() {
@@ -131,21 +136,21 @@ export class EventListComponent implements OnInit {
 
   async dateFilter() {
     let filteredEvents = [];
-  
+
     const data = await this.eventService.getAllEvents().toPromise();
-  
+
     for (let i = 0; i < data!.length; i++) {
       const eventStartDate = new Date(data![i].startDate);
       const eventEndDate = new Date(data![i].endDate);
-      
+
       const startFilterDate = new Date(this.startDateFilter);
       const endFilterDate = new Date(this.endDateFilter);
-  
+
       eventStartDate.setHours(0, 0, 0, 0);
       eventEndDate.setHours(0, 0, 0, 0);
       startFilterDate.setHours(0, 0, 0, 0);
       endFilterDate.setHours(0, 0, 0, 0);
-  
+
       if (
         (this.startDateFilter && !this.endDateFilter && eventStartDate.getTime() === startFilterDate.getTime()) ||
         (!this.startDateFilter && this.endDateFilter && eventEndDate.getTime() === endFilterDate.getTime()) ||
@@ -156,7 +161,7 @@ export class EventListComponent implements OnInit {
         return this.events;
       }
     }
-  
+
     this.events = filteredEvents;
     return filteredEvents;
   }
@@ -168,11 +173,7 @@ export class EventListComponent implements OnInit {
     const combinedFilteredEvents = locationFilteredEvents.filter(event =>
       dateFilteredEvents!.some(filteredEvent => filteredEvent.id === event.id)
     );
-    console.log('Location filtered events:', locationFilteredEvents);
-    console.log('Date filtered events:', dateFilteredEvents);
-
-    console.log('Filtered events:', combinedFilteredEvents);
-
+    
     this.events = combinedFilteredEvents;
     return combinedFilteredEvents;
   }
@@ -185,11 +186,12 @@ export class EventListComponent implements OnInit {
     try {
       var data = await this.eventService.getAllEvents().toPromise();
       const today = new Date();
-      
-      if (data !== undefined ) {
+
+      if (data !== undefined) {
         data = data.filter(item => new Date(item.endDate) >= today);
         this.events = data as Event[];
         this.locationDetails = await this.loadAllLocationDetails();
+
       } else {
         this.events = [];
       }
@@ -236,9 +238,10 @@ export class EventListComponent implements OnInit {
   async filterEventsByCategory(id: number) {
     this.loadCategory(id);
     this.events = [];
+    const today = new Date();
     const data = await this.eventService.getAllEvents().toPromise();
     data!.forEach((event: Event) => {
-      if (event.categoryId === id) {
+      if (event.categoryId === id && new Date(event.endDate) >= today) {
         this.events.push(event);
       }
     })
@@ -247,9 +250,10 @@ export class EventListComponent implements OnInit {
   async filterEventsByFormat(id: number) {
     this.loadFormat(id);
     this.events = [];
+    const today = new Date();
     const data = await this.eventService.getAllEvents().toPromise();
     data!.forEach((event: Event) => {
-      if (event.formatId === id) {
+      if (event.formatId === id && new Date(event.endDate) >= today) {
         this.events.push(event);
       }
     })
@@ -288,4 +292,18 @@ export class EventListComponent implements OnInit {
     this.navbarContainer.nativeElement.scrollLeft += this.scrollStep;
   }
 
+  showPhotos() {
+    try {
+      this.eventService.getAllEvents().subscribe(async (event: Event[]) => {
+        for (let i = 0; i < event.length; i++) {
+          const images = await this.eventService.showImage(event[i].id).toPromise();
+          if (images!.length > 0) {
+            this.images[event[i].id] = images!;
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Error loading images:', error);
+    }
+  }
 }

@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
   canCheck = true;
   isPrivate = true;
   isPublic = true;
+  isHighRole = false;
 
   constructor(private authService: AuthService,
     private eventService: EventService
@@ -52,10 +53,11 @@ export class HomeComponent implements OnInit {
 
   checkCredentials() {
     try {
-      if (this.authService.getCurrentUser()) {
+      if (this.authService.getCurrentUser()?.role == 'user') {
         this.isUser = true;
-      } else {
+      } else if (this.authService.getCurrentUser()?.role == 'admin' || this.authService.getCurrentUser()?.role == 'moderator') {
         this.isUser = false;
+        this.isHighRole = true;
       }
     } catch (error) {
       console.log(error);

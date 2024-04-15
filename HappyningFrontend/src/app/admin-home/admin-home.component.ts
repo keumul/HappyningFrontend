@@ -9,6 +9,9 @@ import { AuthService } from "../services/auth.service";
 import { Router } from "@angular/router";
 import { RateUser } from "../dto/rate-user.dto";
 import { Format } from "../dto/format.dto";
+import { Country } from "../dto/country.dto";
+import { City } from "../dto/city.dto";
+import { LocationService } from "../services/location.service";
 
 type NewType = OnInit;
 
@@ -25,8 +28,12 @@ export class AdminHomeComponent implements NewType {
   categories!: Category[];
   subcategories!: Category[];
   formats!: Format[];
+  countries!: Country[];
   selectedCategory: Category = { id: 0, title: '', description: '', parentId: 0 };
   selectedFormat: Format = { id: 0, title: '', description: '' };
+  selectedCountry: Country = { id: 0, countryName: '' };
+  selectedCity: City = { id: 0, cityName: '', countryId: 0 };
+  newCity: City = { id: 0, cityName: '', countryId: 0 };
   isEditing = true;
   isCreating = false;
   isCreatingFormat = false;
@@ -34,9 +41,13 @@ export class AdminHomeComponent implements NewType {
   ratingCountTotal: { [userId: number]: number } = {};
   editingCategory: { [categoryId: number]: boolean } = {};
   editingFormat: { [formatId: number]: boolean } = {};
+  editingCountry: { [countryId: number]: boolean } = {};
+  editingCity: { [cityId: number]: boolean } = {};
+  creatingCity: { [cityId: number]: boolean } = {};
   categoryEventCounts: { [categoryId: number]: number } = {};
   formatEventCounts: { [formatId: number]: number } = {};
   parentCategory: { [categoryId: number]: Category } = {};
+  cities: { [countryId: number]: City[] } = {};
   filteredUsers: User[] = [];
   searchValue: number = 0;
   mainCategories: Category[] = [];
@@ -52,13 +63,15 @@ export class AdminHomeComponent implements NewType {
   isOpenModerators = false;
   isOpenCategories = false;
   isOpenFormats = false;
-
+  isCreatingLocation = false;
+  isOpenLocations = false;
 
   constructor(
     private userService: UserService,
     private categoryService: CategoryService,
     private eventSerice: EventService,
     private authService: AuthService,
+    private locationService: LocationService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -67,7 +80,10 @@ export class AdminHomeComponent implements NewType {
     this.loadCategories();
     this.loadFormats();
     this.loadEvents();
+    this.loadCountries();
+    this.loadCities();
     this.showParentCategory();
+    // this.showCities();
     this.loadRating();
     this.calculateCategoryEventCounts();
   }
@@ -143,16 +159,53 @@ export class AdminHomeComponent implements NewType {
     );
   }
 
+  loadCountries(): void {
+    this.locationService.getAllCountries().subscribe(
+      (data) => {
+        this.countries = data;
+      },
+      (error) => {
+        console.error('Error loading countries', error);
+      }
+    );
+  }
+
+  loadCities(): void {
+    this.selectedCity={ id: 0, cityName: '', countryId: 0}
+    this.locationService.getAllCountries().subscribe(
+      (data) => {
+        this.countries = data;
+        for (let i = 0; i < this.countries.length; i++) {
+          this.locationService.getCitiesByCountry(this.countries[i].id).subscribe(
+            (cities) => {
+              this.cities[this.countries[i].id] = cities;
+            },
+            (error) => {
+              console.error('Error loading cities', error);
+            }
+          );
+        }
+      },
+      (error) => {
+        console.error('Error loading countries', error);
+      }
+    );
+  }
+
   updateData(data: any, updateFunction: any, successMessage: string, errorMessage: string): void {
     updateFunction.subscribe(
       () => {
         this.loadFormats();
         this.loadCategories();
         this.loadEvents();
+        this.loadCountries();
+        this.loadCities();
         this.showMainCategories();
         this.calculateCategoryEventCounts();
         this.thisCategoryIsEditing(data.id);
-        this.thisFormatIsEditing(data.id)
+        this.thisFormatIsEditing(data.id);
+        
+        this.creatingCity[data.id] = false;
         data.isEditing(data.id);
         data = { id: 0, title: '', description: '', parentId: 0 };
         this.isSuccessMessage = true;
@@ -188,12 +241,34 @@ export class AdminHomeComponent implements NewType {
     );
   }
 
+  updateCountry(country: Country): void {
+    this.selectedCountry = { ...country };
+    this.updateData(
+      this.selectedCountry,
+      this.locationService.updateCountry(country.id, this.selectedCountry),
+      'Country has been successfully updated',
+      'Error updating country'
+    );
+  }
+
+  updateCity(city: City): void {
+    this.selectedCity = { ...city };
+    this.updateData(
+      this.selectedCity,
+      this.locationService.updateCity(city.id, this.selectedCity),
+      'City has been successfully updated',
+      'Error updating city'
+    );
+  }
+
   deleteData(id: number, deleteFunction: any, successMessage: string, errorMessage: string): void {
     deleteFunction.subscribe(
       () => {
         this.loadFormats();
         this.loadCategories();
         this.loadEvents();
+        this.loadCities();
+        this.loadCountries();
         this.calculateCategoryEventCounts();
         this.isSuccessMessage = true;
         this.isErrorMessage = false;
@@ -226,12 +301,32 @@ export class AdminHomeComponent implements NewType {
     );
   }
 
+  deleteCountry(id: number): void {
+    this.deleteData(
+      id,
+      this.locationService.deleteCountry(id),
+      'Country has been successfully deleted',
+      'Error deleting country'
+    );
+  }
+
+  deleteCity(id: number): void {
+    this.deleteData(
+      id,
+      this.locationService.deleteCity(id),
+      'City has been successfully deleted',
+      'Error deleting city'
+    );
+  }
+
   createData(data: any, createFunction: any, successMessage: string, errorMessage: string): void {
     createFunction.subscribe(
       () => {
         this.loadFormats();
         this.loadCategories();
         this.loadEvents();
+        this.loadCountries();
+        this.loadCities();
         this.calculateCategoryEventCounts();
         this.isSuccessMessage = true;
         this.isErrorMessage = false;
@@ -264,9 +359,31 @@ export class AdminHomeComponent implements NewType {
     );
   }
 
+  createCountry(): void {
+    this.createData(
+      this.selectedCountry,
+      this.locationService.createCountry(this.selectedCountry),
+      'Country has been successfully created',
+      'Error creating country'
+    );
+  }
+
+  createCity(countryId: number): void {
+    this.createData(
+      this.selectedCity,
+      this.locationService.createCity(countryId, this.newCity),
+      'City has been successfully created',
+      'Error creating city'
+    );
+  }
+
   cancelCreating(): void {
     this.selectedCategory = { id: 0, title: '', description: '', parentId: 0 };
     this.selectedFormat = { id: 0, title: '', description: '' };
+    this.selectedCountry = { id: 0, countryName: '' };
+    this.thisCategoryIsEditing(this.selectedCategory.id);
+    this.thisFormatIsEditing(this.selectedFormat.id);
+    this.thisCountryIsEditing(this.selectedCountry.id);
   }
 
   calculateCategoryEventCounts(): void {
@@ -329,6 +446,20 @@ export class AdminHomeComponent implements NewType {
     this.editingFormat[id] = !this.editingFormat[id];
   }
 
+  thisCountryIsEditing(id: number): void {
+    this.editingCountry[id] = !this.editingCountry[id];
+    this.creatingCity[id] = false;
+  }
+
+  thisCityIsEditing(id: number): void {
+    this.editingCity[id] = !this.editingCity[id];
+  }
+
+  thisCityIsCreating(id: number): void {
+    this.creatingCity[id] = !this.creatingCity[id];
+    this.editingCountry[id] = false;
+  }
+
   showParentCategory(): void {
     this.categoryService.findAllCategories().subscribe(
       (data) => {
@@ -362,6 +493,32 @@ export class AdminHomeComponent implements NewType {
     );
   }
 
+  // showCities() {
+  //   this.cities = {};
+  //   this.locationService.getAllCountries().subscribe(
+  //     (data) => {
+  //       this.countries = data;
+  //       for (let i = 0; i < this.countries.length; i++) {
+  //         this.locationService.getCitiesByCountry(this.countries[i].id).subscribe(
+  //           (cities) => {
+  //             this.cities[this.countries[i].id] = cities;
+  //           },
+  //           (error) => {
+  //             console.error('Error loading cities', error);
+  //           }
+  //         );
+  //       }
+  //     },
+  //     (error) => {
+  //       console.error('Error loading countries', error);
+  //     }
+  //   );
+  // }
+
+  selectCity(city: City): void {
+    this.selectedCity = city;
+  }
+
   startEditing(category: Category): void {
     this.selectedCategory = { ...category };
     this.thisCategoryIsEditing(category.id);
@@ -370,6 +527,21 @@ export class AdminHomeComponent implements NewType {
   startEditingFormat(format: Format): void {
     this.selectedFormat = { ...format };
     this.thisFormatIsEditing(format.id);
+  }
+
+  startEditingCountry(country: Country): void {
+    this.selectedCountry = { ...country };
+    this.thisCountryIsEditing(country.id);
+  }
+
+  startEditingCity(city: City): void {
+    this.selectedCity = { ...city };
+    this.thisCityIsEditing(city.id);
+  }
+
+  startCreatingCity(country: Country): void {
+    this.selectedCountry = { ...country };
+    this.thisCityIsCreating(country.id);
   }
 
   cancelEditingFormat(format: Format): void {
@@ -382,6 +554,18 @@ export class AdminHomeComponent implements NewType {
     this.selectedCategory = { id: 0, title: '', description: '', parentId: 0 };
     this.thisCategoryIsEditing(category.id);
     this.loadCategories();
+  }
+
+  cancelEditingCountry(country: Country): void {
+    this.selectedCountry = { id: 0, countryName: '' };
+    this.thisCountryIsEditing(country.id);
+    this.loadCountries();
+  }
+
+  cancelEditingCity(city: City): void {
+    this.selectedCity = { id: 0, cityName: '', countryId: 0 };
+    this.thisCityIsEditing(city.id);
+    this.loadCities();
   }
 
   deleteUser(id: number) {
@@ -399,13 +583,17 @@ export class AdminHomeComponent implements NewType {
   }
 
   openList(list: string) {
-    const isOpenValues: Record<string, { isOpenUsers?: boolean; isOpenModerators?: boolean; isOpenCategories?: boolean; isCreating?: boolean; isOpenFormats?: boolean; isCreatingFormat?: boolean;}> = {
+    const isOpenValues: Record<string, { isOpenUsers?: boolean; isOpenModerators?: boolean;
+       isOpenCategories?: boolean; isCreating?: boolean; isOpenFormats?: boolean;
+        isCreatingFormat?: boolean; isOpenLocations?: boolean; isCreatingLocation?: boolean;}> = {
       'users': { isOpenUsers: true },
       'moderators': { isOpenModerators: true },
       'categories': { isOpenCategories: true },
       'createCategory': { isCreating: true },
       'formats': { isOpenFormats: true },
-      'createFormat': { isCreatingFormat: true}
+      'createFormat': { isCreatingFormat: true },
+      'locations': { isOpenLocations: true },
+      'createLocation': { isCreatingLocation: true}
     };
 
     this.isOpenUsers = false;
@@ -415,6 +603,8 @@ export class AdminHomeComponent implements NewType {
     this.isCreating = false;
     this.isCreatingFormat = false;
     this.isOpenFormats = false;
+    this.isCreatingLocation = false;
+    this.isOpenLocations = false;
 
     if (isOpenValues[list]) {
       Object.assign(this, isOpenValues[list]);

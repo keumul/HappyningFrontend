@@ -46,7 +46,11 @@ export class LoginComponent implements OnInit {
           } else if (statusData) {
             this.isActivationCode = false;
             window.sessionStorage.setItem('access_token', data.access_token);
+            if (this.authService.getCurrentUser()?.role == 'admin') {
+              this.router.navigate(['/admin']);
+            } else {
             this.router.navigate(['/home']);
+            }
           }
         }
         );

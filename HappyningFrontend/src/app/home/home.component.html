@@ -1,4 +1,5 @@
-<body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" aria-hidden="false">
+<body *ngIf="isHighRole"><app-role-error></app-role-error></body>
+<body *ngIf="isUser" class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" aria-hidden="false">
   <div class="h-full">
 
     <app-header></app-header>

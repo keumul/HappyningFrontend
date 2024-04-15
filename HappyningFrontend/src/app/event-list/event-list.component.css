@@ -9,3 +9,14 @@
   .overflow-x-auto::-webkit-scrollbar {
     display: none;
   }
+
+  .navbar-button {
+    @apply text-gray-500
+            hover:text-white hover:font-medium rounded-md 
+            focus:text-white focus:font-medium
+            px-20 py-2 text-sm font-medium;
+  }
+
+  .img {
+    @apply h-full w-full object-cover object-center lg:h-full lg:w-full
+  }

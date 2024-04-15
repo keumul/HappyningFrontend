@@ -48,7 +48,7 @@ import { ErrorComponent } from './error/error.component';
 import { DUIButton, DUIAlert } from "david-ui-angular";
 import { FooterComponent } from './footer/footer.component';
 import { EventListComponent } from './event-list/event-list.component';
-import { PhotoComponent } from './photo/photo.component';
+import { RoleErrorComponent } from './role-error/role-error.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +75,7 @@ import { PhotoComponent } from './photo/photo.component';
     ErrorComponent,
     FooterComponent,
     EventListComponent,
-    PhotoComponent
+    RoleErrorComponent
   ],
   imports: [
     BrowserModule,

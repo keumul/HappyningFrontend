@@ -8,114 +8,76 @@
       <app-report class="reports"></app-report>
     </div> -->
     <hr class="mb-6 mt-6">
-    <button (click)="openList('users')" class="inline-flex mr-4 items-center rounded-md bg-white px-3 py-2 
-                text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset 
-                ring-gray-300 hover:bg-gray-100 
-                hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
+    <button (click)="openList('users')" class="accent-button bg-green-500 hover:bg-green-400">
       Users
     </button>
 
-    <button (click)="openList('moderators')" class="inline-flex items-center rounded-md 
-    bg-white px-3 py-2 mr-4
-                text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset 
-                ring-gray-300 hover:bg-gray-100 
-                hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
+    <button (click)="openList('moderators')" class="accent-button bg-blue-400 hover:bg-blue-300">
       Moderators
     </button>
 
-    <button (click)="openList('categories')" class="inline-flex items-center rounded-md bg-white px-3 py-2 
-                text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset mr-4
-                ring-gray-300 hover:bg-gray-100 
-                hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
+    <button (click)="openList('categories')" class="accent-button bg-indigo-400 hover:bg-indigo-300">
       Categories
     </button>
 
-    <button (click)="openList('formats')" class="inline-flex items-center rounded-md bg-white px-3 py-2 
-                text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset mr-4
-                ring-gray-300 hover:bg-gray-100 
-                hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
+    <button (click)="openList('formats')" class="accent-button bg-violet-400 hover:bg-violet-300">
       Formats
     </button>
 
-    <button *ngIf="isOpenCategories || isCreating" (click)="openList('createCategory')" class="inline-flex items-center rounded-md text-transparent bg-gradient-to-r from-green-300 via-pink-400 to-purple-400
-    hover:from-green-200 hover:to-pink-300 text-white font-bold py-2 px-4 rounded focus:ring transform transition 
-    hover:scale-105 duration-300
-    px-3 py-2 text-sm font-semibold text-white shadow-sm 
-    hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
-    focus-visible:outline-indigo-600">
-      Add category</button>
+    <button (click)="openList('locations')" class="accent-button bg-pink-400 hover:bg-pink-300">
+      Countries & cities
+    </button>
 
-    <button *ngIf="isOpenFormats || isCreatingFormat" (click)="openList('createFormat')" class="inline-flex items-center rounded-md text-transparent bg-gradient-to-r from-green-300 via-pink-400 to-purple-400
-    hover:from-green-200 hover:to-pink-300 text-white font-bold py-2 px-4 rounded focus:ring transform transition 
-    hover:scale-105 duration-300
-    px-3 py-2 text-sm font-semibold text-white shadow-sm 
-    hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
-    focus-visible:outline-indigo-600">
-      Add format</button>
+    <button *ngIf="isOpenCategories || isCreating" (click)="openList('createCategory')" class="special-button">Add
+      category</button>
 
-    <!-- ERROR -->
+    <button *ngIf="isOpenFormats || isCreatingFormat" (click)="openList('createFormat')" class="special-button">Add
+      format</button>
+
+      <button *ngIf="isOpenLocations || isCreatingLocation" (click)="openList('createLocation')" class="special-button">Add
+        country</button>
 
     <div *ngIf="isErrorMessage" class="mt-2 flex-col">
-      <label class="block mt-10 text-sm font-bold leading-6 text-red-500">
+      <label class="base-message text-red-500">
         &#9940; {{ errorMessage }}
       </label>
-      <button (click)="closeMessage()" class="text-gray-500 font-bold rounded-md p-2 pb-1 pt-1 
-      text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50
-      hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 
-      focus-visible:outline-offset-2
-      rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
-        OK</button>
+      <button (click)="closeMessage()" class="base-button">OK</button>
     </div>
-
-    <!-- SUCCES -->
 
     <div *ngIf="isSuccessMessage" class="mt-2 flex-col">
-      <label class="block mt-10 text-sm font-bold leading-6 text-green-500">
+      <label class="base-message text-green-500">
         &#10003; {{ successMessage }}
       </label>
-      <button (click)="closeMessage()" class="text-gray-500 font-bold rounded-md p-2 pb-1 pt-1 
-      text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50
-      hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 
-      focus-visible:outline-offset-2
-      rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
-        OK</button>
+      <button (click)="closeMessage()" class="base-button">OK</button>
     </div>
-
-    <!-- LISTS -->
 
     <ul role="list" class="divide-y divide-gray-100" *ngIf="isOpenUsers">
       <li class="flex justify-between gap-x-6 py-5" *ngFor="let user of users">
         <div class="flex min-w-0 gap-x-4">
           <div class="min-w-0 flex-auto">
-            <p class="text-base font-semibold leading-6 text-gray-900">{{ user.username }}</p>
-            <p class="mt-1 truncate text-sm leading-5 text-gray-500"> ✉️ {{ user.email }}</p>
-            <p class="mt-1 text-sm leading-5 text-gray-500">
+            <p class="base-title">{{ user.username }}</p>
+            <p class="base-title-2"> ✉️ {{ user.email }}</p>
+            <p class="base-title-3">
               {{ user.bday | date: 'dd.MM.yyyy'}} 🎂</p>
           </div>
         </div>
         <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end mt-5">
-          <p class="text-base leading-6 text-gray-900"> {{ user.role }}</p>
-          <p class="mt-1 truncate text-sm leading-5 text-gray-500">Rate:
+          <p class="base-title-4"> {{ user.role }}</p>
+          <p class="base-title-2">Rate:
             <label class="font-bold text-gray-800">{{ ratingCount[user.id] || '-'}}</label>
           </p>
         </div>
         <span class="ml-3 hidden sm:block">
-          <button (click)="addModerator(user.id)" class="inline-flex items-center rounded-md bg-white px-3 py-2 
-        text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+          <button (click)="addModerator(user.id)" 
+          class="accent-button bg-green-500 hover:bg-green-400">
             <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
-              <path fill="gray"
+              <path fill="white"
                 d="m12 0a12 12 0 1 0 12 12 12.013 12.013 0 0 0 -12-12zm0 21a9 9 0 1 1 9-9 9.01 9.01 0 0 1 -9 9zm1.5-10.5h3.5v3h-3.5v3.5h-3v-3.5h-3.5v-3h3.5v-3.5h3z" />
             </svg>
             Add to moderators</button>
-          <button type="button" (click)="deleteUser(user.id)" class="ml-4 inline-flex items-center rounded-md bg-indigo-400 px-3 py-2 
-          text-sm font-semibold text-white shadow-sm hover:bg-indigo-300 focus-visible:outline 
-          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          <button type="button" (click)="deleteUser(user.id)" class="base-button">
             <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
-              <path fill="white"
+              <path fill="#4b5563"
                 d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
             </svg>
             Delete
@@ -124,36 +86,33 @@
       </li>
     </ul>
 
-
     <ul role="list" class="divide-y divide-gray-100" *ngIf="isOpenModerators">
       <li class="flex justify-between gap-x-6 py-5" *ngFor="let user of moderators">
         <div class="flex min-w-0 gap-x-4">
           <div class="min-w-0 flex-auto">
-            <p class="text-base font-semibold leading-6 text-gray-900">{{ user.username }}</p>
-            <p class="mt-1 truncate text-sm leading-5 text-gray-500">✉️ {{ user.email }}</p>
+            <p class="base-title">{{ user.username }}</p>
+            <p class="base-title-2">✉️ {{ user.email }}</p>
           </div>
         </div>
         <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-          <p class="text-base leading-6 text-gray-900"> {{ user.role }}</p>
-          <p class="mt-1 text-sm leading-5 text-gray-500"> {{ user.bday | date: 'dd.MM.yyyy'}} 🎂 </p>
+          <p class="base-title-4"> {{ user.role }}</p>
+          <p class="base-title-3"> {{ user.bday | date: 'dd.MM.yyyy'}} 🎂 </p>
         </div>
 
         <span class="hidden sm:block">
           <button type="button" (click)="removeModerator(user.id)"
-            class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 25 25" fill="currentColor"
+            class="accent-button bg-blue-400 hover:bg-blue-300">
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 25 25" fill="currentColor"
               aria-hidden="true">
-              <polygon
+              <polygon 
                 points="16.879 9.242 14.758 7.121 12 9.879 9.242 7.121 7.121 9.242 9.879 12 7.121 14.758 9.242 16.879 12 14.121 14.758 16.879 16.879 14.758 14.121 12 16.879 9.242" />
               <path d="M12,24A12,12,0,1,1,24,12,12.013,12.013,0,0,1,12,24ZM12,3a9,9,0,1,0,9,9A9.01,9.01,0,0,0,12,3Z" />
             </svg>
             Remove from moderators
           </button>
-          <button type="button" (click)="deleteUser(user.id)" class="ml-4 inline-flex items-center rounded-md bg-pink-400 px-3 py-2 text-sm font-semibold 
-            text-white shadow-sm hover:bg-pink-300 focus-visible:outline focus-visible:outline-2
-             focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-            <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-red-100" viewBox="0 0 27 27" aria-hidden="true">
-              <path fill="white"
+          <button type="button" (click)="deleteUser(user.id)" class="base-button">
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+              <path fill="#4b5563"
                 d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
             </svg>
             Delete
@@ -164,78 +123,66 @@
 
     <ul role="list" class="divide-y divide-gray-100" *ngIf="isOpenCategories">
       <li class="flex justify-between gap-x-6 py-5" *ngFor="let category of categories" [ngClass]="{ 
-        'bg-blue-100 flex-row rounded-md p-4 mt-3': editingCategory[category.id]}">
-        <p class="self-start font-bold text-lg text-blue-500" *ngIf="editingCategory[category.id]">
+        'bg-indigo-100 flex-row rounded-md p-4 mt-3': editingCategory[category.id]}">
+        <p class="self-start font-bold text-lg text-indigo-500" *ngIf="editingCategory[category.id]">
           Editing mode
         </p>
         <div class=" flex min-w-0 gap-x-4">
-          <div class="min-w-0 flex-auto text-blue-400">
+          <div class="min-w-0 flex-auto text-indigo-400">
             [Id: {{category.id}}]
-            <p class="text-base font-semibold leading-6 text-gray-900">{{ category.title | ellipsis:20 }}</p>
-            <p class="mt-1 truncate text-sm leading-5 text-gray-500">{{ category.description | ellipsis:25 }}</p>
+            <p class="base-title">{{ category.title | ellipsis:20 }}</p>
+            <p class="base-title-2">{{ category.description | ellipsis:25 }}</p>
           </div>
         </div>
         <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end text-right">
-          <p class="text-base leading-6 text-gray-900" *ngIf="category.parentId == null">Category</p>
-          <p class="text-base leading-6 text-gray-900" *ngIf="category.parentId > 0">Subcategory<br>
-            <label class="text-sm text-blue-400">
+          <p class="base-title-4" *ngIf="category.parentId == null">Category</p>
+          <p class="base-title-4" *ngIf="category.parentId > 0">Subcategory<br>
+            <label class="text-sm text-indigo-400">
               Parent is {{ parentCategory[category.id].title | ellipsis:20 }} [Id:
               {{parentCategory[category.id].id}}]</label>
           </p>
-          <p class="mt-1 text-sm leading-5 text-gray-500">Number of uses in events: {{
+          <p class="base-title-3">Number of uses in events: {{
             categoryEventCounts[category.id] || 0 }}</p>
         </div>
 
-        <div *ngIf="editingCategory[category.id]" class="self-start flex flex-row-reverse">
+        <div *ngIf="editingCategory[category.id]" class="editing-div">
           <div class="flex flex-col">
             <label class="text-sm text-gray-500">Title</label>
-            <input class="rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 w-64
-              ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-              focus:ring-indigo-600 sm:text-sm sm:leading-6" [(ngModel)]="category.title"
+            <input class="base-input" [(ngModel)]="category.title"
               placeholder="{{ category.title }}">
             <label class="text-sm text-gray-500">Description</label>
-            <input class="rounded-md border-0 py-1.5 pl-3 w-64 text-gray-900 shadow-sm ring-1 
-              ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-              focus:ring-indigo-600 sm:text-sm sm:leading-6" [(ngModel)]="category.description"
+            <input class="base-input" [(ngModel)]="category.description"
               placeholder="{{ category.description }}">
             <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-              <p class="text-base leading-6 text-gray-900">
+              <p class="base-title-4">
                 <label class="text-sm text-gray-500">Parent</label>
                 <select id="categorySelect" name="category" autocomplete="category-title" (click)="showMainCategories()"
-                  [(ngModel)]="category.parentId" class="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 
-              ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
-              sm:max-w-xs sm:text-sm sm:leading-6 w-64">
+                  [(ngModel)]="category.parentId" class="base-select">
                   <option *ngFor="let cat of mainCategories" [value]="cat.id">
                     {{cat.title}}</option>
                 </select>
               </p>
             </div>
             <div class="self-start">
-              <button (click)="updateCategory(category)" class="ml-4 inline-flex items-center rounded-md bg-blue-400 px-3 py-2 text-sm font-semibold 
-            text-white shadow-sm hover:bg-blue-300 focus-visible:outline focus-visible:outline-2
-             focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Update</button>
-              <button (click)="cancelEditing(category)" class="ml-4 inline-flex items-center rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold 
-            text-white shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2
-             focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Cancel</button>
+              <button (click)="updateCategory(category)" class="base-button">Update</button>
+              <button (click)="cancelEditing(category)" class="base-button">Cancel</button>
             </div>
           </div>
         </div>
 
         <span class="hidden sm:block">
-          <button type="button" (click)="startEditing(category)" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold 
-            text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+          <button type="button" (click)="startEditing(category)" 
+          class="accent-button bg-indigo-400 hover:bg-indigo-300">
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
               aria-hidden="true">
               <path
                 d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
             </svg>
             Edit
           </button>
-          <button type="button" class="ml-4 inline-flex items-center rounded-md bg-blue-400 px-3 py-2 text-sm font-semibold 
-            text-white shadow-sm hover:bg-blue-300 focus-visible:outline focus-visible:outline-2
-             focus-visible:outline-offset-2 focus-visible:outline-indigo-600" (click)="deleteCategory(category.id)">
-            <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-red-100" viewBox="0 0 27 27" aria-hidden="true">
-              <path fill="white"
+          <button type="button" class="base-button" (click)="deleteCategory(category.id)">
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+              <path fill="#4b5563"
                 d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
             </svg>
             Delete
@@ -244,23 +191,17 @@
       </li>
     </ul>
 
-    <div *ngIf="isCreating || isCreatingFormat">
+    <div *ngIf="isCreating || isCreatingFormat || isCreatingLocation">
       <div class="flex flex-col mt-5">
         <div class="hidden shrink-0 sm:flex sm:flex-col mt-5" *ngIf="isCreating">
           <label class="text-sm text-gray-500">Title</label>
-          <input class="rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 w-64
-              ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-              focus:ring-indigo-600 sm:text-sm sm:leading-6" [(ngModel)]="selectedCategory.title" placeholder="Title">
+          <input class="base-input" [(ngModel)]="selectedCategory.title" placeholder="Title">
           <label class="text-sm text-gray-500 mt-5">Description</label>
-          <input class="rounded-md border-0 py-1.5 pl-3 w-64 text-gray-900 shadow-sm ring-1 
-              ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-              focus:ring-indigo-600 sm:text-sm sm:leading-6" [(ngModel)]="selectedCategory.description"
+          <input class="base-input" [(ngModel)]="selectedCategory.description"
             placeholder="Description">
           <label class="text-sm text-gray-500 mt-5">Parent</label>
           <select id="categorySelect" name="category" autocomplete="category-title" (click)="showMainCategories()"
-            [(ngModel)]="selectedCategory.parentId" class="text-base leading-6 text-gray-900 block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 
-              ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
-              sm:max-w-xs sm:text-sm sm:leading-6 w-64">
+            [(ngModel)]="selectedCategory.parentId" class="base-title-4 base-select">
             <option *ngFor="let cat of mainCategories" [value]="cat.id">
               {{cat.title}}</option>
           </select>
@@ -268,94 +209,178 @@
 
         <div class="hidden shrink-0 sm:flex sm:flex-col mt-5" *ngIf="isCreatingFormat">
           <label class="text-sm text-gray-500">Title</label>
-          <input class="rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 w-64
-              ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-              focus:ring-indigo-600 sm:text-sm sm:leading-6" [(ngModel)]="selectedFormat.title" placeholder="Title">
+          <input class="base-input" [(ngModel)]="selectedFormat.title" placeholder="Title">
           <label class="text-sm text-gray-500 mt-5">Description</label>
-          <input class="rounded-md border-0 py-1.5 pl-3 w-64 text-gray-900 shadow-sm ring-1 
-              ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-              focus:ring-indigo-600 sm:text-sm sm:leading-6" [(ngModel)]="selectedFormat.description"
+          <input class="base-input" [(ngModel)]="selectedFormat.description"
             placeholder="Description">
         </div>
+
+        <div class="hidden shrink-0 sm:flex sm:flex-col mt-5" *ngIf="isCreatingLocation">
+          <label class="text-sm text-gray-500">Country name</label>
+          <input class="base-input" [(ngModel)]="selectedCountry.countryName">
+        </div>
+
         <div class="self-start mt-7" *ngIf="isCreating">
-          <button (click)="createCategory()" class="ml-8 inline-flex items-center rounded-md text-transparent bg-gradient-to-r from-green-300 via-pink-400 to-purple-400
-          hover:from-green-200 hover:to-pink-300 text-white font-bold py-2 px-4 rounded focus:ring transform transition 
-          hover:scale-105 duration-300
-          px-3 py-2 text-sm font-semibold text-white shadow-sm 
-          hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
-          focus-visible:outline-indigo-600">Create</button>
-          <button (click)="cancelCreating()" class="ml-4 inline-flex items-center rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold 
-            text-white shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2
-             focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Cancel</button>
+          <button (click)="createCategory()" class="ml-8 base-button">Create</button>
+          <button (click)="cancelCreating()" class="ml-4 base-button">Cancel</button>
+        </div>
+        <div class="self-start mt-7" *ngIf="isCreatingLocation">
+          <button (click)="createCountry()" class="ml-8 base-button">Create</button>
+          <button (click)="cancelCreating()" class="ml-4 base-button">Cancel</button>
         </div>
 
         <div class="self-start mt-7" *ngIf="isCreatingFormat">
-          <button (click)="createFormat()" class="ml-8 inline-flex items-center rounded-md text-transparent bg-gradient-to-r from-green-300 via-pink-400 to-purple-400
-          hover:from-green-200 hover:to-pink-300 text-white font-bold py-2 px-4 rounded focus:ring transform transition 
-          hover:scale-105 duration-300
-          px-3 py-2 text-sm font-semibold text-white shadow-sm 
-          hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
-          focus-visible:outline-indigo-600">Create</button>
-          <button (click)="cancelCreating()" class="ml-4 inline-flex items-center rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold 
-            text-white shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2
-             focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Cancel</button>
+          <button (click)="createFormat()" class="ml-8 base-button">Create</button>
+          <button (click)="cancelCreating()" class="ml-4 base-button">Cancel</button>
         </div>
       </div>
     </div>
 
     <ul role="list" class="divide-y divide-gray-100" *ngIf="isOpenFormats">
       <li class="flex justify-between gap-x-6 py-5" *ngFor="let format of formats"
-        [ngClass]="{ 'bg-indigo-100 flex-row rounded-md p-4 mt-3': editingFormat[format.id]}">
-        <p class="self-start font-bold text-lg text-indigo-500" *ngIf="editingFormat[format.id]">
+        [ngClass]="{ 'bg-violet-100 flex-row rounded-md p-4 mt-3': editingFormat[format.id]}">
+        <p class="self-start font-bold text-lg text-violet-500" *ngIf="editingFormat[format.id]">
           Editing mode
         </p>
         <div class=" flex min-w-0 gap-x-4">
-          <div class="min-w-0 flex-auto text-green-400">
-            <p class="text-base font-semibold leading-6 text-gray-900">{{ format.title }}</p>
-            <p class="mt-1 truncate text-sm leading-5 text-gray-500">{{ format.description }}</p>
-            <p class="mt-1 text-sm leading-5 text-gray-500">Number of uses in events: {{
+          <div class="min-w-0 flex-auto">
+            <p class="base-title">{{ format.title }}</p>
+            <p class="base-title-2">{{ format.description }}</p>
+            <p class="base-title-3">Number of uses in events: {{
               categoryEventCounts[format.id] || 0 }}</p>
           </div>
         </div>
 
-        <div *ngIf="editingFormat[format.id]" class="self-start flex flex-row-reverse">
+        <div *ngIf="editingFormat[format.id]" class="editing-div">
           <div class="flex flex-col">
             <label class="text-sm text-gray-500">Title</label>
-            <input class="rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 w-64
-              ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-              focus:ring-indigo-600 sm:text-sm sm:leading-6" [(ngModel)]="format.title"
+            <input class="base-input" [(ngModel)]="format.title"
               placeholder="{{ format.title }}">
             <label class="text-sm text-gray-500">Description</label>
-            <input class="rounded-md border-0 py-1.5 pl-3 w-64 text-gray-900 shadow-sm ring-1 
-              ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-              focus:ring-indigo-600 sm:text-sm sm:leading-6" [(ngModel)]="format.description"
+            <input class="base-input" [(ngModel)]="format.description"
               placeholder="{{ format.description }}">
             <div class="self-start mt-3">
-              <button (click)="updateFormat(format)" class="ml-4 inline-flex items-center rounded-md bg-indigo-400 px-3 py-2 text-sm font-semibold 
-            text-white shadow-sm hover:bg-indigo-300 focus-visible:outline focus-visible:outline-2
-             focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Update</button>
-              <button (click)="cancelEditingFormat(format)" class="ml-4 inline-flex items-center rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold 
-            text-white shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2
-             focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Cancel</button>
+              <button (click)="updateFormat(format)" class="base-button">Update</button>
+              <button (click)="cancelEditingFormat(format)" class="base-button">Cancel</button>
             </div>
           </div>
         </div>
 
         <span class="hidden sm:block">
-          <button type="button" (click)="startEditingFormat(format)" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold 
-            text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+          <button type="button" (click)="startEditingFormat(format)" class="accent-button bg-violet-400 hover:bg-violet-300">
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
               aria-hidden="true">
               <path
                 d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
             </svg>
             Edit
           </button>
-          <button type="button" class="ml-4 inline-flex items-center rounded-md bg-indigo-400 px-3 py-2 text-sm font-semibold 
-            text-white shadow-sm hover:bg-blue-300 focus-visible:outline focus-visible:outline-2
-             focus-visible:outline-offset-2 focus-visible:outline-indigo-600" (click)="deleteFormat(format.id)">
+          <button type="button" class="base-button" (click)="deleteFormat(format.id)">
             <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-indigo-100" viewBox="0 0 27 27" aria-hidden="true">
-              <path fill="white"
+              <path fill="#4b5563"
+                d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
+            </svg>
+            Delete
+          </button>
+        </span>
+      </li>
+    </ul>
+
+    <ul role="list" class="divide-y divide-gray-100" *ngIf="isOpenLocations">
+      <li class="flex justify-between gap-x-6 py-5" *ngFor="let country of countries" [ngClass]="{ 
+        'bg-pink-100 flex-row rounded-md p-4 mt-3': editingCountry[country.id] || creatingCity[country.id]}">
+        <p class="self-start font-bold text-lg text-pink-500" *ngIf="editingCountry[country.id] || creatingCity[country.id]">
+          Editing mode
+        </p>
+        <div class="min-w-0 flex-auto" *ngIf="!editingCountry[country.id]">
+          <p class="base-title">{{ country.countryName }}</p>
+          <label class="base-title-2">Cities: {{ cities[country.id].length }}</label>
+          
+          <ul *ngIf="!editingCountry[country.id] && !creatingCity[country.id]">
+            <li class="flex self-start justify-between gap-x-6 py-5" *ngFor="let city of cities[country.id]" [ngClass]="{ 
+                'bg-pink-100 flex-row rounded-md p-4 mt-3': editingCity[city.id]}">
+                <p class="self-start font-bold text-lg text-pink-500" *ngIf="editingCity[city.id]">
+                  Editing mode
+                </p>
+              <p class="base-title-4">- {{ city.cityName }}</p>
+              <div *ngIf="editingCity[city.id]" class="editing-div">
+                <div class="flex flex-col">
+                  <label class="text-sm text-gray-500">City name</label>
+                  <input class="base-input" [(ngModel)]="city.cityName"
+                    placeholder="{{ city.cityName }}">
+                  <div class="self-start mt-3">
+                    <button (click)="updateCity(city)" class="base-button">Update</button>
+                    <button (click)="cancelEditingCity(city)" class="base-button">Cancel</button>
+                  </div>
+                </div>
+              </div>
+
+              <span class="hidden sm:block">
+                <button type="button" (click)="startEditingCity(city)" 
+                class="accent-button bg-pink-300 hover:bg-pink-200">
+                  <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
+                    aria-hidden="true">
+                    <path
+                      d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
+                  </svg>
+                  Edit
+                </button>
+                <button type="button" class="base-button" (click)="deleteCity(city.id)">
+                  <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+                    <path fill="#4b5563"
+                      d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
+                  </svg>
+                  Delete
+                </button>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div *ngIf="editingCountry[country.id]" class="editing-div">
+          <div class="flex flex-col">
+            <label class="text-sm text-gray-500">Country name</label>
+            <input class="base-input" [(ngModel)]="country.countryName"
+              placeholder="{{ country.countryName }}">
+            <div class="self-start mt-3">
+              <button (click)="updateCountry(country)" class="base-button">Update</button>
+              <button (click)="cancelEditingCountry(country)" class="base-button">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="creatingCity[country.id]" class="editing-div">
+          <div class="flex flex-col">
+            <label class="text-sm text-gray-500">City</label>
+            <input class="base-input" [(ngModel)]="newCity.cityName"
+              placeholder="{{ newCity.cityName }}">
+            <div class="self-start mt-3">
+              <button (click)="createCity(country.id)" class="base-button">Create</button>
+              <button (click)="cancelEditingCountry(country)" class="base-button">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <span class="hidden sm:block">
+          <button type="button" (click)="startCreatingCity(country)" 
+          class="accent-button bg-pink-300 hover:bg-pink-200">
+          <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+            <path fill="white"
+              d="m12 0a12 12 0 1 0 12 12 12.013 12.013 0 0 0 -12-12zm0 21a9 9 0 1 1 9-9 9.01 9.01 0 0 1 -9 9zm1.5-10.5h3.5v3h-3.5v3.5h-3v-3.5h-3.5v-3h3.5v-3.5h3z" />
+          </svg>
+            Add city
+          </button>
+          <button type="button" (click)="startEditingCountry(country)" class="accent-button bg-pink-400 hover:bg-pink-300">
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
+              aria-hidden="true">
+              <path
+                d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
+            </svg>
+            Edit
+          </button>
+          <button type="button" class="base-button" (click)="deleteCountry(country.id)">
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-red-100" viewBox="0 0 27 27" aria-hidden="true">
+              <path fill="#4b5563"
                 d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
             </svg>
             Delete

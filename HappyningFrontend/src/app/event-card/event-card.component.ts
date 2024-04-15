@@ -42,7 +42,8 @@ export class EventCardComponent implements OnInit {
   complaintsCategory!: Complaint[];
   complaint!: number;
   isComplaint: boolean = false;
-  
+  image: any;
+
   constructor(
     private eventService: EventService,
     private categoryService: CategoryService,
@@ -68,6 +69,7 @@ export class EventCardComponent implements OnInit {
       this.auxDate = new Date(this.event.startDate);
       this.loadCategory();
       this.loadOrganizer();
+      this.showPhoto();
       if (this.userId === this.event.organizerId) {
         this.isOrganizer = true;
       }
@@ -156,5 +158,14 @@ export class EventCardComponent implements OnInit {
     }
   }
 
+  showPhoto() {
+    try {
+      this.eventService.showImage(this.event.id).subscribe((data: any) => {
+        this.image = data;
+      });
+    } catch (error) {
+      console.error('Error loading images:', error);
+    }
+  }
 
 }

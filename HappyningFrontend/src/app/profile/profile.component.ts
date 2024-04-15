@@ -25,7 +25,6 @@ export class ProfileComponent implements OnInit {
       this.user = user;
       this.calculateAgeMessage();
       console.log(this.currentUser);
-      
     });
   }
 

@@ -12,4 +12,5 @@ export interface Event {
     secretCode: string;
     ageLimit: number;
     organizerId: number;
+    photo: number;
 }
