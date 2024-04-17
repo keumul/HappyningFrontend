@@ -40,6 +40,14 @@
     ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6
 }
 
+.main-title {
+    @apply text-3xl leading-7 text-indigo-400 font-bold;
+}
+
+.base-title {
+    @apply text-lg text-gray-700 font-bold
+}
+
 .base-select {
     @apply block pl-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
     ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
@@ -62,5 +70,5 @@
 
 .date-picker {
     @apply block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 
-    placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6;
+    placeholder:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6;
 }

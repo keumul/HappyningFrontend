@@ -58,4 +58,12 @@ export class UserService {
   removeModerator(id: number): Observable<any> {
     return this.http.patch(`${this.baseUrl}/user/${id}`,{});
   }
+
+  banUser(id: number): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/ban/${id}`,{});
+  }
+
+  unbanUser(id: number): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/unban/${id}`,{});
+  }
 }

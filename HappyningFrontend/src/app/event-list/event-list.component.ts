@@ -41,11 +41,9 @@ export class EventListComponent implements OnInit {
   endDateFilter!: Date;
 
   isChooseCategory = false;
-  image: any;
   images: { [eventId: number]: string } = {};
 
   scrollStep: number = 150;
-
 
   constructor(
     private eventService: EventService,

@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
   showNotifications = false;
   notificationCount = 0;
   isAdmin = false;
+  isModerator = false;
   currentUser!: User;
 
   constructor(
@@ -28,6 +29,7 @@ export class HeaderComponent implements OnInit {
     this.userService.whoAmI().subscribe((user) => {
       this.currentUser = user;
       this.isAdmin = this.currentUser.role === 'admin';
+      this.isModerator = this.currentUser.role === 'moderator';
       this.loadNotifications();
     });
   }

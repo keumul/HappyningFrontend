@@ -6,7 +6,6 @@ import { Category } from "../dto/category.dto";
 import { Event } from "../dto/event.dto";
 import { EventService } from "../services/event.service";
 import { AuthService } from "../services/auth.service";
-import { Router } from "@angular/router";
 import { RateUser } from "../dto/rate-user.dto";
 import { Format } from "../dto/format.dto";
 import { Country } from "../dto/country.dto";
@@ -26,10 +25,9 @@ export class AdminHomeComponent implements NewType {
   events!: Event[];
   rates!: RateUser[];
   categories!: Category[];
-  subcategories!: Category[];
   formats!: Format[];
   countries!: Country[];
-  selectedCategory: Category = { id: 0, title: '', description: '', parentId: 0 };
+  selectedCategory: Category = { id: 0, title: '', description: ''};
   selectedFormat: Format = { id: 0, title: '', description: '' };
   selectedCountry: Country = { id: 0, countryName: '' };
   selectedCity: City = { id: 0, cityName: '', countryId: 0 };
@@ -71,8 +69,7 @@ export class AdminHomeComponent implements NewType {
     private categoryService: CategoryService,
     private eventSerice: EventService,
     private authService: AuthService,
-    private locationService: LocationService,
-    private router: Router) { }
+    private locationService: LocationService) { }
 
   ngOnInit(): void {
     this.checkCredentials();
@@ -83,7 +80,6 @@ export class AdminHomeComponent implements NewType {
     this.loadCountries();
     this.loadCities();
     this.showParentCategory();
-    // this.showCities();
     this.loadRating();
     this.calculateCategoryEventCounts();
   }
@@ -235,7 +231,7 @@ export class AdminHomeComponent implements NewType {
     this.selectedCategory = { ...category };
     this.updateData(
       this.selectedCategory,
-      this.categoryService.updateCategory(category.id, category.parentId, this.selectedCategory),
+      this.categoryService.updateCategory(category.id, this.selectedCategory),
       'Category has been successfully updated',
       'Error updating category'
     );
@@ -353,7 +349,7 @@ export class AdminHomeComponent implements NewType {
   createCategory(): void {
     this.createData(
       this.selectedCategory,
-      this.categoryService.createCategory(this.selectedCategory.parentId, this.selectedCategory),
+      this.categoryService.createCategory(this.selectedCategory),
       'Category has been successfully created',
       'Error creating category'
     );
@@ -378,7 +374,7 @@ export class AdminHomeComponent implements NewType {
   }
 
   cancelCreating(): void {
-    this.selectedCategory = { id: 0, title: '', description: '', parentId: 0 };
+    this.selectedCategory = { id: 0, title: '', description: ''};
     this.selectedFormat = { id: 0, title: '', description: '' };
     this.selectedCountry = { id: 0, countryName: '' };
     this.thisCategoryIsEditing(this.selectedCategory.id);
@@ -481,11 +477,7 @@ export class AdminHomeComponent implements NewType {
     this.mainCategories = [];
     this.categoryService.findAllCategories().subscribe(
       (data) => {
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].parentId === null && this.selectedCategory.id !== data[i].id) {
-            this.mainCategories.push(data[i]);
-          }
-        }
+        this.mainCategories = data;
       },
       (error) => {
         console.error('Error loading categories', error);
@@ -551,7 +543,7 @@ export class AdminHomeComponent implements NewType {
   }
 
   cancelEditing(category: Category): void {
-    this.selectedCategory = { id: 0, title: '', description: '', parentId: 0 };
+    this.selectedCategory = { id: 0, title: '', description: '' };
     this.thisCategoryIsEditing(category.id);
     this.loadCategories();
   }

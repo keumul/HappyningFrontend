@@ -11,6 +11,8 @@ import { NotificationService } from '../services/notification.service';
 import { Country } from '../dto/country.dto';
 import { City } from '../dto/city.dto';
 import { LocationService } from '../services/location.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-editor',
@@ -25,7 +27,6 @@ export class EditorComponent implements OnInit {
 
   category!: Category;
   categories: Category[] = [];
-  subcategories: Category[] = [];
 
   format!: Format;
   formats!: Format[];
@@ -39,13 +40,14 @@ export class EditorComponent implements OnInit {
   accessLevel: string = 'Public';
   canCheck = true;
   isEventsListOpen = false;
-  isSubcategoriesOpen = false;
 
   countryId!: number;
   countries!: Country[];
   cityId!: number;
   cities!: City[];
   address!: string;
+  country: Country = { id: 0, countryName: 'Country' };
+  city: City = { id: 0, cityName: 'City', countryId: 0 };
   locations!: { id: number, details: string, cityId: number }[];
 
   isPrivate = true;
@@ -64,6 +66,10 @@ export class EditorComponent implements OnInit {
   bytes: any | undefined;
 
   isImageEditorOpen = false;
+  isOverlayVisible = false;
+  isSelectedEvent = false;
+
+  isUser: boolean = false;
 
   constructor(private eventService: EventService,
     private authService: AuthService,
@@ -71,43 +77,76 @@ export class EditorComponent implements OnInit {
     private router: Router,
     private notificationService: NotificationService,
     private locationService: LocationService,
-    private el: ElementRef) { }
+    private _snackBar: MatSnackBar,
+    private userService: UserService
+  ) { }
 
   ngOnInit(): void {
     this.canCheck = true;
     let userId = this.authService.getCurrentUser()?.id;
+    if(userId == undefined) {
+      this.isUser = false;
+    } else {
+      this.isUser = true;
+    }
+    this.ageLimitCheck(userId!);
+
+    this.loadCategories();
+    this.loadFormats();
+    this.loadCountries();
+    this.loadCities();
+    this.loadLocations();
     this.eventService.getUserEvents(userId).subscribe(data => {
       this.events = data;
       this.onSelectEvent({
         title: '',
         description: '',
-        startDate: new Date(0),
-        endDate: new Date(0),
-        locationId: 1,
+        startDate: new Date(),
+        endDate: new Date(),
+        locationId: this.locations[0].id,
         organizerId: this.authService.getCurrentUser()?.id,
-        categoryId: 1,
-        formatId: 1,
+        categoryId: this.categories[0].id,
+        formatId: this.formats[0].id,
         ageLimit: 21,
         maxGuestAmount: 100,
         isPublic: true,
       });
+      this.isSelectedEvent = false;
       this.image = "";
       this.isImageEditorOpen = false;
       this.clearInput();
+      this.showCitiesByCountry();
     });
-
-    this.loadCategories();
-    this.loadSubcategories(1);
-    this.loadFormats();
-    this.loadCountries();
-    this.loadCities();
-    this.loadLocations();
 
     if (this.selectedEvent.isPublic) {
       this.accessLevel = 'Public';
     } else {
       this.accessLevel = 'Private';
     }
+  }
+
+  ageLimitCheck(userId: number) {
+    var today = new Date();
+    this.userService.findUser(userId).subscribe((data: any) => {
+      var birthdate = new Date(data.bday);
+      var age = today.getFullYear() - birthdate.getFullYear();
+      var monthDiff = today.getMonth() - birthdate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdate.getDate())) {
+        age--;
+      }
+      if (age < 18) {
+        this.openOverlay();
+      }
+    });
+  }
+
+  openOverlay() {
+    this.isOverlayVisible = true;
+  }
+
+  closeOverlay() {
+    this.isOverlayVisible = false;
+    this.router.navigate(['/home']);
   }
 
   openEventsList() {
@@ -118,17 +157,19 @@ export class EditorComponent implements OnInit {
     this.image = "";
     this.canCheck = false;
     this.isImageEditorOpen = true;
+    
     this.selectedEvent = event;
-    this.auxDate = new Date(this.selectedEvent.startDate);
-    this.startDate = moment().format('YYYY.MM.DD HH:MM');
+    this.isSelectedEvent = true;
+
     this.loadCategory(this.selectedEvent.categoryId);
     this.loadFormat(this.selectedEvent.formatId);
+    this.loadLocation(this.selectedEvent.locationId);
     this.loadCategories();
-    this.loadSubcategories(this.selectedEvent.categoryId);
+    this.loadCountries();
+    this.loadCities();
     this.loadFormats();
     this.loadCountries();
     this.loadCities();
-    this.loadLocations();
     this.showPhoto();
     if (this.selectedEvent && this.selectedEvent.isPublic) {
       this.accessLevel = 'Public';
@@ -147,14 +188,26 @@ export class EditorComponent implements OnInit {
     })
   }
 
+  loadCity(id: number) {
+    this.locationService.getCityById(id).subscribe((data: any) => {
+      this.city = data;
+      this.locationService.getCountryById(data.countryId).subscribe((data: any) => {
+        this.country = data;
+      })
+    })
+  }
+
+  loadLocation(id: number) {
+    this.locationService.getLocationById(id).subscribe((data: any) => {
+      this.address = data.details;
+      this.loadCity(data.cityId);
+    })
+  }
+
   loadCategories() {
     this.categories = [];
     this.categoryService.findAllCategories().subscribe((data: any) => {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].parentId == null) {
-          this.categories.push(data[i]);
-        }
-      }
+      this.categories = data;
     });
   }
 
@@ -162,24 +215,6 @@ export class EditorComponent implements OnInit {
     this.locationService.getAllLocations().subscribe((data: any) => {
       this.locations = data;
     })
-  }
-
-  loadSubcategories(id: number) {
-    this.categoryService.findSubcategories(id).subscribe((data: any) => {
-
-      if (data.length > 0) {
-        this.subcategories = data;
-        this.isSubcategoriesOpen = true;
-      } else {
-        this.selectedEvent.categoryId = id;
-        this.isSubcategoriesOpen = false;
-      }
-    })
-
-  }
-
-  showSubcategories() {
-    this.loadSubcategories(this.selectedEvent.categoryId);
   }
 
   loadFormat(id: number) {
@@ -207,18 +242,23 @@ export class EditorComponent implements OnInit {
   }
 
   showCitiesByCountry() {
+    if(this.countryId == undefined) {
+      this.countryId = this.countries[0].id;
+    }
     this.locationService.getCitiesByCountry(this.countryId).subscribe((data: any) => {
       this.cities = data;
+      this.cityId = data[0].id;
     },
       (error) => {
-        console.log("Error: " + error);
         this.errorMessage = "Error: cities not found";
       }
     )
   }
 
   showCountryByCity() {
-    if (this.cityId == 0) {
+    if (this.cityId == undefined) {
+      this.cityId = this.cities[0].id;
+    } else if (this.cityId == 0) {
       return;
     }
     this.locationService.getCityById(this.cityId).subscribe((data: City) => {
@@ -236,15 +276,15 @@ export class EditorComponent implements OnInit {
       id: this.auxId,
       title: '',
       description: '',
-      startDate: new Date(0),
-      endDate: new Date(0),
+      startDate: new Date(),
+      endDate: new Date(),
       locationId: 0,
       organizerId: this.authService.getCurrentUser()?.id,
-      categoryId: this.selectedEvent.categoryId || 1,
+      categoryId: this.categories[0].id,
       formatId: 1,
       maxGuestAmount: 100,
       ageLimit: 21,
-      isPublic: false,
+      isPublic: true,
       secretCode: '',
       photo: 0,
     };
@@ -253,6 +293,7 @@ export class EditorComponent implements OnInit {
   }
 
   editEvent(eventId: number) {
+    this.updateLocation(this.selectedEvent.locationId);
     this.eventService.updateEvent(eventId, {
       title: this.selectedEvent.title,
       description: this.selectedEvent.description,
@@ -283,6 +324,10 @@ export class EditorComponent implements OnInit {
           this.isErrorMessage = true;
           this.errorMessage = "Date is too early";
           return;
+        } if (this.selectedEvent.startDate > this.selectedEvent.endDate) {
+          this.isErrorMessage = true;
+          this.errorMessage = "End date is before start date";
+          return;
         }
         else {
           this.errorMessage = "Error: something went wrong while updating the event";
@@ -304,9 +349,15 @@ export class EditorComponent implements OnInit {
   }
 
   createEvent() {
-    if (this.event.startDate < new Date(moment.now())) {
+  this.event = this.selectedEvent;
+    if (this.event.startDate < new Date()) {
       this.errorMessage = "Date is too early";
       this.isErrorMessage = true;
+      return;
+    } 
+    if (this.selectedEvent.startDate > this.selectedEvent.endDate) {
+      this.isErrorMessage = true;
+      this.errorMessage = "End date is before start date";
       return;
     }
     if (!this.event.isPublic && this.event.secretCode == null) {
@@ -314,8 +365,6 @@ export class EditorComponent implements OnInit {
       this.isErrorMessage = true;
       return;
     }
-    console.log(this.locations[this.locations.length - 1].id + 1);
-
 
     this.createLocation();
     this.eventService.createEvent({
@@ -344,6 +393,7 @@ export class EditorComponent implements OnInit {
         this.isSuccessMessage = true;
         this.isErrorMessage = false;
         this.ngOnInit();
+        this._snackBar.open('You can add a cover to the event in the editor!', '', { duration: 5000 });
       },
       (error) => {
         if (this.selectedEvent.title.length >= 20) {
@@ -385,20 +435,31 @@ export class EditorComponent implements OnInit {
   }
 
   createLocation() {
-    if (this.cityId == undefined) {
-      this.cityId = this.cities[0].id;
-    }
-    this.locationService.createLocation(
-      +this.cityId,
-      this.address,
-      +this.cityId
-    ).subscribe(
+    this.locationService.createLocation(+this.cityId,this.address,+this.cityId).subscribe(
       (response: any) => {
         this.isErrorMessage = false;
         console.log("Location successfully created");
       },
       (error) => {
         this.errorMessage = "Error: something went wrong while creating the location";
+        this.isErrorMessage = true;
+        this.isSuccessMessage = false;
+        console.log("Error: " + error.message);
+      }
+    );
+  }
+
+  updateLocation(id: number) {
+    this.locationService.updateLocation(id, {
+      details: this.address,
+      cityId: this.cityId,
+    }).subscribe(
+      (response: any) => {
+        this.loadLocation(response.id);
+        this.isErrorMessage = false;
+      },
+      (error) => {
+        this.errorMessage = "Error: something went wrong while updating the location";
         this.isErrorMessage = true;
         this.isSuccessMessage = false;
         console.log("Error: " + error.message);
@@ -449,21 +510,6 @@ export class EditorComponent implements OnInit {
     this.eventService.showImage(id).subscribe((data) => {
       this.image = data;
     });
-  }
-
-
-
-
-  async goToImageEditor(event: Event, url: any) {
-    await this.onSelectEvent(event);
-    const go = document.querySelector('#goToImageEditor');
-    const view = document.querySelector('#imageEditorView');
-    go!.addEventListener('click', (evt) => {
-      evt.preventDefault();
-  
-      view!.scrollIntoView({behavior: 'smooth'});
-  });
-    window.location = url;
   }
 }
 

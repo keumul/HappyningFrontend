@@ -1,3 +1,45 @@
 .img {
     @apply rounded-lg h-64 w-64 object-cover my-4 flex justify-center items-center;
 }
+
+.main-title {
+    @apply text-3xl leading-7 text-indigo-400 font-bold;
+}
+
+.message {
+    @apply text-lg text-pink-500 font-bold;
+}
+
+.hint {
+    @apply mt-1 max-w-2xl text-base leading-6 text-gray-500
+}
+
+.base-select {
+    @apply block pl-3 w-full rounded-md border-0 
+            py-1.5 text-gray-900 shadow-sm ring-1 
+              ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
+              sm:max-w-xs sm:text-sm sm:leading-6
+}
+
+.base-title {
+    @apply text-lg text-gray-700 font-bold
+}
+
+.base-title-2 {
+    @apply text-sm font-medium leading-6 text-gray-900
+}
+
+.base-title-3 {
+    @apply mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0
+}
+
+.row-div {
+    @apply px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0
+}
+
+.base-button {
+    @apply rounded-md text-indigo-500
+    text-sm leading-6 hover:text-indigo-400 
+    focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
+    focus-visible:outline-indigo-600
+}

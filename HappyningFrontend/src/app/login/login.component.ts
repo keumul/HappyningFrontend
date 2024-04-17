@@ -48,8 +48,12 @@ export class LoginComponent implements OnInit {
             window.sessionStorage.setItem('access_token', data.access_token);
             if (this.authService.getCurrentUser()?.role == 'admin') {
               this.router.navigate(['/admin']);
+            } else if (this.authService.getCurrentUser()?.role == 'moderator') {
+              this.router.navigate(['/moderator']);
+            } else if (this.authService.getCurrentUser()?.role == 'banned') {
+              this.router.navigate(['/banned']);
             } else {
-            this.router.navigate(['/home']);
+              this.router.navigate(['/home']);
             }
           }
         }
@@ -63,22 +67,34 @@ export class LoginComponent implements OnInit {
 
   checkCredentials(activationCode: string) {
     try {
-      this.authService.sendCredentials(this.username, this.password, activationCode)      
+      this.authService.sendCredentials(this.username, this.password, activationCode)
         .subscribe((data: any) => {
-          
+
           window.sessionStorage.setItem('access_token', data.access_token);
           this.username = ''
           this.password = ''
           if (this.authService.getCurrentUser()?.role == 'admin') {
             this.router.navigate(['/admin']);
+          } else if (this.authService.getCurrentUser()?.role == 'moderator') {
+            this.router.navigate(['/moderator']);
           } else {
             this.router.navigate(['/home']);
-          }
+          } 
         }, error => {
           this.errorMessage = this.errorMessageRandom();
         })
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  roleCheck() {
+    if (this.authService.getCurrentUser()?.role == 'admin') {
+      this.router.navigate(['/admin']);
+    } else if (this.authService.getCurrentUser()?.role == 'moderator') {
+      this.router.navigate(['/moderator']);
+    } else {
+      this.router.navigate(['/home']);
     }
   }
 }

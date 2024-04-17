@@ -123,7 +123,7 @@
           <div
             class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 
             lg:aspect-none group-hover:opacity-75 lg:h-80">
-            <img src="{{images[event.id]}}" class="img" alt="event">
+            <img src="{{images[event.id]}}" class="img" alt="Loading...">
           </div>
 
           <div class="mt-4 flex justify-between font-bold text-pink-400">
@@ -131,8 +131,7 @@
               <p class="text-gray-500 text-2xl font-bold">
                 {{event.title}}
               </p>
-              <span *ngIf="locationDetails && locationDetails[i]">{{ locationDetails[i].cityName
-                }}</span>,
+              <span *ngIf="locationDetails && locationDetails[i]">{{ locationDetails[i].cityName}}</span>,
               <span *ngIf="locationDetails && locationDetails[i]">{{ locationDetails[i].countryName }}</span>
             </div>
             <p aria-hidden="true" class="text-2xl text-green-400 inset-4">

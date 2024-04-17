@@ -1,0 +1,259 @@
+<app-error *ngIf="!isModerator"></app-error>
+
+<body *ngIf="isModerator" class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed">
+    <div class="h-full">
+        <app-header></app-header>
+
+        <!-- <div class="main">
+      <app-report class="reports"></app-report>
+    </div> -->
+        <hr class="mb-6 mt-6">
+        <div class="flex justify-between">
+            <div>
+                <button class="accent-button bg-pink-500 hover:bg-pink-400" (click)="openUsers()">
+                    Users & Complaints
+                </button>
+
+                <button class="accent-button bg-pink-500 hover:bg-pink-400" (click)="openComplaintsCategory()">
+                    Categories
+                </button>
+
+                <button class='special-button' (click)="startCreatingComplaint()" *ngIf="isOpenComplaints">Add
+                    category</button>
+            </div>
+            <div>
+                <button (click)="sortUsers('asc')">
+                    <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+                        <path fill="#4b5563"
+                            d="M22.5,8H11.5c-.829,0-1.5,.672-1.5,1.5s.671,1.5,1.5,1.5h11c.828,0,1.5-.672,1.5-1.5s-.672-1.5-1.5-1.5Z" />
+                        <path fill="#4b5563"
+                            d="M18.5,14h-7c-.829,0-1.5,.672-1.5,1.5s.671,1.5,1.5,1.5h7c.828,0,1.5-.672,1.5-1.5s-.672-1.5-1.5-1.5Z" />
+                        <path fill="#4b5563"
+                            d="M14.5,20h-3c-.829,0-1.5,.672-1.5,1.5s.671,1.5,1.5,1.5h3c.828,0,1.5-.672,1.5-1.5s-.672-1.5-1.5-1.5Z" />
+                        <path fill="#4b5563"
+                            d="M9.752,3.879L6.166,.293c-.391-.391-1.024-.391-1.414,0L1.166,3.879c-.39,.391-.39,1.024,0,1.414,.187,.187,.442,.293,.707,.293h2.127V25.229c0,.828,.671,1.5,1.5,1.5s1.5-.672,1.5-1.5V5.586h2.045c.552,0,1-.448,1-1,0-.265-.105-.519-.293-.707Z" />
+                    </svg>
+                </button>
+                <button (click)="sortUsers('desc')">
+                    <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+                        <path fill="#4b5563"
+                            d="M22.5,13H11.5c-.828,0-1.5,.672-1.5,1.5s.672,1.5,1.5,1.5h11c.828,0,1.5-.672,1.5-1.5s-.672-1.5-1.5-1.5Z" />
+                        <path fill="#4b5563"
+                            d="M11.5,10h7c.828,0,1.5-.672,1.5-1.5s-.672-1.5-1.5-1.5h-7c-.828,0-1.5,.672-1.5,1.5s.672,1.5,1.5,1.5Z" />
+                        <path fill="#4b5563"
+                            d="M11.5,4h3c.828,0,1.5-.672,1.5-1.5s-.672-1.5-1.5-1.5h-3c-.828,0-1.5,.672-1.5,1.5s.672,1.5,1.5,1.5Z" />
+                        <path fill="#4b5563"
+                            d="M9.172,18.414h-2.172V-1.229c0-.828-.672-1.5-1.5-1.5s-1.5,.672-1.5,1.5V18.414H2c-.552,0-1,.448-1,1,0,.265,.105,.519,.293,.707l3.586,3.586c.391,.39,1.024,.39,1.414,0l3.586-3.586c.39-.391,.39-1.024,0-1.414-.187-.187-.442-.293-.707-.293Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul role="list" class="divide-y divide-gray-100" *ngIf="!isOpenComplaints">
+            <li class="flex justify-between gap-x-6 py-5" *ngFor="let user of users"
+                [ngClass]="{ 'bg-gray-200 rounded-md p-2': isBanned[user.id]}">
+                <div class="flex min-w-0 gap-x-4">
+                    <div class="min-w-0 flex-auto">
+                        <p class="base-title">{{ user.username }}<label class="base-title-4"> [{{
+                                userComplaints[user.id] || '0'}} complaints] </label></p>
+                        <p class="base-title-2"> ✉️ {{ user.email }}</p>
+                        <p class="base-title-3"> 🎂 {{ user.bday | date: 'dd.MM.yyyy'}}</p>
+
+                        <button (click)="openComplaints(user)" *ngIf="!isComplaintsList[user.id]">
+                            <svg class="h-5 w-5" viewBox="0 0 25 25" aria-hidden="true">
+                                <path fill="#4b5563"
+                                    d="M7,0H4A4,4,0,0,0,0,4V7a4,4,0,0,0,4,4H7a4,4,0,0,0,4-4V4A4,4,0,0,0,7,0ZM9,7A2,2,0,0,1,7,9H4A2,2,0,0,1,2,7V4A2,2,0,0,1,4,2H7A2,2,0,0,1,9,4Z" />
+                                <path fill="#4b5563"
+                                    d="M7,13H4a4,4,0,0,0-4,4v3a4,4,0,0,0,4,4H7a4,4,0,0,0,4-4V17A4,4,0,0,0,7,13Zm2,7a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V17a2,2,0,0,1,2-2H7a2,2,0,0,1,2,2Z" />
+                                <path fill="#4b5563"
+                                    d="M20,13H17a4,4,0,0,0-4,4v3a4,4,0,0,0,4,4h3a4,4,0,0,0,4-4V17A4,4,0,0,0,20,13Zm2,7a2,2,0,0,1-2,2H17a2,2,0,0,1-2-2V17a2,2,0,0,1,2-2h3a2,2,0,0,1,2,2Z" />
+                                <path fill="#4b5563"
+                                    d="M14,7h3v3a1,1,0,0,0,2,0V7h3a1,1,0,0,0,0-2H19V2a1,1,0,0,0-2,0V5H14a1,1,0,0,0,0,2Z" />
+                            </svg>
+                        </button>
+
+                        <button (click)="openComplaints(user)" *ngIf="isComplaintsList[user.id]">
+                            <svg class="h-5 w-5" viewBox="0 0 25 25" aria-hidden="true">
+                                <path fill="#4b5563"
+                                    d="M7,0H4A4,4,0,0,0,0,4V7a4,4,0,0,0,4,4H7a4,4,0,0,0,4-4V4A4,4,0,0,0,7,0ZM9,7A2,2,0,0,1,7,9H4A2,2,0,0,1,2,7V4A2,2,0,0,1,4,2H7A2,2,0,0,1,9,4Z" />
+                                <path fill="#4b5563"
+                                    d="M7,13H4a4,4,0,0,0-4,4v3a4,4,0,0,0,4,4H7a4,4,0,0,0,4-4V17A4,4,0,0,0,7,13Zm2,7a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V17a2,2,0,0,1,2-2H7a2,2,0,0,1,2,2Z" />
+                                <path fill="#4b5563"
+                                    d="M20,13H17a4,4,0,0,0-4,4v3a4,4,0,0,0,4,4h3a4,4,0,0,0,4-4V17A4,4,0,0,0,20,13Zm2,7a2,2,0,0,1-2,2H17a2,2,0,0,1-2-2V17a2,2,0,0,1,2-2h3a2,2,0,0,1,2,2Z" />
+                                <path fill="#4b5563" d="M14,7h8a1,1,0,0,0,0-2H14a1,1,0,0,0,0,2Z" />
+                            </svg>
+                        </button>
+
+                        <div class="flex self-start justify-between py-5 grid grid-cols-5 gap-x-12 gap-y-12"
+                            *ngIf="isComplaintsList[user.id]">
+                            <div *ngFor="let event of eventsComplaints[user.id]" class="complaint">
+                                <p class="base-title">{{ event.event.title }}
+                                    <button (click)="eventInfo(event.eventId)">
+                                        <svg class="h-5 w-5 text-gray-600" viewBox="0 0 25 25" aria-hidden="true">
+                                            <path
+                                                d="M12,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,12,0Zm0,21a9,9,0,1,1,9-9A9.011,9.011,0,0,1,12,21Z" />
+                                            <path
+                                                d="M11.545,9.545h-.3A1.577,1.577,0,0,0,9.64,10.938,1.5,1.5,0,0,0,11,12.532v4.65a1.5,1.5,0,0,0,3,0V12A2.455,2.455,0,0,0,11.545,9.545Z" />
+                                            <path
+                                                d="M11.83,8.466A1.716,1.716,0,1,0,10.114,6.75,1.715,1.715,0,0,0,11.83,8.466Z" />
+                                        </svg>
+                                    </button>
+                                </p>
+                                <p class="base-title-2">Reason: {{ event.category.title }}</p>
+                                <p class="base-title-2">Details: {{ event.category.description }}</p>
+
+                                <span class="hidden sm:block">
+                                    <button (click)="deleteEvent(event.id)" class="base-button">
+                                        <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+                                            <path fill="#4b5563"
+                                                d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
+                                        </svg>Delete
+                                    </button>
+                                </span>
+                            </div>
+
+                            <div *ngFor="let message of messagesComplaints[user.id]" class="complaint">
+                                <p class="base-title">{{ message.message.message | ellipsis:20}}</p>
+                                <p class="base-title-2">Reason: {{ message.category.title | ellipsis:20}}</p>
+                                <p class="base-title-2">Details: {{ message.category.description | ellipsis:20}}</p>
+
+                                <span class="hidden sm:block">
+                                    <button (click)="deleteMessage(message.messageId)" class="base-button">
+                                        <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+                                            <path fill="#4b5563"
+                                                d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
+                                        </svg>Delete
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span class="ml-3 hidden sm:block">
+                    <button *ngIf="!isBanned[user.id]" (click)="banUser(user.id)"
+                        class="accent-button bg-pink-500 hover:bg-pink-400">
+                        <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+                            <path fill="white"
+                                d="M12,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,12,0Zm0,3a8.947,8.947,0,0,1,5.207,1.672L4.672,17.206A8.986,8.986,0,0,1,12,3Zm0,18a8.942,8.942,0,0,1-5.206-1.672L19.328,6.793A8.986,8.986,0,0,1,12,21Z" />
+                        </svg>
+                        Ban</button>
+                    <button *ngIf="isBanned[user.id]" (click)="unbanUser(user.id)"
+                        class="accent-button bg-gray-500 hover:bg-gray-400">
+                        <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+                            <path fill="white"
+                                d="m12 0a12 12 0 1 0 12 12 12.013 12.013 0 0 0 -12-12zm0 21a9 9 0 1 1 9-9 9.01 9.01 0 0 1 -9 9zm1.5-10.5h3.5v3h-3.5v3.5h-3v-3.5h-3.5v-3h3.5v-3.5h3z" />
+                        </svg>Unban</button>
+                </span>
+
+            </li>
+
+        </ul>
+
+
+        <ul role="list" class="divide-y divide-gray-100" *ngIf="isOpenComplaints">
+            <div *ngIf="isCreatingComplaint">
+                <div class="flex flex-col gap-y-4 mt-5">
+                    <input type="text" class="base-input" placeholder="Title" [(ngModel)]="newCategory.title">
+                    <input type="text" class="base-input" placeholder="Description"
+                        [(ngModel)]="newCategory.description">
+                    <button class="accent-button bg-indigo-400 hover:bg-indigo-300 w-64 mb-4"
+                        (click)="createComplaintCategory(newCategory)">Create</button>
+                </div>
+            </div>
+            <li class="flex justify-between gap-x-6 py-5" *ngFor="let category of categories">
+                <div class="flex min-w-0 gap-x-4">
+                    <div class="min-w-0 flex-auto">
+                        <p class="base-title">{{ category.title | ellipsis:15}}</p>
+                        <p class="base-title-2">{{ category.description | ellipsis:20 }}</p>
+                    </div>
+                </div>
+
+                <div *ngIf="isEditingComplaint">
+                    <div class="flex flex-col gap-y-4 mt-5">
+                        <input type="text" class="base-input" placeholder="Title" [(ngModel)]="category.title">
+                        <input type="text" class="base-input" placeholder="Description"
+                            [(ngModel)]="category.description">
+                        <div class="self-start justify-center">
+                            <button class="accent-button bg-indigo-400 hover:bg-indigo-300 w-28 ml-2"
+                                (click)="editComplaintCategory(category)">
+                                Update</button>
+                            <button class="base-button w-28" (click)="cancel()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <span class="ml-3 hidden sm:block">
+                    <button (click)="startEditingComplaint()" class="accent-button bg-green-500 hover:bg-green-400">
+                        <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+                            <path fill="white"
+                                d="m12 0a12 12 0 1 0 12 12 12.013 12.013 0 0 0 -12-12zm0 21a9 9 0 1 1 9-9 9.01 9.01 0 0 1 -9 9zm1.5-10.5h3.5v3h-3.5v3.5h-3v-3.5h-3.5v-3h3.5v-3.5h3z" />
+                        </svg>
+                        Edit</button>
+                    <button type="button" (click)="deleteComplaintCategory(category.id)" class="base-button">
+                        <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
+                            <path fill="#4b5563"
+                                d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
+                        </svg>
+                        Delete
+                    </button>
+                </span>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+        <div *ngIf="isEventInfo">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+            <div class="fixed inset-0 overflow-hidden">
+                <div class="absolute inset-0 overflow-hidden">
+                    <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                        <div class="pointer-events-auto relative w-screen max-w-md">
+                            <div class="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
+                                <button type="button" (click)="closeEventInfo()"
+                                    class="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
+                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                        stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="flex h-full flex-col bg-white py-6 shadow-xl">
+                                <div class="px-4 sm:px-6">
+                                    <p class="base-title" id="slide-over-title">{{ currentEvent.title }}</p>
+                                    <ul>
+                                        <li>
+                                            <p class="base-title-2">Description: {{ currentEvent.description }}</p>
+                                        </li>
+                                        <li>
+                                            <p class="base-title-2">Age limit: {{ currentEvent.ageLimit }}+</p>
+                                        </li>
+                                        <li>
+                                            <p class="base-title-2">Guest limit: {{ currentEvent.maxGuestAmount }}</p>
+                                        </li>
+                                        <li>
+                                            <p class="base-title-2">Start date: {{ currentEvent.startDate | date:
+                                                'dd.MM.yyyy' }}</p>
+                                        </li>
+                                        <li>
+                                            <p class="base-title-2">End date: {{ currentEvent.endDate | date:
+                                                'dd.MM.yyyy' }}</p>
+                                        </li>
+
+                                        <li>
+                                            <p class="base-title-2">Location: {{ currentLocation }}</p>
+                                        </li>
+                                    </ul>
+
+                                    <img src="{{image}}" class="img" alt="Loading...">
+                                </div>
+                                <div class="relative mt-6 flex-1 px-4 sm:px-6">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

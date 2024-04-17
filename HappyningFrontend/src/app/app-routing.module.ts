@@ -8,12 +8,16 @@ import { UserComponent } from './user/user.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
+import { ModeratorHomeComponent } from './moderator-home/moderator-home.component';
+import { BannedErrorComponent } from './banned-error/banned-error.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'home', component: HomeComponent },
   { path: 'admin', component: AdminHomeComponent },
+  { path: 'moderator', component: ModeratorHomeComponent},
+  { path: 'banned', component: BannedErrorComponent},
   { path: 'profile', component: ProfileComponent },
   { path: 'event/:eventId', component: EventCardComponent },
   { path: 'editor', component: EditorComponent },

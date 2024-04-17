@@ -49,6 +49,8 @@ import { DUIButton, DUIAlert } from "david-ui-angular";
 import { FooterComponent } from './footer/footer.component';
 import { EventListComponent } from './event-list/event-list.component';
 import { RoleErrorComponent } from './role-error/role-error.component';
+import { ModeratorHomeComponent } from './moderator-home/moderator-home.component';
+import { BannedErrorComponent } from './banned-error/banned-error.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,9 @@ import { RoleErrorComponent } from './role-error/role-error.component';
     ErrorComponent,
     FooterComponent,
     EventListComponent,
-    RoleErrorComponent
+    RoleErrorComponent,
+    ModeratorHomeComponent,
+    BannedErrorComponent
   ],
   imports: [
     BrowserModule,

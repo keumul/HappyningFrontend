@@ -50,7 +50,6 @@ export class HomeComponent implements OnInit {
     );
   }
 
-
   checkCredentials() {
     try {
       if (this.authService.getCurrentUser()?.role == 'user') {
@@ -63,5 +62,4 @@ export class HomeComponent implements OnInit {
       console.log(error);
     }
   }
-
 }

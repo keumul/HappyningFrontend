@@ -34,6 +34,8 @@ export class EventCardComponent implements OnInit {
   auxDate!: Date;
   codeFromDatabase: string = '';
   isOverlayVisible: boolean = false;
+  isMessage: boolean = false;
+  message: string = '';
   enteredCode: string = '';
   qrCode: string = '';
   location!: Location;
@@ -42,6 +44,8 @@ export class EventCardComponent implements OnInit {
   complaintsCategory!: Complaint[];
   complaint!: number;
   isComplaint: boolean = false;
+  isSecretCode: boolean = false;
+  isAgeLimit: boolean = false;
   image: any;
 
   constructor(
@@ -72,11 +76,12 @@ export class EventCardComponent implements OnInit {
       this.showPhoto();
       if (this.userId === this.event.organizerId) {
         this.isOrganizer = true;
-      }
-      if (!this.event.isPublic) {
+      } else if (!this.event.isPublic) {
         this.codeFromDatabase = this.event.secretCode;
-        this.openOverlay();
-      }
+        this.openOverlay("code");
+      } 
+      this.ageCheck();
+      this.organizerIsBaned();
     });
   }
 
@@ -96,7 +101,14 @@ export class EventCardComponent implements OnInit {
     this.router.navigate([`user/${userId}`]);
   }
 
-  openOverlay() {
+  openOverlay(type: string) {
+    if (type === "code") {
+      this.isSecretCode = true;
+      this.isAgeLimit = false;
+    } else if (type==="age"){
+      this.isAgeLimit = true;
+      this.isSecretCode = false;
+    }
     this.isOverlayVisible = true;
   }
 
@@ -113,10 +125,7 @@ export class EventCardComponent implements OnInit {
 
   onOverlaySubmit() {
     if (this.enteredCode === this.codeFromDatabase) {
-      console.log('Right code!');
       this.closeSuccessOverlay();
-    } else {
-      console.log('Unvalid code!');
     }
   }
 
@@ -125,7 +134,6 @@ export class EventCardComponent implements OnInit {
       this.complaintsCategory = data;
     });
   }
-
 
   sendComplaint() {
     this.complaintService.createEventComplaint(this.event.id, this.complaint).subscribe(() => {
@@ -168,4 +176,28 @@ export class EventCardComponent implements OnInit {
     }
   }
 
+  organizerIsBaned() {
+    this.userService.findUser(this.event.organizerId).subscribe((data: any) => {
+      this.organizer = data as User;
+      if (this.organizer.role == 'banned') {
+        this.isMessage = true;
+        this.message = 'This organizer is banned! This event may be deleted soon.';
+      }
+    });
+  }
+
+  ageCheck() {
+    var today = new Date();
+    this.userService.findUser(this.userId).subscribe((data: any) => {
+      var birthdate = new Date(data.bday);
+      var age = today.getFullYear() - birthdate.getFullYear();
+      var monthDiff = today.getMonth() - birthdate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdate.getDate())) {
+        age--;
+      }
+      if (age < this.event.ageLimit) {
+        this.openOverlay('age');
+      }
+    });
+  }
 }

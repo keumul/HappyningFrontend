@@ -1,38 +1,15 @@
-<body *ngIf="isHighRole"><app-role-error></app-role-error></body>
+<app-role-error *ngIf="isHighRole"></app-role-error>
+<app-error *ngIf="!isUser && !isHighRole"></app-error>
+
 <body *ngIf="isUser" class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" aria-hidden="false">
   <div class="h-full">
-
     <app-header></app-header>
     <hr class="mt-6 mb-2">
     <form>
       <app-event-list></app-event-list>
-      <div class="mx-auto md:pt-16">
-        <p class="text-blue-400 font-bold pb-8 lg:pb-6 text-center">
-          Download our app:
-        </p>
-        <div class="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in">
-          <img src="App Store.svg" class="h-12 pr-12 transform hover:scale-125 duration-300 ease-in-out" />
-          <img src="Play Store.svg" class="h-12 transform hover:scale-125 duration-300 ease-in-out" />
-        </div>
-      </div>
-
       <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
         <app-footer></app-footer>
       </div>
-  </form>
+    </form>
   </div>
 </body>
-
-<!-- <mat-card *ngIf="isUser"> -->
-<!-- <mat-card>
-    <app-header></app-header>
-    <div class="container">
-      <div class="calendar">
-        <app-calendar></app-calendar>
-      </div>
-      <div class="side-components">
-        <app-event></app-event>
-      </div>
-    </div>
-</mat-card> -->
-<!-- <app-error *ngIf="!isUser"></app-error> -->

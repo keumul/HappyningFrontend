@@ -3,54 +3,62 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ComplaintService {
-  private categoryUrl = 'http://localhost:5000/api/complaint';
+    private baseUrl = 'http://localhost:5000/api/complaint';
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     findAllMessageComplaints(): Observable<any> {
-        return this.http.get<any>(`${this.categoryUrl}/message`);
+        return this.http.get<any>(`${this.baseUrl}/message`);
     }
 
     findAllEventComplaints(): Observable<any> {
-        return this.http.get<any>(`${this.categoryUrl}/event`);
+        return this.http.get<any>(`${this.baseUrl}/event`);
     }
 
     findEventComplaint(id: number): Observable<any> {
-        return this.http.get<any>(`${this.categoryUrl}/event/${id}`);
+        return this.http.get<any>(`${this.baseUrl}/event/${id}`);
     }
 
     findMessageComplaint(id: number): Observable<any> {
-        return this.http.get<any>(`${this.categoryUrl}/message/${id}`);
+        return this.http.get<any>(`${this.baseUrl}/message/${id}`);
     }
 
     createMessageComplaint(messageId: number, categoryId: number): Observable<any> {
-        return this.http.post<any>(`${this.categoryUrl}/message/${messageId}/${categoryId}`, {});
+        return this.http.post<any>(`${this.baseUrl}/message/${messageId}/${categoryId}`, {});
     }
 
     createEventComplaint(eventId: number, categoryId: number): Observable<any> {
-        return this.http.post<any>(`${this.categoryUrl}/event/${eventId}/${categoryId}`, {});
+        return this.http.post<any>(`${this.baseUrl}/event/${eventId}/${categoryId}`, {});
     }
 
     findAllComplaintsCategories(): Observable<any> {
-        return this.http.get<any>(`${this.categoryUrl}/categories`);
+        return this.http.get<any>(`${this.baseUrl}/categories`);
     }
 
     createComplaintsCategory(dto: any): Observable<any> {
-        return this.http.post<any>(`${this.categoryUrl}/categories`, dto);
+        return this.http.post<any>(`${this.baseUrl}/categories`, dto);
     }
 
     findComplaintsCategory(id: number): Observable<any> {
-        return this.http.get<any>(`${this.categoryUrl}/categories/${id}`);
+        return this.http.get<any>(`${this.baseUrl}/categories/${id}`);
     }
 
     updateComplaintsCategory(id: number, dto: any): Observable<any> {
-        return this.http.patch<any>(`${this.categoryUrl}/categories/${id}`, dto);
+        return this.http.patch<any>(`${this.baseUrl}/categories/${id}`, dto);
     }
 
     removeComplaintsCategory(id: number): Observable<any> {
-        return this.http.delete<any>(`${this.categoryUrl}/categories/${id}`);
+        return this.http.delete<any>(`${this.baseUrl}/categories/${id}`);
+    }
+
+    findUserMessageComplaints(userId: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}/message/user/${userId}`);
+    }
+
+    findUserEventComplaints(userId: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}/event/user/${userId}`);
     }
 }

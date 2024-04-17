@@ -69,4 +69,7 @@ export class EventService {
     return this.http.delete<any>(`${this.photoUrl}/${id}`);
   }
 
+  deleteMessage(id: number): Observable<any> {
+    return this.http.delete<any>(`http://localhost:5000/api/message/${id}`);
+  }
 }

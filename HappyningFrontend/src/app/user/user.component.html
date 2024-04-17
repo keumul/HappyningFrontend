@@ -16,7 +16,8 @@
                 {{currentUser.username}}
               </span>
             </div>
-            <label class="text-lg font-bold text-green-500"> &#10022; Organizer</label>
+            <p *ngIf="isMessage" class="text-lg font-bold text-pink-500">{{message}}</p>
+            <label *ngIf="!isMessage" class="text-lg font-bold text-green-500"> &#10022; Organizer</label>
             <div class="max-w-xl text-base text-gray-700 lg:max-w-lg">
               <ul role="list" class="mt-8 space-y-8 text-gray-600">
                 <li class="flex gap-x-3">

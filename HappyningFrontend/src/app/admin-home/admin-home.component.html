@@ -135,12 +135,7 @@
           </div>
         </div>
         <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end text-right">
-          <p class="base-title-4" *ngIf="category.parentId == null">Category</p>
-          <p class="base-title-4" *ngIf="category.parentId > 0">Subcategory<br>
-            <label class="text-sm text-indigo-400">
-              Parent is {{ parentCategory[category.id].title | ellipsis:20 }} [Id:
-              {{parentCategory[category.id].id}}]</label>
-          </p>
+          <p class="base-title-4">Category</p>
           <p class="base-title-3">Number of uses in events: {{
             categoryEventCounts[category.id] || 0 }}</p>
         </div>
@@ -153,17 +148,7 @@
             <label class="text-sm text-gray-500">Description</label>
             <input class="base-input" [(ngModel)]="category.description"
               placeholder="{{ category.description }}">
-            <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-              <p class="base-title-4">
-                <label class="text-sm text-gray-500">Parent</label>
-                <select id="categorySelect" name="category" autocomplete="category-title" (click)="showMainCategories()"
-                  [(ngModel)]="category.parentId" class="base-select">
-                  <option *ngFor="let cat of mainCategories" [value]="cat.id">
-                    {{cat.title}}</option>
-                </select>
-              </p>
-            </div>
-            <div class="self-start">
+            <div class="self-start mt-3">
               <button (click)="updateCategory(category)" class="base-button">Update</button>
               <button (click)="cancelEditing(category)" class="base-button">Cancel</button>
             </div>
@@ -199,12 +184,6 @@
           <label class="text-sm text-gray-500 mt-5">Description</label>
           <input class="base-input" [(ngModel)]="selectedCategory.description"
             placeholder="Description">
-          <label class="text-sm text-gray-500 mt-5">Parent</label>
-          <select id="categorySelect" name="category" autocomplete="category-title" (click)="showMainCategories()"
-            [(ngModel)]="selectedCategory.parentId" class="base-title-4 base-select">
-            <option *ngFor="let cat of mainCategories" [value]="cat.id">
-              {{cat.title}}</option>
-          </select>
         </div>
 
         <div class="hidden shrink-0 sm:flex sm:flex-col mt-5" *ngIf="isCreatingFormat">

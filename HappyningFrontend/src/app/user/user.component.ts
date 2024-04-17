@@ -11,6 +11,8 @@ import { User } from '../dto/user.dto';
 export class UserComponent implements OnInit {
   userId: any;
   currentUser!: User;
+  isMessage: boolean = false;
+  message: string = '';
 
   constructor(private route: ActivatedRoute,
     private userService: UserService) { }
@@ -22,6 +24,11 @@ export class UserComponent implements OnInit {
     });
     this.userService.findUser(this.userId).subscribe((user) => {
       this.currentUser = user;
+
+      if (this.currentUser.role === 'banned') {
+        this.isMessage = true;
+        this.message = 'This organizer is banned!';
+      }
     });
   }
 
@@ -43,5 +50,4 @@ export class UserComponent implements OnInit {
     var age = this.calculateAge(this.currentUser.bday);
     return age + "y.o.";
   }
-
 }

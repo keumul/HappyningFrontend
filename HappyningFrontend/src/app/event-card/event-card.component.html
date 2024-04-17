@@ -6,12 +6,12 @@
   <div>
     <div class="px-4 sm:px-0">
       <div class="flex justify-between">
-        <p class="text-3xl leading-7 text-indigo-400 text-shadow-md font-bold">{{event.title}}</p>
-        <button (click)="openComplaintDialog()" 
-        class="text-pink-500 font-bold text-lg">🛇</button>
+        <p class="main-title">{{event.title}}</p>
+        <button (click)="openComplaintDialog()" class="text-pink-500 font-bold text-lg">🛇</button>
       </div>
-      <img *ngIf="image" src="{{image}}" class="img" alt="Cover">
-      <p class="mt-1 max-w-2xl text-base leading-6 text-gray-500">This event is available to persons
+      <img *ngIf="image" src="{{image}}" class="img" alt="Loading...">
+      <p class="message" *ngIf="isMessage">{{message}}</p>
+      <p class="hint">This event is available to persons
         <span class="font-bold text-lg text-pink-400">{{event.ageLimit}}+</span>
       </p>
     </div>
@@ -22,10 +22,8 @@
         moderator.</label><br>
       <label class="mt-3">Select a violation category</label>
       <div class="flex">
-        <select id="categorySelect" name="category" autocomplete="category-title" [(ngModel)]="complaint" class="block pl-3 w-full rounded-md border-0 
-            py-1.5 text-gray-900 shadow-sm ring-1 
-              ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
-              sm:max-w-xs sm:text-sm sm:leading-6">
+        <select id="categorySelect" name="category" autocomplete="category-title" [(ngModel)]="complaint"
+          class="base-select">
           <option *ngFor="let cat of complaintsCategory" [value]="cat.id">{{cat.title}} {{cat.description}}
           </option>
         </select>
@@ -36,57 +34,99 @@
 
     <app-event-registration></app-event-registration>
     <div class="mt-10">
-      <p class="text-lg text-gray-700 font-bold">Event information</p>
+      <p class="base-title">Event information</p>
       <div class="border-t border-gray-100">
         <dl class="divide-y divide-gray-100">
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">Title</dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ event.title }}</dd>
+          <div class="row-div">
+            <dt class="base-title-2">Title</dt>
+            <dd class="base-title-3">{{ event.title }}</dd>
           </div>
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">Address</dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+          <div class="row-div">
+            <dt class="base-title-2">Address</dt>
+            <dd class="base-title-3">
               {{ location.details }} - {{ city.cityName }} - {{ country.countryName }} </dd>
           </div>
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">Date</dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">From
-              <span class="text-green-500">{{ event.startDate | date :"MMM d - h:mm a YYYY" }}</span> To
-              <span class="text-green-500">{{ event.endDate | date :"MMM d - h:mm a YYYY"}}</span>
+          <div class="row-div">
+            <dt class="base-title-2">Date</dt>
+            <dd class="base-title-3">From
+              <span class="text-green-500">{{ event.startDate | date :"MMM d YYYY - h:mm a" }}</span> To
+              <span class="text-green-500">{{ event.endDate | date :"MMM d YYYY - h:mm a"}}</span>
             </dd>
           </div>
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">About</dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+          <div class="row-div">
+            <dt class="base-title-2">About</dt>
+            <dd class="base-title-3">
               {{ event.description | ellipsis: 100}}
             </dd>
           </div>
 
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">Organizer</dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ organizer.username }}
+          <div class="row-div">
+            <dt class="base-title-2">Organizer</dt>
+            <dd class="base-title-3">{{ organizer.username }}
               <br><span class="text-gray-500 text-xs">You can view the organizer's </span>
-              <button class="rounded-md text-indigo-500
-          text-sm leading-6 hover:text-indigo-400 
-          focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
-          focus-visible:outline-indigo-600" (click)="navigateToUserProfile(organizer.id)">
+              <button class="base-button" (click)="navigateToUserProfile(organizer.id)">
                 profile</button>
             </dd>
           </div>
 
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">Category</dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ category.title }}:
+          <div class="row-div">
+            <dt class="base-title-2">Category</dt>
+            <dd class="base-title-3">{{ category.title }}:
               <span class="text-pink-400">{{ category.description }}</span>
             </dd>
           </div>
-          <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm font-medium leading-6 text-gray-900">Format</dt>
-            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ organizer.username }},
+          <div class="row-div">
+            <dt class="base-title-2">Format</dt>
+            <dd class="base-title-3">{{ organizer.username }},
               <span class="text-blue-400">{{ organizer.email }}</span>
             </dd>
           </div>
         </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true" *ngIf="isOverlayVisible">
+    <div>
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+      <div class="fixed inset-0 overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden">
+          <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+            <div class="pointer-events-auto relative w-screen max-w-md">
+              <div class="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
+                <button type="button" (click)="closeOverlay()"
+                  class="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="flex h-full flex-col bg-white py-6 shadow-xl">
+                <div class="px-4 sm:px-6" *ngIf="isSecretCode">
+                  <div class="flex self-start inline-flex">
+                    <p class="base-title">This event is private</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2" viewBox="0 0 24 24" stroke-width="3">
+                      <path fill="#4b5563"
+                        d="M19,8.424V7A7,7,0,0,0,5,7V8.424A5,5,0,0,0,2,13v6a5.006,5.006,0,0,0,5,5H17a5.006,5.006,0,0,0,5-5V13A5,5,0,0,0,19,8.424ZM7,7A5,5,0,0,1,17,7V8H7ZM20,19a3,3,0,0,1-3,3H7a3,3,0,0,1-3-3V13a3,3,0,0,1,3-3H17a3,3,0,0,1,3,3Z" />
+                      <path d="M12,14a1,1,0,0,0-1,1v2a1,1,0,0,0,2,0V15A1,1,0,0,0,12,14Z" />
+                    </svg>
+                  </div>
+                  <p class="base-title-3">To access it, you need to enter a secret code</p>
+                  <input type="text" [(ngModel)]="enteredCode" placeholder="Enter the code" class="base-input">
+                  <button class="base-button ml-2" (click)="onOverlaySubmit()">Submit</button>
+                </div>
+                <div class="px-4 sm:px-6" *ngIf="isAgeLimit">
+                  <p class="base-title">Sorry! You are too young to attend this event!</p>
+                  <p class="main-title">Limit: {{event.ageLimit}}+</p>
+                </div>
+                <div class="relative mt-6 flex-1 px-4 sm:px-6">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
