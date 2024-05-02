@@ -47,6 +47,7 @@ export class EventCardComponent implements OnInit {
   isSecretCode: boolean = false;
   isAgeLimit: boolean = false;
   image: any;
+  isCurrentUser: boolean = false;
 
   constructor(
     private eventService: EventService,
@@ -72,6 +73,7 @@ export class EventCardComponent implements OnInit {
       this.event = data;
       this.auxDate = new Date(this.event.startDate);
       this.loadCategory();
+      this.loadFormat();
       this.loadOrganizer();
       this.showPhoto();
       if (this.userId === this.event.organizerId) {
@@ -88,6 +90,12 @@ export class EventCardComponent implements OnInit {
   loadCategory() {
     this.categoryService.findCategory(this.event.categoryId).subscribe((data: any) => {
       this.category = data as Category;
+    })
+  }
+
+  loadFormat() {
+    this.categoryService.findFormat(this.event.formatId).subscribe((data: any) => {
+      this.format = data as Format;
     })
   }
 

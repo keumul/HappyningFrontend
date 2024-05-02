@@ -3,13 +3,15 @@
     <div class="mx-auto sm:px-6 lg:px-8 relative">
       <div #navbarContainer class="flex h-12 justify-between overflow-x-auto">
 
-        <div class="arrow-left flex items-center justify-center text-gray-400 hover:text-gray-500 absolute left-0 top-0 bottom-0 ml-2" (click)="scrollLeft()">
+        <div class="arrow-left flex items-center justify-center text-gray-400 hover:text-gray-500 absolute left-0 top-0 bottom-0 ml-2" 
+        (click)="scrollLeft()">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </div>
 
-        <div class="arrow-right flex items-center justify-center text-gray-400 hover:text-gray-500 absolute right-0 top-0 bottom-0 mr-2" (click)="scrollRight()">
+        <div class="arrow-right flex items-center justify-center text-gray-400 hover:text-gray-500 absolute right-0 top-0 bottom-0 mr-2" 
+        (click)="scrollRight()">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
@@ -34,7 +36,7 @@
     </div>
   </nav>
 
-  <div class="pt-20 md:pt-13 mx-auto flex flex-wrap flex-col md:flex-row items-center justify-between">
+  <div class="pt-20 md:pt-13 mx-auto flex md:flex-row items-center justify-between">
     <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden font-bold">
       <p class="my-4 text-3xl md:text-10xl text-indigo font-bold leading-tight text-center md:text-left">
         What kind of
@@ -49,12 +51,13 @@
 
       <form class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
         <div class="mb-4">
-          <label class="block text-blue-300 py-2 font-bold mb-2" for="emailaddress">
+          <label class="block text-blue-300 py-2 font-bold mb-2" for="title">
             Filters
           </label>
-          <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 
+          <input [(ngModel)]="title" name="title"
+          class="shadow appearance-none border rounded w-full p-3 text-gray-700 
             leading-tight focus:ring transform transition hover:scale-105 duration-300 
-            ease-in-out" id="location" type="text" placeholder="location" [(ngModel)]="locationFilter" />
+            ease-in-out" type="text" placeholder="Title"/>
           <button (click)="openFilter()" class="mt-6">More filter</button>
           <div *ngIf="isFilter">
             <div class="sm:col-span-2 sm:col-start-1">
@@ -107,19 +110,27 @@
               type="button" (click)="applyFilters()">
               Search
             </button>
+            <button
+              class="base-button"
+              type="button" (click)="clearFilters()">
+              Clear
+            </button>
           </div>
         </div>
       </form>
+    </div>
+
+    <div *ngIf="!isFilter">
+      <app-notification location="home"></app-notification>
     </div>
   </div>
 
   <div class="flex justify-end">
     <div class="mx-auto max-w-2xl py-8 sm:py-8 lg:max-w-7xl">
-      <p class="text-2xl font-bold tracking-tight text-indigo-400">More events</p>
+      <p class="text-2xl font-bold tracking-tight text-pink-400">More events</p>
 
-      <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+      <div class="mt-6 grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 overflow-y-auto">
         <div *ngFor="let event of events; let i = index" (click)="redirectToEvent(event.id)">
-
           <div
             class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 
             lg:aspect-none group-hover:opacity-75 lg:h-80">

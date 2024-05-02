@@ -51,6 +51,7 @@ import { EventListComponent } from './event-list/event-list.component';
 import { RoleErrorComponent } from './role-error/role-error.component';
 import { ModeratorHomeComponent } from './moderator-home/moderator-home.component';
 import { BannedErrorComponent } from './banned-error/banned-error.component';
+import { PreferenceComponent } from './preference/preference.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { BannedErrorComponent } from './banned-error/banned-error.component';
     EventListComponent,
     RoleErrorComponent,
     ModeratorHomeComponent,
-    BannedErrorComponent
+    BannedErrorComponent,
+    PreferenceComponent
   ],
   imports: [
     BrowserModule,

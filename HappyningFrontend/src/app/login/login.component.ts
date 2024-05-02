@@ -35,7 +35,6 @@ export class LoginComponent implements OnInit {
     this.authService.sendCredentials(this.username, this.password, "nocode").subscribe((data: any) => {
 
       if (data) {
-
         this.authService.confirmationStatus(this.username).subscribe((statusData: any) => {
           if (!statusData) {
             this.isActivationCode = true;
@@ -78,7 +77,7 @@ export class LoginComponent implements OnInit {
           } else if (this.authService.getCurrentUser()?.role == 'moderator') {
             this.router.navigate(['/moderator']);
           } else {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/preference']);
           } 
         }, error => {
           this.errorMessage = this.errorMessageRandom();

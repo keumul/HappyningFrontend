@@ -316,7 +316,7 @@ export class EditorComponent implements OnInit {
         this.ngOnInit();
       },
       (error) => {
-        if (this.selectedEvent.title.length > 20) {
+        if (this.selectedEvent.title.length > 50) {
           this.isErrorMessage = true;
           this.errorMessage = "Title is too long";
           return;
@@ -383,9 +383,8 @@ export class EditorComponent implements OnInit {
       photo: this.event.photo || 0,
     }).subscribe(
       (response: any) => {
-        this.notificationService.createNotification({
-          userId: +this.authService.getCurrentUser()?.id,
-          eventId: response.id,
+        this.notificationService.createNotification(response.id,
+          +this.authService.getCurrentUser()?.id, {
           message: 'Event created!',
           isRead: false,
         }).subscribe();
@@ -396,7 +395,7 @@ export class EditorComponent implements OnInit {
         this._snackBar.open('You can add a cover to the event in the editor!', '', { duration: 5000 });
       },
       (error) => {
-        if (this.selectedEvent.title.length >= 20) {
+        if (this.selectedEvent.title.length >= 50) {
           this.isErrorMessage = true;
           this.isSuccessMessage = false;
           this.errorMessage = "Title is too long";
@@ -452,7 +451,7 @@ export class EditorComponent implements OnInit {
   updateLocation(id: number) {
     this.locationService.updateLocation(id, {
       details: this.address,
-      cityId: this.cityId,
+      cityId: +this.cityId,
     }).subscribe(
       (response: any) => {
         this.loadLocation(response.id);

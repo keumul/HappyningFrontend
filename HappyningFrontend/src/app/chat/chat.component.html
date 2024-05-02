@@ -47,7 +47,7 @@
                     <div *ngIf="message.user.id === currentUser.id" class="font-bold text-green-500">You</div>
                     <div *ngIf="message.user.id !== currentUser.id" class="font-bold text-green-500">
                         {{ message.user.username }}</div>
-                    <button (click)="openComplaintDialog(message)" class="text-pink-500 font-bold">🛇</button>
+                    <button *ngIf="message.user.id !== currentUser.id" (click)="openComplaintDialog(message)" class="text-pink-500 font-bold">🛇</button>
                 </div>
                 <span class="text-sm text-gray-400">{{ message.createdAt | date : "MMM d, h:mm a" }}</span>
                 <div class="text-gray-700">"{{ message.message }}"</div>

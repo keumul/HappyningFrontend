@@ -10,6 +10,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
 import { ModeratorHomeComponent } from './moderator-home/moderator-home.component';
 import { BannedErrorComponent } from './banned-error/banned-error.component';
+import { PreferenceComponent } from './preference/preference.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'event/:eventId', component: EventCardComponent },
   { path: 'editor', component: EditorComponent },
   { path: 'user/:userId', component: UserComponent },
+  { path: 'preference', component: PreferenceComponent }
 ];
 
 @NgModule({

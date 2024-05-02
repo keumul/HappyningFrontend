@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NotificationService } from '../services/notification.service';
 import { Notifications } from '../dto/notification.dto';
 import { Router } from '@angular/router';
@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
   isAdmin = false;
   isModerator = false;
   currentUser!: User;
+  @Input() location!: string;
 
   constructor(
     private notificationService: NotificationService,
@@ -42,7 +43,7 @@ export class HeaderComponent implements OnInit {
         this.notificationCount = 0;
 
         for (let i = 0; i < this.notifications.length; i++) {
-          if (this.notifications[i].isRead == false) {
+          if (this.notifications[i].isRead == false && this.notifications[i].message.includes('You')) {
             this.notificationCount++;
           }
         }
@@ -53,13 +54,6 @@ export class HeaderComponent implements OnInit {
     );
   }
 
-  markAsRead(id: number): void {
-    if (this.notificationCount > 0) {
-      this.notificationCount--;
-    }
-    this.ngOnInit();
-  }
-
   openNotifications(): void {
     this.loadNotifications();
     this.showNotifications = true;
@@ -67,6 +61,7 @@ export class HeaderComponent implements OnInit {
 
   closeNotifications(): void {
     this.showNotifications = false;
+    this.loadNotifications();
   }
 
   menuExitAccount() {

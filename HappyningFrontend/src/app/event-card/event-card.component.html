@@ -7,7 +7,7 @@
     <div class="px-4 sm:px-0">
       <div class="flex justify-between">
         <p class="main-title">{{event.title}}</p>
-        <button (click)="openComplaintDialog()" class="text-pink-500 font-bold text-lg">🛇</button>
+        <button *ngIf="!isOrganizer" (click)="openComplaintDialog()" class="text-pink-500 font-bold text-lg">🛇</button>
       </div>
       <img *ngIf="image" src="{{image}}" class="img" alt="Loading...">
       <p class="message" *ngIf="isMessage">{{message}}</p>
@@ -77,8 +77,8 @@
           </div>
           <div class="row-div">
             <dt class="base-title-2">Format</dt>
-            <dd class="base-title-3">{{ organizer.username }},
-              <span class="text-blue-400">{{ organizer.email }}</span>
+            <dd class="base-title-3">{{ format.title }},
+              <span class="text-blue-400">{{ format.description }}</span>
             </dd>
           </div>
         </dl>

@@ -22,15 +22,16 @@ export class RegistrationComponent implements OnInit {
   ngOnInit(): void {
     this.errorMessage = ''
   }
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+    private router: Router
+  ) { }
 
   registerUser() {
     try {
       if (this.bday >= new Date()) {
         this.errorMessage = 'Invalid birthday'
-        return
+        return;
       }
-      console.log(this.bday);
       this.bday = new Date(this.bday);
       this.authService.registerUser(this.username, this.password, this.email, this.bday, this.role).subscribe(data => {
         this.errorMessage = ''
@@ -39,14 +40,12 @@ export class RegistrationComponent implements OnInit {
         this.email = ''
         this.bday = new Date()
         this.isLogin = true;
+        this.router.navigate(['/login']);
       }, err => {
-        this.errorMessage = err.error.message
-        console.log(err);
-        
+        this.errorMessage = err.error.message;
       })
     } catch (error) {
       console.log(error);
-      
     }
 
   }

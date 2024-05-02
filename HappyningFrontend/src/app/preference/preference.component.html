@@ -1,0 +1,45 @@
+<body class="px-20">
+    <div class="sm:mx-auto sm:w-full sm:max-w-full mt-5 justify-center">
+        <a class="flex items-center justify-center text-indigo-400 no-underline hover:no-underline font-bold text-xl lg:text-4xl"
+            href="#"><span
+                class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">
+                Happy</span>ning!
+        </a>
+    </div>
+
+    <div class="bg-white py-6">
+        <div class="hint ml-10">&#10022; Choose the categories and formats that suit your interests (at least 1)</div>
+        <div class="mx-auto max-w-7xl px-6 lg:px-8 mt-10">
+            <dl class="grid grid-cols-1 gap-x-8 gap-y-8 text-center lg:grid-cols-4">
+                <div class="base-div" *ngFor="let category of categories">
+                    <button (click)="addCategoryPreference(category)" class="base-button"
+                        matTooltip="{{ category.title }} - {{category.description }}"
+                        [ngClass]="{'selected-button': isSelectedCategory[category.id]}">
+                        <dt class="base-dt">
+                            {{ category.title | ellipsis: 18 }}
+                        </dt>
+                        <dd class="base-dd">
+                            {{ category.description | ellipsis: 20}}
+                        </dd>
+                    </button>
+                </div>
+                <div class="base-div" *ngFor="let format of formats">
+                    <button (click)="addFormatPreference(format)" class="base-button"
+                        matTooltip="{{ format.title }} - {{ format.description }}"
+                        [ngClass]="{'selected-button': isSelectedFormat[format.id]}">
+                        <dt class="base-dt">
+                            {{ format.title | ellipsis: 18}}
+                        </dt>
+                        <dd class="base-dd">
+                            {{ format.description | ellipsis: 20}}
+                        </dd>
+                    </button>
+                </div>
+            </dl>
+        </div>
+    </div>
+    <div class="flex justify-end m-6">
+        <button class="submit-button" (click) = "submitPreferences()"
+        >Submit</button>
+    </div>
+</body>

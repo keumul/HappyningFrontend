@@ -11,20 +11,47 @@
   <div *ngIf="isAdmin">
     <a class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-3xl">
       <span
-        class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">Happy</span>ning 
-        <span class="text-base font-medium text-gray-600">[Admin]</span>
-    </a> 
+        class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">Happy</span>ning
+      <span class="text-base font-medium text-gray-600">[Admin]</span>
+    </a>
   </div>
 
   <div *ngIf="isModerator">
     <a class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-3xl">
       <span
-        class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">Happy</span>ning 
-        <span class="text-base font-medium text-gray-600">[Moderator]</span>
-    </a> 
+        class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">Happy</span>ning
+      <span class="text-base font-medium text-gray-600">[Moderator]</span>
+    </a>
   </div>
 
-  <div class="flex w-1/2 justify-end content-center" >
+  <div class="flex w-1/2 justify-end content-center">
+
+    <div *ngIf="!isAdmin && !isModerator">
+      <button (click)="openNotifications()" class="href">
+
+        <div *ngIf="notificationCount !== 0; else allRead" class="flex justify-center items-center">
+          <div class="relative">
+            <div class="absolute left-4 bottom-2">
+              <p class="flex h-2 w-2 items-center justify-center rounded-full bg-green-500 text-xs text-white"></p>
+            </div>
+            <svg class="h-6 w-6" viewBox="0 0 27 27" aria-hidden="true">
+              <path fill="white"
+                d="M12.0009 5C13.4331 5 14.8066 5.50571 15.8193 6.40589C16.832 7.30606 17.4009 8.52696 17.4009 9.8C17.4009 11.7691 17.846 13.2436 18.4232 14.3279C19.1606 15.7133 19.5293 16.406 19.5088 16.5642C19.4849 16.7489 19.4544 16.7997 19.3026 16.9075C19.1725 17 18.5254 17 17.2311 17H6.77066C5.47638 17 4.82925 17 4.69916 16.9075C4.54741 16.7997 4.51692 16.7489 4.493 16.5642C4.47249 16.406 4.8412 15.7133 5.57863 14.3279C6.1558 13.2436 6.60089 11.7691 6.60089 9.8C6.60089 8.52696 7.16982 7.30606 8.18251 6.40589C9.19521 5.50571 10.5687 5 12.0009 5ZM12.0009 5V3M9.35489 20C10.0611 20.6233 10.9888 21.0016 12.0049 21.0016C13.0209 21.0016 13.9486 20.6233 14.6549 20"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+        <ng-template #allRead>
+          <span><svg class="h-6 w-6" viewBox="0 0 27 27" aria-hidden="true">
+              <path fill="white"
+                d="M12.0009 5C13.4331 5 14.8066 5.50571 15.8193 6.40589C16.832 7.30606 17.4009 8.52696 17.4009 9.8C17.4009 11.7691 17.846 13.2436 18.4232 14.3279C19.1606 15.7133 19.5293 16.406 19.5088 16.5642C19.4849 16.7489 19.4544 16.7997 19.3026 16.9075C19.1725 17 18.5254 17 17.2311 17H6.77066C5.47638 17 4.82925 17 4.69916 16.9075C4.54741 16.7997 4.51692 16.7489 4.493 16.5642C4.47249 16.406 4.8412 15.7133 5.57863 14.3279C6.1558 13.2436 6.60089 11.7691 6.60089 9.8C6.60089 8.52696 7.16982 7.30606 8.18251 6.40589C9.19521 5.50571 10.5687 5 12.0009 5ZM12.0009 5V3M9.35489 20C10.0611 20.6233 10.9888 21.0016 12.0049 21.0016C13.0209 21.0016 13.9486 20.6233 14.6549 20"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg></span>
+        </ng-template>
+      </button>
+
+    </div>
+
     <a class="href hover:text-indigo-500" href="/editor" *ngIf="!isAdmin && !isModerator">
       Editor
     </a>
@@ -35,6 +62,13 @@
 
     <button class="href hover:text-blue-500" (click)="areYouSure()">
       Log out &#8592;
-      </button>
+    </button>
   </div>
 </div>
+
+<ng-container *ngIf="showNotifications" class="notifications-container">
+  <div class="notifications-overlay" (click)="closeNotifications()"></div>
+  <div class="notifications">
+    <app-notification location="header"></app-notification>
+  </div>
+</ng-container>

@@ -1,22 +1,13 @@
-.notification {
-    background-color: rgba(199, 222, 129, 0.402);
-    box-shadow: none;
-    margin: 5px;
-    font-weight:lighter;
-  }
+::-webkit-scrollbar {
+    width: 0;
+    display: none;
+}
 
-.read-notification {
-    background-color: rgb(241, 241, 239);
-    box-shadow: none;
-    margin: 2px;
-    font-weight:lighter;
-  }
+.img {
+    @apply rounded-lg h-64 w-64 object-cover my-4 flex justify-center items-center;
+}
 
-  button {
-    background-color: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-weight:lighter;
-    width: 100%;
-  }
+.base-button {
+    @apply inline-block rounded font-bold border-2 border-neutral-50 px-5 pb-[5px] pt-2 text-xs
+    uppercase leading-normal text-neutral-50 hover:bg-neutral-200 hover:text-neutral-900;
+}

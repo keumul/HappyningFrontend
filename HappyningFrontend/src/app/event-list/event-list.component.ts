@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Event } from '../dto/event.dto';
 import { Location } from '../dto/location.dto';
 import { City } from '../dto/city.dto';
@@ -16,7 +16,8 @@ import { CategoryService } from '../services/category.service';
 })
 export class EventListComponent implements OnInit {
   @ViewChild('navbarContainer') navbarContainer!: ElementRef;
-
+  @Input() location!: string;
+  
   events!: Event[];
   locations!: Location;
   city!: City;
@@ -44,6 +45,8 @@ export class EventListComponent implements OnInit {
   images: { [eventId: number]: string } = {};
 
   scrollStep: number = 150;
+
+  title!: string;
 
   constructor(
     private eventService: EventService,
@@ -131,7 +134,6 @@ export class EventListComponent implements OnInit {
     return filteredEvents;
   }
 
-
   async dateFilter() {
     let filteredEvents = [];
 
@@ -164,16 +166,32 @@ export class EventListComponent implements OnInit {
     return filteredEvents;
   }
 
+  async searchByTitle() {
+    if (!this.title) {
+      return this.events;
+    }
+    this.events = this.events.filter(event => event.title.toLowerCase().
+      includes(this.title.toLowerCase()));
+    return this.events;
+  }
+
   async applyFilters() {
     await this.loadAllEvents();
     const locationFilteredEvents = await this.locationFilter();
     const dateFilteredEvents = await this.dateFilter();
+    const titleFilteredEvents = await this.searchByTitle();
     const combinedFilteredEvents = locationFilteredEvents.filter(event =>
       dateFilteredEvents!.some(filteredEvent => filteredEvent.id === event.id)
+      && titleFilteredEvents!.some(filteredEvent => filteredEvent.id === event.id)
     );
-    
+
     this.events = combinedFilteredEvents;
     return combinedFilteredEvents;
+  }
+
+  async clearFilters() {
+    this.isFilter = false;
+    this.loadAllEvents();
   }
 
   async openFilter() {
@@ -187,9 +205,9 @@ export class EventListComponent implements OnInit {
 
       if (data !== undefined) {
         data = data.filter(item => new Date(item.endDate) >= today);
-        this.events = data as Event[];
+        this.events = data;
+        this.events = this.events.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
         this.locationDetails = await this.loadAllLocationDetails();
-
       } else {
         this.events = [];
       }
@@ -294,11 +312,13 @@ export class EventListComponent implements OnInit {
     try {
       this.eventService.getAllEvents().subscribe(async (event: Event[]) => {
         for (let i = 0; i < event.length; i++) {
-          const images = await this.eventService.showImage(event[i].id).toPromise();
-          if (images!.length > 0) {
-            this.images[event[i].id] = images!;
-          }
-        }
+            await this.eventService.showImage(event[i].id).subscribe((data) => {
+              if(data === null || data === undefined) {
+                return;
+              } else {
+                this.images[event[i].id] = data;
+              }
+        })};
       });
     } catch (error) {
       console.error('Error loading images:', error);

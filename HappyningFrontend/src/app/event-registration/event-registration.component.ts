@@ -12,6 +12,7 @@ import { RegistrationService } from '../services/registration.service';
 import { EventService } from '../services/event.service';
 import { Event } from '../dto/event.dto';
 import { UserService } from '../services/user.service';
+import { PreferenceService } from '../services/preference.service';
 
 @Component({
   selector: 'app-event-registration',
@@ -47,7 +48,8 @@ export class EventRegistrationComponent implements OnInit {
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private notificationService: NotificationService,
-    private registrationService: RegistrationService
+    private registrationService: RegistrationService,
+    private preferenceService: PreferenceService
   ) { }
 
   ngOnInit(): void {
@@ -141,6 +143,10 @@ export class EventRegistrationComponent implements OnInit {
           this.findAllEventParticipants();
           this.ngOnInit();
           this.registrationService.isRegistered = true;
+          this.preferenceService.addPreference(this.userId, 
+            {categoryId: this.event.categoryId,
+            formatId: this.event.formatId
+          });
         },
         (error) => {
           this.openSnackBar('You are already registered for this event');

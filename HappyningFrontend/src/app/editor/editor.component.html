@@ -67,7 +67,7 @@
             <div class="flex rounded-md flex-col max-w-md">
               <div *ngFor="let event of events" class="flex flex-1">
               <button class="events-list" (click)="onSelectEvent(event)">
-                {{ event.title | ellipsis: 16 }}
+                {{ event.title | ellipsis: 40 }}
               </button>
 
               <button class="ml-3" id="goToImageEditor">
@@ -265,11 +265,12 @@
                   </svg>
                   <img *ngIf="image" src="{{image}}" class="img">
                   <div class="mt-4 flex flex-col text-sm leading-6 text-gray-600">
+                    <p>We recommend using jpeg/jpg (other formats may not be displayed correctly)</p>
                     <p class="input-title" *ngIf="image">Do you want to change the cover of the event?</p>
                     <p for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 
                       focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 
                       focus-within:ring-offset-2 hover:text-indigo-500">
-                      <input type="file" (change)="onFileSelected($event)">
+                      <input type="file" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" (change)="onFileSelected($event)">
                     </p>
                   </div>
                   <img *ngIf="base64Image" [src]="base64Image" alt="Uploaded Image" class="img">

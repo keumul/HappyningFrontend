@@ -1,0 +1,31 @@
+.base-title {
+    @apply order-first text-lg text-gray-600 font-bold tracking-tight;
+}
+
+.hint {
+    @apply order-first text-lg text-green-400 tracking-tight font-bold;
+}
+
+.base-dt {
+    @apply text-2xl font-semibold tracking-tight sm:text-4xl;
+}
+
+.base-dd {
+    @apply text-sm leading-7 text-gray-500;
+}
+
+.base-div {
+    @apply mx-auto flex max-w-xs flex-col gap-y-3 p-2 rounded-md
+}
+
+.base-button {
+    @apply w-56 h-36 ring-1 rounded-lg ring-gray-200 text-indigo-400
+}
+
+.selected-button {
+    @apply w-56 h-36 rounded-lg bg-indigo-400 text-white;
+}
+
+.submit-button {
+    @apply w-36 h-12 rounded-lg bg-indigo-400 text-white hover:bg-indigo-300 font-bold text-lg;
+}

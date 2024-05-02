@@ -10,8 +10,8 @@ export class NotificationService {
 
   constructor(private http: HttpClient) {}
 
-  createNotification(notificationDto: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}`, notificationDto);
+  createNotification(eventId: number, userId: number, notificationDto: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/${eventId}/${userId}`, notificationDto);
   }
 
   findAllUserNotifications(id: number): Observable<any> {
@@ -20,5 +20,9 @@ export class NotificationService {
 
   pickNotification(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/${id}`);
+  }
+
+  deleteNotification(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 }
