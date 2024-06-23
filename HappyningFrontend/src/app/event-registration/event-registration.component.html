@@ -1,81 +1,28 @@
 <body>
   <div class="col-start-1">
     <div class="col-span-2">
-      <button class="inline-flex items-center rounded-md text-transparent 
-    bg-gradient-to-r from-green-300 via-pink-400 to-purple-400
-    hover:from-green-200 hover:to-pink-300 text-white font-bold 
-    py-2 px-4 rounded focus:ring transform transition 
-    hover:scale-105 duration-300
-    px-3 py-2 text-sm font-semibold text-white shadow-sm 
-    hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
-    focus-visible:outline-indigo-600" (click)="tryToAddParticipant()" *ngIf="!isOrganizer">
+      <button class="active-register-button" (click)="tryToAddParticipant()" *ngIf="!isOrganizer && !isRegistered">
         Register!
       </button>
 
-      <button *ngIf="isRegistered" class="inline-flex ml-2 items-center rounded-md 
-      bg-white px-3 py-2 
-    text-sm font-semibold text-gray-800 shadow-sm ring-1 ring-inset 
-    ring-gray-300 hover:bg-gray-200 
-    hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-    rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300"
+      <button class="unactive-register-button" (click)="tryToAddParticipant()" *ngIf="!isOrganizer && isRegistered">
+        Register!
+      </button>
+
+      <button *ngIf="isRegistered" class="cancel-button"
         (click)="removeEventParticipant()">
         Cancel registration
       </button>
-
-      <button *ngIf="!isOrganizer" class="inline-flex ml-2 items-center rounded-md bg-white px-3 py-2 
-      text-sm font-semibold text-gray-800 shadow-sm ring-1 ring-inset 
-      ring-gray-300 hover:bg-gray-200 
-      hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-      rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300" (click)="openList()">
-        Show participants
-      </button>
-      <button *ngIf="isRegistered" class="inline-flex ml-2 mr-2 items-center rounded-md bg-white px-3 py-2 
-      text-sm font-semibold text-gray-800 shadow-sm ring-1 ring-inset 
-      ring-gray-300 hover:bg-gray-200 
-      hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-      rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300" (click)="showQrCode()">
-        QR-code
-      </button>
-
-      <button *ngIf="isRegistered || isOrganizer" (click)="openChat()" 
-      class="inline-flex items-center rounded-md bg-white px-3 py-2 
-      text-sm font-semibold text-gray-800 shadow-sm ring-1 ring-inset 
-      ring-gray-300 hover:bg-gray-200 
-      hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-      rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">Chat</button>
-      
-      <button *ngIf="isOrganizer" (click)="openList()"
-      class="inline-flex ml-2 items-center rounded-md bg-white px-3 py-2
-      text-sm font-semibold text-gray-800 shadow-sm ring-1 ring-inset 
-      ring-gray-300 hover:bg-gray-200 
-      hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-      rounded focus:outline-none transition duration-200 ease-in-out active:bg-gray-300">
-      Organizer information
-      </button>
-      <app-chat *ngIf="isChatOpen"></app-chat>
-      <img class="qrcode" src="{{qrCode}}" alt="" *ngIf="isQRCode">
     </div>
 
-    <div class="col-span-1 shadow-md p-3 rounded-md" *ngIf="isOpenList && !isOrganizer">
-      <ul role="list" *ngFor="let participant of participants">
-        <li class="flex justify-between">
-          <div class="min-w-0 flex-auto">
-            <p class="text-base font-semibold leading-6 text-gray-900">
-              {{ userDetails![participant.userId]?.username}}</p>
-            <p class="text-sm leading-5 text-gray-500">
-              {{ userDetails![participant.userId]?.email }}</p>
-          </div>
-        </li>
-      </ul>
-    </div>
-
-
-    <div *ngIf="isOpenList && isOrganizer" class="mt-8">
+    <div class="flex justify-between">
+    <div *ngIf="isOrganizer">
       <p class="text-lg text-gray-700 font-bold">Organizer information</p>
-      <label class="text-green-500 text-sm">&#10022; You can find the required user by Id and check the validity of the information in the QR code of the participant</label>
+      <label class="text-lime-500 text-sm">&#10022; You can find the required user by Id and check the validity of the
+        information in the QR code of the participant</label>
       <div class="text-gray-600"><span>UserID</span>
-        <input [(ngModel)]="searchValue" placeholder="UserID" 
-        class="p-1 mr-1 ml-1 ring-1 ring-inset ring-gray-300 rounded-md w-24" type="number" min="0">
+        <input [(ngModel)]="searchValue" placeholder="UserID"
+          class="p-1 mr-1 ml-1 ring-1 ring-inset ring-gray-300 rounded-md w-24" type="number" min="0">
         <button (click)="applyFilter(searchValue)">
           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="18" height="18" viewBox="0 0 30 30">
             <path
@@ -88,14 +35,11 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th scope="col" 
-              class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 UserID</th>
-              <th scope="col" 
-              class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 EventID</th>
-              <th scope="col" 
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Other</th>
             </tr>
           </thead>
@@ -112,52 +56,8 @@
         </table>
       </div>
     </div>
+    <app-chat *ngIf="isOrganizer"></app-chat>
   </div>
+
+</div>
 </body>
-
-
-<!-- <div class="event-container">
-    <div class="message"> {{ message }} </div>
-    <button (click)="tryToAddParticipant()">Register</button>
-    <div>
-      <button (click)="removeEventParticipant()">Cancel registration</button>
-      <div *ngIf="participants?.length">
-        <h2>Participants list</h2>
-        <mat-card class="p-5">
-          <ul>
-            <li *ngFor="let participant of participants">
-              {{ userDetails![participant.userId]?.username }} - {{ userDetails![participant.userId]?.email }}
-            </li>
-          </ul>
-        </mat-card>
-      </div>
-    </div>
-    <img class="qrcode" src="{{qrCode}}" alt="">
-    <mat-card *ngIf="isOrganizer">
-      <h2 class="organizer-list-title">Расширенный список</h2>
-      <div class="search"><span>UserID</span>
-        <input [(ngModel)]="searchValue" placeholder="UserID" class="search-input" type="number" min="0">
-        <button mat-icon-button (click)="applyFilter(searchValue)" class="search-button"><mat-icon>search</mat-icon></button>
-      </div>
-      <div class="organizer-list-table">
-      <table>
-        <thead>
-          <tr>
-            <th>UserID</th>
-            <th>EventID</th>
-            <th>Информация</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let participant of filteredUsers">
-            <td>{{ participant.userId }}</td>
-            <td>{{ eventId }}</td>
-            <td>{{ userDetails![participant.userId]?.username }} - {{ userDetails![participant.userId]?.email }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    </mat-card>
-     
-  </div>
-   -->

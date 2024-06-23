@@ -1,6 +1,7 @@
-<main class="bg-blue-900/50 rounded-lg p-6">
+<body class="ring-1 ring-indigo-100 rounded-lg p-6">
     <div class="header flex items-center justify-between mb-4">
-        <p class="header-data text-xl font-bold text-white">Сегодня {{currentDay}} {{monthNames[currentMonth]}}</p>
+        <p class="header-data text-xl font-bold text-lime-500">
+        {{currentDay}} {{monthNames[currentMonth]}}</p>
         <div class="header-button">
             <button class="btn mr-2" (click)="decreaseMonth()">&lt;</button>
             <button class="btn mr-2" (click)="setCurrentMonth()">{{displayMonth}}</button>
@@ -8,23 +9,24 @@
         </div>
     </div>
 
-    <table class="calendar-table w-full rounded-lg overflow-hidden" *ngIf="calendar">
+    <table class="calendar-table w-5/6 rounded-lg overflow-hidden" *ngIf="calendar">
         <thead>
             <tr>
-                <th class="px-4 py-2">Понедельник</th>
-                <th class="px-4 py-2">Вторник</th>
-                <th class="px-4 py-2">Среда</th>
-                <th class="px-4 py-2">Четверг</th>
-                <th class="px-4 py-2">Пятница</th>
-                <th class="px-4 py-2">Суббота</th>
-                <th class="px-4 py-2">Воскресенье</th>
+                <th class="px-4 py-2">Monday</th>
+                <th class="px-4 py-2">Tuesday</th>
+                <th class="px-4 py-2">Wednesday</th>
+                <th class="px-4 py-2">Thursday</th>
+                <th class="px-4 py-2">Friday</th>
+                <th class="px-4 py-2">Saturday</th>
+                <th class="px-4 py-2">Sunday</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let row of calendar | chunk: 7; let i = index">
-                <td class="calendar-day px-4 py-2" [ngClass]="{'past-date': c.isPastDate, 'today': c.isToday}"
+                <td class="h-12 w-12 px-4 py-2" 
+                [ngClass]="{'past-date': c.isPastDate, 'today': c.isToday}"
                     *ngFor="let c of row; let j = index" id="scrollable-card">
-                    <div class="calendar-day-header flex justify-between items-center">
+                    <div class="">
                         <strong>{{c.date.getDate()}}</strong>
                         <strong *ngIf="c.isToday || (i==0 && j==0) || (c.date.getDate() == 1)"
                             class="text-blue-500">{{monthNames[c.date.getMonth()]}}</strong>
@@ -39,4 +41,4 @@
             </tr>
         </tbody>
     </table>
-</main>
+</body>

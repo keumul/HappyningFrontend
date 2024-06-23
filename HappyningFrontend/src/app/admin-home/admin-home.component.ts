@@ -411,27 +411,21 @@ export class AdminHomeComponent implements NewType {
   calculateRating(): void {
       this.ratingCount = {};
       this.ratingCountTotal = {};
-      
       this.rates.forEach((rate) => {
           if (this.ratingCount[rate.ratedId]) {
               this.ratingCount[rate.ratedId] += rate.rate;
               this.ratingCountTotal[rate.ratedId] += 1;
-              console.log("1", this.ratingCount[rate.ratedId]);
-              
           } else {
               this.ratingCount[rate.ratedId] = rate.rate;
               this.ratingCountTotal[rate.ratedId] = 1;
-              console.log("2", this.ratingCount[rate.ratedId]);
           }
       });
   
       for (const userId in this.ratingCount) {
           if (Object.prototype.hasOwnProperty.call(this.ratingCount, userId)) {
-              this.ratingCount[userId] /= this.ratingCountTotal[userId];
+              this.ratingCount[userId] = parseFloat((this.ratingCount[userId]/this.ratingCountTotal[userId]).toFixed(1));
           }
-      }      
-      console.log("3", this.ratingCount);
-      
+      } 
   }
 
   thisCategoryIsEditing(id: number): void {

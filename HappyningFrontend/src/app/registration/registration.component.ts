@@ -28,25 +28,33 @@ export class RegistrationComponent implements OnInit {
 
   registerUser() {
     try {
+
+      this.bday = new Date(this.bday);
       if (this.bday >= new Date()) {
         this.errorMessage = 'Invalid birthday'
         return;
       }
-      this.bday = new Date(this.bday);
       this.authService.registerUser(this.username, this.password, this.email, this.bday, this.role).subscribe(data => {
         this.errorMessage = ''
         this.username = ''
-        this.password = ''
+        this.username = ''
         this.email = ''
         this.bday = new Date()
         this.isLogin = true;
         this.router.navigate(['/login']);
       }, err => {
-        this.errorMessage = err.error.message;
-      })
-    } catch (error) {
-      console.log(error);
-    }
 
+        if (err.error.message == 'email must be an email') {
+          this.errorMessage = 'The mail has an incorrect format';
+          return;
+        } else if (err.error.message == 'User already exists') {
+          this.errorMessage = err.error.message;
+        } else {
+          this.errorMessage = 'Fill in the empty fields';
+        }
+      })
+  } catch(error) {
+    console.log(error);
   }
+}
 }

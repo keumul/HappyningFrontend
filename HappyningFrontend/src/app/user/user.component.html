@@ -1,6 +1,5 @@
 <body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" style="background-image: url('');">
   <div class="h-full">
-
     <app-header></app-header>
     <hr class="mt-6 mb-6">
     <div class="mt-5 relative isolate overflow-hidden bg-white px-6 py-24 sm:py-16 lg:overflow-visible lg:px-0">
@@ -12,12 +11,12 @@
             <div
               class="text-4xl flex items-center no-underline hover:no-underline font-bold lg:text-4xl leading-7 text-gray-700">
               It's&nbsp;
-              <span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500 ">
+              <span class="bg-clip-text text-transparent bg-gradient-to-r from-lime-400 via-pink-500 to-purple-500 ">
                 {{currentUser.username}}
               </span>
             </div>
             <p *ngIf="isMessage" class="text-lg font-bold text-pink-500">{{message}}</p>
-            <label *ngIf="!isMessage" class="text-lg font-bold text-green-500"> &#10022; Organizer</label>
+            <label *ngIf="!isMessage" class="text-lg font-bold text-lime-500"> &#10022; Organizer</label>
             <div class="max-w-xl text-base text-gray-700 lg:max-w-lg">
               <ul role="list" class="mt-8 space-y-8 text-gray-600">
                 <li class="flex gap-x-3">
@@ -41,15 +40,3 @@
     </div>
   </div>
 </body>
-<!-- <mat-card>
-  <div class="main">
-    <div class="user-info">
-      <h2 class="username">{{ currentUser.username }}</h2>
-      <div class="subinfo">
-      <p><mat-icon>mail</mat-icon> {{ currentUser.email }}</p>
-      <p><mat-icon>cake</mat-icon> {{ displayAge() }}</p>
-    </div>
-    </div>
-    <app-user-rating></app-user-rating>
-  </div>
-</mat-card> -->

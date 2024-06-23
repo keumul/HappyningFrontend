@@ -1,7 +1,7 @@
 <body class="ring-1 p-3 pb-20 ring-gray-200 rounded-lg bg-white h-full w-full" *ngIf="location === 'header'">
     <div class="my-4 text-3xl md:text-10xl text-indigo font-bold leading-tight text-center md:text-left
   flex inline-flex justify-end">
-      <label class="flex justify-end text-green-500">Specially for you</label>
+      <label class="flex justify-end text-lime-500">Specially for you</label>
       <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 27 27" aria-hidden="true">
         <path fill="#22C55E"
           d="M19.5,24a1,1,0,0,1-.929-.628l-.844-2.113-2.116-.891a1.007,1.007,0,0,1,.035-1.857l2.088-.791.837-2.092a1.008,1.008,0,0,1,1.858,0l.841,2.1,2.1.841a1.007,1.007,0,0,1,0,1.858l-2.1.841-.841,2.1A1,1,0,0,1,19.5,24ZM10,21a2,2,0,0,1-1.936-1.413L6.45,14.54,1.387,12.846a2.032,2.032,0,0,1,.052-3.871L6.462,7.441,8.154,2.387A1.956,1.956,0,0,1,10.108,1a2,2,0,0,1,1.917,1.439l1.532,5.015,5.03,1.61a2.042,2.042,0,0,1,0,3.872h0l-5.039,1.612-1.612,5.039A2,2,0,0,1,10,21ZM20.5,7a1,1,0,0,1-.97-.757l-.357-1.43L17.74,4.428a1,1,0,0,1,.034-1.94l1.4-.325L19.53.757a1,1,0,0,1,1.94,0l.354,1.418,1.418.355a1,1,0,0,1,0,1.94l-1.418.355L21.47,6.243A1,1,0,0,1,20.5,7Z" />
@@ -12,7 +12,7 @@
       class="flex flex-col items-start justify-start text-gray-600 rounded-md p-2 mb-2 max-w-7xl">
       <div class="flex justify-between w-full">
         <button *ngIf="!notification.isRead; else alreadyRead" (click)="markNotificationAsRead(notification.id)"
-          class="text-3xl text-green-500" matTooltip="Unread">&#8226;</button>
+          class="text-3xl text-lime-500" matTooltip="Unread">&#8226;</button>
         <ng-template #alreadyRead>
           <button class="text-3xl text-gray-400" matTooltip="Read">&#8226;</button>
         </ng-template>

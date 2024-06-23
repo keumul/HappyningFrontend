@@ -3,7 +3,7 @@
 }
 
 .hint {
-    @apply order-first text-lg text-green-400 tracking-tight font-bold;
+    @apply order-first text-lg text-lime-400 tracking-tight font-bold;
 }
 
 .base-dt {

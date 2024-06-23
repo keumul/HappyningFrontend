@@ -5,41 +5,108 @@
   <hr class="mt-6 mb-6">
   <div>
     <div class="px-4 sm:px-0">
-      <div class="flex justify-between">
+      <div class="flex justify-between mb-5">
         <p class="main-title">{{event.title}}</p>
         <button *ngIf="!isOrganizer" (click)="openComplaintDialog()" class="text-pink-500 font-bold text-lg">🛇</button>
       </div>
-      <img *ngIf="image" src="{{image}}" class="img" alt="Loading...">
-      <p class="message" *ngIf="isMessage">{{message}}</p>
-      <p class="hint">This event is available to persons
-        <span class="font-bold text-lg text-pink-400">{{event.ageLimit}}+</span>
-      </p>
-    </div>
-
-    <div *ngIf="isComplaint" class="bg-pink-100 rounded-md mb-5 shadow-sm p-2 max-w-md items-center text-pink-500">
-      <p class="text-pink-500 font-bold text-lg">Is there something wrong with this event?</p>
-      <label class="text-gray-500">&#10022; You can submit a complaint, which will be reviewed by the
-        moderator.</label><br>
-      <label class="mt-3">Select a violation category</label>
-      <div class="flex">
-        <select id="categorySelect" name="category" autocomplete="category-title" [(ngModel)]="complaint"
-          class="base-select">
-          <option *ngFor="let cat of complaintsCategory" [value]="cat.id">{{cat.title}} {{cat.description}}
-          </option>
-        </select>
-
-        <button (click)="sendComplaint()" class="ml-3 font-bold text-lg">Send</button>
+      <div *ngIf="isComplaint" class="bg-pink-100 rounded-md mb-5 shadow-sm p-2 max-w-md items-center text-pink-500">
+        <p class="text-pink-500 font-bold text-lg">Is there something wrong with this event?</p>
+        <label class="text-gray-500">&#10022; You can submit a complaint, which will be reviewed by the
+          moderator.</label><br>
+        <label class="mt-3">Select a violation category</label>
+        <div class="flex">
+          <select id="categorySelect" name="category" autocomplete="category-title" [(ngModel)]="complaint"
+            class="base-select">
+            <option *ngFor="let cat of complaintsCategory" [value]="cat.id">{{cat.title}} {{cat.description}}
+            </option>
+          </select>
+          <button (click)="sendComplaint()" class="ml-3 font-bold text-lg">Send</button>
+        </div>
       </div>
+      <div class="flex justify-between">
+        <div>
+          <img *ngIf="image" src="{{image}}" class="img" alt="Loading...">
+          <p class="message" *ngIf="isMessage">{{message}}</p>
+        </div>
+        <div>
+          <div class="card-container">
+            <div
+              matTooltip="{{ location.details }} ({{ city.cityName | ellipsis:10 }}, {{ country.countryName | ellipsis:10 }})">
+              <p class="card-p">📍 {{ location.details | ellipsis:20 }}, {{ city.cityName | ellipsis:10 }}, {{
+                country.countryName | ellipsis:10 }}</p>
+            </div>
+          </div>
+          <div class="card-container">
+            <dd class="base-title-3">⌚
+              <span class="card-p">{{ event.startDate | date :"dd.MM.YY h:mm a" }}</span>
+              -
+              <span class="card-p">{{ event.endDate | date :"dd.MM.YY h:mm a"}}</span>
+            </dd>
+          </div>
+          <div class="card-container">
+            <p class="card-p" matTooltip="Description: {{ event.description }}">✍
+              {{ event.description| ellipsis: 30}}</p>
+          </div>
+
+          <div class="card-container">
+            <div class="flex justify-between">
+              <p class="card-p" matTooltip="Organizer">👥
+                {{ organizer.username }} <span class="text-gray-400 text-base">is organizer</span>
+              </p>
+              <button (click)="navigateToUserProfile(organizer.id)" class="button">
+                >
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-4 gap-x-4 mt-5">
+
+            <div class="card-container-small flex items-center justify-between border-pink-300 "
+              matTooltip="Category: {{ category.title }} ({{ category.description}})">
+              <p class="card-p">{{ category.title }}</p>
+            </div>
+
+            <div class="card-container-small flex items-center justify-between border-yellow-300 "
+              matTooltip="Format: {{ format.title }} ({{format.description}})">
+              <p class="card-p">{{ format.title }}</p>
+            </div>
+
+            <div class="card-container-small flex items-center justify-between border-lime-300 ">
+              <p class="card-p">
+                <span class="text-2xl text-lime-500 font-bold">{{ participants }}</span>
+                participants
+              </p>
+            </div>
+
+            <div class="card-container-small border-blue-300">
+              <div class="flex">
+                <div>
+                  <p class="text-2xl font-semibold text-blue-400" matTooltip="Age limit">
+                    {{ event.ageLimit }}+</p>
+                </div>
+                <div>
+                  <p class="card-p">age limit</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <app-chat *ngIf="!isOrganizer" class="mb-8"></app-chat>
+        </div>
+        <div *ngIf="isOrganizer" class="mr-80"></div>
+      </div>
+      <app-event-registration></app-event-registration>
     </div>
 
-    <app-event-registration></app-event-registration>
-    <div class="mt-10">
+    <div class="mt-10" *ngIf="!isOrganizer">
       <p class="base-title">Event information</p>
       <div class="border-t border-gray-100">
         <dl class="divide-y divide-gray-100">
-          <div class="row-div">
-            <dt class="base-title-2">Title</dt>
-            <dd class="base-title-3">{{ event.title }}</dd>
+          <div class="row-div" *ngIf="isRegistered">
+            <dt class="base-title-2">QR-code</dt>
+            <dd class="base-title-3">
+              <img class="qrcode" src="{{qrCode}}" alt=""> </dd>
           </div>
           <div class="row-div">
             <dt class="base-title-2">Address</dt>
@@ -49,8 +116,8 @@
           <div class="row-div">
             <dt class="base-title-2">Date</dt>
             <dd class="base-title-3">From
-              <span class="text-green-500">{{ event.startDate | date :"MMM d YYYY - h:mm a" }}</span> To
-              <span class="text-green-500">{{ event.endDate | date :"MMM d YYYY - h:mm a"}}</span>
+              <span class="text-lime-500">{{ event.startDate | date :"MMM d YYYY - h:mm a" }}</span> To
+              <span class="text-lime-500">{{ event.endDate | date :"MMM d YYYY - h:mm a"}}</span>
             </dd>
           </div>
           <div class="row-div">
@@ -86,7 +153,8 @@
     </div>
   </div>
 
-  <div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true" *ngIf="isOverlayVisible">
+  <div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true"
+    *ngIf="isOverlayVisible">
     <div>
       <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
       <div class="fixed inset-0 overflow-hidden">
@@ -129,5 +197,8 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
+    <app-footer></app-footer>
   </div>
 </body>

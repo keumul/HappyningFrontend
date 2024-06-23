@@ -52,6 +52,7 @@ import { RoleErrorComponent } from './role-error/role-error.component';
 import { ModeratorHomeComponent } from './moderator-home/moderator-home.component';
 import { BannedErrorComponent } from './banned-error/banned-error.component';
 import { PreferenceComponent } from './preference/preference.component';
+import { InformationComponent } from './information/information.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { PreferenceComponent } from './preference/preference.component';
     RoleErrorComponent,
     ModeratorHomeComponent,
     BannedErrorComponent,
-    PreferenceComponent
+    PreferenceComponent,
+    InformationComponent
   ],
   imports: [
     BrowserModule,

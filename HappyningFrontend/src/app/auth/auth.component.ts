@@ -9,12 +9,12 @@ export class AuthComponent {
   constructor() { }
   ngOnInit() {
     this.isLogin = true
-    this.buttonText = 'Нет аккаунта? Регистрируйся!'
+    this.buttonText = 'Dont have an account?'
   }
   isLogin!: boolean
   buttonText!: string
   changeMode() {
     this.isLogin = !this.isLogin
-    this.isLogin ? this.buttonText = 'Нет аккаунта? Регистрируйся!' : this.buttonText = 'Есть аккаунт?'
+    this.isLogin ? this.buttonText = 'Dont have an account?' : this.buttonText = 'Already registered?'
   }
 }

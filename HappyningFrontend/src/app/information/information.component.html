@@ -1,0 +1,66 @@
+<body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" aria-hidden="false">
+    <div class="h-full">
+      <app-header></app-header>
+      <hr class="mt-6 mb-2">
+      <form>
+        <div class="max-w-4xl mx-auto p-6 bg-white">
+            <p class="text-3xl font-bold text-center text-gray-700 mb-6">About Us</p>
+          
+            <section class="mb-8">
+              <p class="text-2xl font-semibold text-gray-600 mb-4">Who We Are</p>
+              <p class="text-gray-600">
+                We are a team of enthusiasts dedicated to bringing people together through exciting and engaging events.
+                Our app is designed to make it easy for everyone to find like-minded individuals and organize the event of their dreams.
+                We believe that meeting and connecting with new people makes life more vibrant and interesting.
+              </p>
+            </section>
+          
+            <section class="mb-8">
+              <p class="text-2xl font-semibold text-gray-600 mb-4">Our Mission</p>
+              <p class="text-gray-600">
+                Our mission is to create a space where people can find each other based on shared interests and collaboratively create unforgettable moments.
+                We want every user of our app to be able to quickly and easily organize an event, meet new friends, and enjoy positive experiences.
+              </p>
+            </section>
+          
+            <section class="mb-8">
+              <p class="text-2xl font-semibold text-gray-600 mb-4">What categories do we offer?</p>
+              <ul class="list-disc list-inside text-gray-500" *ngFor="let category of categories">
+               <li>
+                <span class="font-semibold">{{category.title}}</span>. {{category.description}}</li> 
+             </ul>
+            </section>
+
+            <section class="mb-8">
+              <p class="text-2xl font-semibold text-gray-600 mb-4">What formats do we offer?</p>
+              <ul class="list-disc list-inside text-gray-500" *ngFor="let format of formats">
+               <li>
+                <span class="font-semibold">{{format.title}}</span>. {{format.description}}</li> 
+             </ul>
+             </section>
+          
+            <section class="mb-8">
+              <p class="text-2xl font-semibold text-gray-600 mb-4">Why Choose Us?</p>
+              <ul class="list-disc list-inside text-gray-500">
+                <li class="mb-2"><strong>Convenience and Simplicity:</strong> Our intuitive interface allows you to quickly find and create events.</li>
+                <li class="mb-2"><strong>Variety and Choice:</strong> A wide range of events to suit every taste and interest.</li>
+                <li class="mb-2"><strong>Safety and Trust:</strong> We care about our users' safety and verify all events.</li>
+                <li class="mb-2"><strong>Community and Support:</strong> A friendly community and support team ready to help at any time.</li>
+              </ul>
+            </section>
+          
+            <section>
+              <p class="text-2xl font-semibold text-gray-600 mb-4">Join Us</p>
+              <p class="text-gray-500">
+                Ready for new connections and exciting events? Join our community and start creating unforgettable moments today.
+                Our app opens the door to a world of interesting events and new friends!
+              </p>
+            </section>
+          </div>
+          
+      </form>
+    </div>
+    <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
+      <app-footer></app-footer>
+    </div>
+  </body>

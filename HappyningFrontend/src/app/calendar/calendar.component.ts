@@ -15,7 +15,7 @@ export class CalendarComponent implements OnInit{
     private router: Router) { }
 
   public calendar: CalendarDay[] = [];
-  monthNames: string[] = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+  monthNames: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   public displayMonth!: string;
   private monthIndex: number = 0;
   currentDay: any = new Date().getDate();

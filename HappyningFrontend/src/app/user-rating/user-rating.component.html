@@ -3,7 +3,7 @@
 <div>
   <div *ngIf="userRate !== null && userRate!.length > 0">
     <p class="text-2xl font-bold text-gray-500">Organizer rate:
-      <span class="text-green-500">{{ calculateAverageRating() }}</span></p>
+      <span class="text-lime-500">{{ calculateAverageRating() }}</span></p>
         <ng-container *ngFor="let star of starsArray()">
           <span class="text-gray-300 text-2xl" [class.filled]="star <= calculateAverageRating()">★</span>
         </ng-container>     
@@ -12,7 +12,7 @@
   <div *ngIf="userRate !== null && userRate!.length > 0" class="mt-4">
     <ng-container *ngFor="let rate of userRate">
       <div class="bg-white rounded shadow-md p-4 mb-4">
-        <p class="font-bold text-green-500">{{ rate.rate }} ★</p>
+        <p class="font-bold text-lime-500">{{ rate.rate }} ★</p>
         <label class="text-gray-400">
           By <span class="text-gray-500">{{ usersInfoMap.get(rate.raterId)?.username }}</span></label>
         <label class="text-gray-400">
@@ -23,7 +23,7 @@
   </div>
 
   <div *ngIf="userRate === null || userRate!.length === 0">
-    <p class="mt-4 text-green-500">No rate.</p>
+    <p class="mt-4 text-lime-500">No rate.</p>
   </div>
 </div>
 
@@ -53,45 +53,3 @@
   <button class="mt-4 bg-gray-500 hover:bg-indigo-400 text-white font-bold py-2 px-4 rounded" 
   (click)="submitRating()">Submit</button>
 </div>
-
-
-<!-- <div class="main">
-  <mat-card class="comment-card" *ngIf="canRate">
-    <mat-card-content>
-      <h3>Оцените организатора</h3>
-      <mat-form-field>
-        <mat-label>Оценка</mat-label>
-        <input matInput [(ngModel)]="newRating" min="1" max="5" type="number" required>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Комментарий</mat-label>
-        <textarea matInput [(ngModel)]="newComment" rows="4" required></textarea>
-      </mat-form-field>
-      <button mat-raised-button (click)="submitRating()">Отправить</button>
-    </mat-card-content>
-  </mat-card>
-<mat-card class="scrollable-card">
-  <div class="header" *ngIf="userRate !== null && userRate!.length > 0">
-    <mat-card-title>Оценка: {{ calculateAverageRating() }}</mat-card-title>
-    <div class="star-rating">
-      <ng-container *ngFor="let star of starsArray()">
-        <span class="star" [class.filled]="star <= calculateAverageRating()">★</span>
-      </ng-container>
-    </div>
-  </div>
-
-  <div *ngIf="userRate !== null && userRate!.length > 0">
-    <ng-container *ngFor="let rate of userRate">
-      <mat-card class="rating-card" >
-        <mat-card-content>Оценка: {{ rate.rate }}</mat-card-content>
-        <mat-card-content matTooltip="{{ rate.message }}">Комментарий: {{ rate.message | ellipsis: 25 }}</mat-card-content>
-      </mat-card>
-    </ng-container>
-  </div>
-
-  <div *ngIf="userRate === null || userRate!.length === 0">
-    <p>Оценок нет.</p>
-  </div>
-</mat-card>
-
-</div> -->

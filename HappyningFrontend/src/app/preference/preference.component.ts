@@ -83,6 +83,9 @@ export class PreferenceComponent {
     if(this.selectedCategory.length === 0 || this.selectedFormat.length === 0) {
       this.snackBar.open('Please select at least one category or one format', '', {duration: 2000});
       return;  
+    } else if (this.selectedCategory.length === this.categories.length && this.selectedFormat.length === this.formats.length) {
+      this.snackBar.open('You cannot select all categories and formats', '', {duration: 2000});
+      return;
     }
 
     for (let category of this.selectedCategory) {

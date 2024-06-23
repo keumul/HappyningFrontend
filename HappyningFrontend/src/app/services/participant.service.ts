@@ -22,6 +22,22 @@ export class ParticipantService {
     return this.http.get<any>(`${this.apiUrl}/event/user/${eventId}`, { params: dto });
   }
 
+  findEventParticipantsAge(eventId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/age/${eventId}`);
+  }
+
+  findMostPopularEvent(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/mostpopular`);
+  }
+
+  findMostPopularCategory(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/mostpopular/category`);
+  }
+
+  findMostPopularFormat(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/mostpopular/format`);
+  }
+
   findUserEvents(userId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/all/user/${userId}`);
   }

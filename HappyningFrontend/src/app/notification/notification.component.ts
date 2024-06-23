@@ -69,7 +69,7 @@ export class NotificationComponent {
       (data: Event[]) => {
         for (let event of data) {
           if (event.organizerId !== this.currentUser.id) {
-            this.events.push(event);
+              this.events.push(event);
           }
         }
         this.loadPreferences();
@@ -109,9 +109,10 @@ export class NotificationComponent {
   }
 
   loadEventsByPreferences() {
+    this.preferencesEvents = [];
     for (let event of this.events) {
       for (let i = 0; i < this.preferences.length; i++) {
-        if (event.categoryId == this.preferences[i] || event.formatId == this.preferences[i]) {
+        if ((event.categoryId == this.preferences[i] || event.formatId == this.preferences[i])) {
           this.preferencesEvents.push(event);
           this.loadCategoryById(event.categoryId);
           this.loadEventById(event.id);
@@ -123,6 +124,8 @@ export class NotificationComponent {
   randomEventByPreferences() {
     if (this.preferencesEvents.length > 0) {
       const event = this.preferencesEvents[Math.floor(Math.random() * this.preferencesEvents.length)];
+      console.log(event);
+      
       var chance = Math.floor(Math.random() * 5);
       if (chance === 1) {
         this.sendNotification(event.id, this.currentUser.id);
@@ -202,7 +205,9 @@ export class NotificationComponent {
       (data: Notifications[]) => {
         for (let notification of data) {
           if (notification.message.includes('You')) {
+            if (new Date(this.eventInfo[notification.eventId].startDate) > new Date()) {
             this.notifications.push(notification);
+            }
           }
         }
         this.notifications = this.notifications.sort((a, b) => {
@@ -210,7 +215,7 @@ export class NotificationComponent {
         })
 
         this.uniqueEvents = this.notifications.filter((thing, index, self) =>
-          index === self.findIndex((t) => ( 
+          index === self.findIndex((t) => (
             t.eventId === thing.eventId
           ))
         );

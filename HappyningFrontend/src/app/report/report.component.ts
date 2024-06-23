@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../services/user.service';
-import { RateUser } from '../dto/rate-user.dto';
 import { User } from '../dto/user.dto';
 import { Event } from '../dto/event.dto';
-import { saveAs } from 'file-saver';
 import { EventService } from '../services/event.service';
 import { ParticipantService } from '../services/participant.service';
+import { AuthService } from '../services/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CategoryService } from '../services/category.service';
+import { Category } from '../dto/category.dto';
+import { Format } from '../dto/format.dto';
 
 @Component({
   selector: 'app-report',
@@ -13,243 +16,120 @@ import { ParticipantService } from '../services/participant.service';
   styleUrls: ['./report.component.css']
 })
 export class ReportComponent implements OnInit {
-  users!: User[];
-  events!: Event[];
-  averageRating: number | null = null;
-  averageEventRating: number | null = null;
-  totalUsers: number = 0;
-  totalEvents: number = 0;
-  highestRatedUser: string | null = null;
-  mostPopularEvent: string | null = null;
-  lowestRatedUser: string | null = null;
-  leastPopularEvent: string | null = null;
-  ratings: RateUser[] = [];
+  userId!: number;
+  event!: Event;
+  category!: Category;
+  formats!: Format;
 
-  userRatingsChartOptions: any = {
-    scaleShowVerticalLines: false,
-    responsive: true,
-    scales: {
-      xAxes: [{
-        ticks: {
-          beginAtZero: true,
-        },
-      }],
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-        },
-      }],
-    },
-    legend: {
-      display: true,
-    },
-    backgroundColor: 'rgba(210,222,50, 0.2)',
-    hoverBackgroundColor: 'rgba(210,222,50, 0.4)',
-    borderColor: 'rgba(210,222,50, 1)',
-    borderWidth: 1,
-  };
-
-  userRatingsChartLabels: string[] = [];
-  userRatingsChartData: any[] = [{ data: [], label: 'Оценка' }];
-
-  eventsChartOptions: any = {
-    responsive: true,
-    scales: {
-      xAxes: [{
-        ticks: {
-          beginAtZero: true,
-        },
-      }],
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-          max: 100,
-          stepSize: 10,
-        },
-      }],
-    },
-    legend: {
-      position: 'top',
-    },
-    title: {
-      display: true,
-      text: 'Заполненность события',
-    },
-    animation: {
-      animateScale: true,
-      animateRotate: true,
-    },
-    backgroundColor: 'rgba(210,222,50, 0.2)',
-    hoverBackgroundColor: 'rgba(210,222,50, 0.4)',
-    borderColor: 'rgba(210,222,50, 1)',
-    borderWidth: 1
-  };
-
-
-  eventsChartLabels: string[] = [];
-  eventsChartData: any[] = [{ data: [], label: 'Заполненность события (% из 100)' }];
-
-  barChartLegend: boolean = true;
-  barChartPlugins: any[] = [];
+  ages: number[] = [];
+  agesCount: any[] = [{ age: [], amount: [] }];
+  participants: any[] = [];
+  labels: any[] = [];
+  amounts: any[] = [];
+  mostPopularEvent!: Event;
+  mostPopularCategory!: [{ title: string, count: number }];
+  mostPopularFormat!: [{ title: string, count: number }];
 
   constructor(
+    private authService: AuthService,
     private userService: UserService,
     private eventService: EventService,
-    private participantService: ParticipantService
+    private participantService: ParticipantService,
+    private route: ActivatedRoute,
+    private categoryService: CategoryService,
+    private router: Router
   ) { }
 
-  ngOnInit(): void {
-    this.loadRatings();
-    this.loadEvents();
-  }
-
-  loadRatings(): void {
-    this.userService.findAllUserRates().subscribe(
-      (ratings: any[]) => {
-        this.ratings = ratings;
-
-        const userRatings: { [username: string]: { sum: number; count: number } } = {};
-
-        for (const rating of this.ratings) {
-          const userId = rating.ratedId;
-
-          if (!userRatings[userId]) {
-            userRatings[userId] = { sum: 0, count: 0 };
-          }
-          userRatings[userId].sum += rating.rate;
-          userRatings[userId].count += 1;
-        }
-
-        this.userRatingsChartLabels = Object.keys(userRatings);
-        this.userRatingsChartData[0].data = this.userRatingsChartLabels.map(userId => {
-          const average = userRatings[userId].sum / userRatings[userId].count;
-          return isNaN(average) ? 0 : average;
-        });
-
-        const totalRatings = ratings.length;
-        if (totalRatings > 0) {
-          const sum = ratings.reduce((acc, rating) => acc + rating.value, 0);
-          this.averageRating = sum / totalRatings;
-          this.totalUsers = this.userRatingsChartLabels.length;
-
-          const highestRatedUser = this.userRatingsChartLabels.reduce((max, userId) => {
-            const userAverage = userRatings[userId].sum / userRatings[userId].count;
-            return userAverage > userRatings[max].sum / userRatings[max].count ? userId : max;
-          });
-          this.highestRatedUser = highestRatedUser;
-
-          const lowestRatedUser = this.userRatingsChartLabels.reduce((min, userId) => {
-            const userAverage = userRatings[userId].sum / userRatings[userId].count;
-            return userAverage < userRatings[min].sum / userRatings[min].count ? userId : min;
-          });
-
-          this.lowestRatedUser = lowestRatedUser;
-        }
-      },
-      (error) => {
-        console.error('Error loading ratings', error);
-      }
-    );
-  }
-
-  loadEvents(): void {
-    this.eventService.getAllEvents().subscribe(
-      (events: Event[]) => {
-        this.events = events;
-        this.prepareChartData();
-        this.calculateEventStats();
-      },
-      (error) => {
-        console.error('Error loading events', error);
-      }
-    );
-  }
-
-  prepareChartData(): void {
-    this.eventsChartLabels = this.events.map((event: Event) => {
-      return event.title;
-    });
-
-    const participantPromises = this.events.map(event =>
-      this.participantService.findAllEventParticipants(event.id).toPromise()
-    );
-
-    Promise.all(participantPromises)
-      .then(participantsCounts => {
-        this.eventsChartData[0].data = participantsCounts.map((count, index) => {
-          const maxParticipants = this.events[index].maxGuestAmount;
-
-          return (+count.length / maxParticipants) * 100;
-        });
-      })
-      .catch(error => {
-        console.error('Error loading participants counts', error);
-      });
-  }
-
-  calculateEventStats(): void {
-    this.totalEvents = this.events.length;
-
-    if (this.totalEvents > 0) {
-      const eventParticipantsCounts = this.events.map(event =>
-        this.participantService.findAllEventParticipants(event.id).toPromise()
-      );
-
-      Promise.all(eventParticipantsCounts)
-        .then(participantsCounts => {
-          const eventPopularity = participantsCounts.map((count, index) => ({
-            event: this.events[index].title,
-            popularity: count.length
-          }));
-
-          const mostPopularEvent = eventPopularity.reduce((max, event) =>
-            event.popularity > max.popularity ? event : max, eventPopularity[0]);
-
-          const leastPopularEvent = eventPopularity.reduce((min, event) =>
-            event.popularity < min.popularity ? event : min, eventPopularity[0]);
-
-          this.mostPopularEvent = mostPopularEvent.event;
-          this.leastPopularEvent = leastPopularEvent.event;
-        })
-        .catch(error => {
-          console.error('Error calculating event stats', error);
-        });
+  async ngOnInit() {
+    this.userId = this.authService.getCurrentUser()?.id;
+    this.getMostPopularEventInfo();
+    if (this.agesCount.length > 0 && this.agesCount[0].age.length === 0) {
+      this.agesCount.shift();
     }
   }
 
-  generateUserReport(): void {
-    const userRatingsReportContent = `
-      Отчет по успеваемости пользователей
-      -------------------
-      Всего участников: ${this.totalUsers}
-      Самая высокая успеваемость (ID): ${this.highestRatedUser || 'N/A'}
-      Самая низкая успеваемость (ID): ${this.lowestRatedUser || 'N/A'}
-      Рейтинги пользователей:
-      ${this.ratings.map((rating, index) => {
-        const userRatingInfo = `${index + 1}. ID ${rating.ratedId}\n` +
-                               `  Оценка: ${rating.rate}\n` +
-                               `  Коммента: ${rating.message}\n\n`;
-        return userRatingInfo;
-      }).join('')}
-    `;
-  
-    const userRatingsBlob = new Blob([userRatingsReportContent], { type: 'text/plain;charset=utf-8' });
-    saveAs(userRatingsBlob, 'user_ratings_report.txt');
+  redirectToEvent(eventId: number) {
+    window.location.href = `/event/${eventId}`;
   }
-  
 
-  generateEventReport(): void {
-    const eventsReportContent = `
-      Отчет по событиям
-      -------------------
-      ${this.events.map((event, index) => {
-      const eventInfo = `Событие #${index + 1}: ${event.title}\n` +
-        `Организатор: ${event.organizerId}\n` +
-        `Максимальное количество участников: ${event.maxGuestAmount}\n` +
-        `Зарегистрированных участников: ${this.eventsChartData[0].data[index]}\n\n`;
-      return eventInfo;
-    }).join('')}`;
-    const eventsBlob = new Blob([eventsReportContent], { type: 'text/plain;charset=utf-8' });
-    saveAs(eventsBlob, 'events_report.txt');
+  getParticipantsInfo(): void {
+    this.participantService.findAllEventParticipants(this.event.id).subscribe((participants: any[]) => {
+      participants.forEach(participant => {
+        this.userService.findUser(participant.userId).subscribe((user: User) => {
+          this.participants.push(user);
+        });
+      })
+      this.getParticipantsAge();
+    });
+  }
+
+  getParticipantsAge(): void {
+    this.participantService.findEventParticipantsAge(this.event.id).subscribe((ages: any[]) => {
+      ages.forEach(bday => {
+        const age = new Date().getFullYear() - new Date(bday.user.bday).getFullYear();
+        this.ages.push(age);
+      });
+      this.calculateCountOfAges();
+    });
+  }
+
+  calculateCountOfAges(): void {
+    this.ages.forEach(age => {
+      if (!this.agesCount.find(item => item.age === age)) {
+        this.agesCount.push({ age: age, amount: 1 });
+        this.labels.push(age);
+        this.amounts.push(1);
+      } else {
+        this.agesCount.find(item => item.age === age).amount += 1;
+        this.amounts[this.labels.indexOf(age)] += 1;
+      }
+    });
+  }
+
+  getMostPopularEventInfo(): void {
+    this.participantService.findMostPopularEvent().subscribe((event: any) => {
+      this.eventService.getEventById(event[0].eventId).subscribe((data: Event) => {
+        this.mostPopularEvent = data;
+        this.loadPopularCategory();
+        this.loadPopularFormat();
+        this.getMostPopularCategory();
+        this.getMostPopularFormat();
+      });
+    })
+  }
+
+  getMostPopularCategory(): void {
+    this.participantService.findMostPopularCategory().subscribe((category: any) => {
+      const cat = Object.keys(category)[0]
+      this.categoryService.findCategory(parseInt(cat)).subscribe((data: Category) => {
+        this.mostPopularCategory = [{ title: data.title, count: category[cat] }];
+      });
+    });
+  }
+
+  getMostPopularFormat(): void {
+    this.participantService.findMostPopularFormat().subscribe((format: any) => {
+      const form = Object.keys(format)[0];
+      this.categoryService.findFormat(parseInt(form)).subscribe((data: Format) => {
+        this.mostPopularFormat = [{ title: data.title, count: format[form] }];
+        console.log('4', this.mostPopularFormat);
+      });
+    });
+  }
+
+  loadPopularCategory(): void {
+    this.categoryService.findCategory(this.mostPopularEvent.categoryId).subscribe((data: Category) => {
+      this.category = data;
+      console.log('1', this.category);
+      
+    });
+  }
+
+  loadPopularFormat(): void {
+    this.categoryService.findFormat(this.mostPopularEvent.formatId).subscribe((data: Format) => {
+      this.formats = data;
+      console.log('2', this.formats);
+      
+    });
   }
 }

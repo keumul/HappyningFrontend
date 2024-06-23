@@ -2,7 +2,7 @@
     <div class="sm:mx-auto sm:w-full sm:max-w-full mt-5 justify-center">
         <a class="flex items-center justify-center text-indigo-400 no-underline hover:no-underline font-bold text-xl lg:text-4xl"
             href="#"><span
-                class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">
+                class="bg-clip-text text-transparent bg-gradient-to-r from-lime-400 via-pink-500 to-purple-500">
                 Happy</span>ning!
         </a>
     </div>
@@ -15,8 +15,8 @@
                     <button (click)="addCategoryPreference(category)" class="base-button"
                         matTooltip="{{ category.title }} - {{category.description }}"
                         [ngClass]="{'selected-button': isSelectedCategory[category.id]}">
-                        <dt class="base-dt">
-                            {{ category.title | ellipsis: 18 }}
+                        <dt class="base-dt break-all">
+                            {{ category.title | ellipsis: 20 }}
                         </dt>
                         <dd class="base-dd">
                             {{ category.description | ellipsis: 20}}
@@ -27,8 +27,8 @@
                     <button (click)="addFormatPreference(format)" class="base-button"
                         matTooltip="{{ format.title }} - {{ format.description }}"
                         [ngClass]="{'selected-button': isSelectedFormat[format.id]}">
-                        <dt class="base-dt">
-                            {{ format.title | ellipsis: 18}}
+                        <dt class="base-dt break-all">
+                            {{ format.title | ellipsis: 10}}
                         </dt>
                         <dd class="base-dd">
                             {{ format.description | ellipsis: 20}}

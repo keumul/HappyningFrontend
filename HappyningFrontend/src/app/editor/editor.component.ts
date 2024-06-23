@@ -52,6 +52,7 @@ export class EditorComponent implements OnInit {
 
   isPrivate = true;
   isPublic = true;
+  isOpenStatistic = true;
 
   message!: string;
   errorMessage!: string;
@@ -84,7 +85,7 @@ export class EditorComponent implements OnInit {
   ngOnInit(): void {
     this.canCheck = true;
     let userId = this.authService.getCurrentUser()?.id;
-    if(userId == undefined) {
+    if (userId == undefined) {
       this.isUser = false;
     } else {
       this.isUser = true;
@@ -157,7 +158,7 @@ export class EditorComponent implements OnInit {
     this.image = "";
     this.canCheck = false;
     this.isImageEditorOpen = true;
-    
+
     this.selectedEvent = event;
     this.isSelectedEvent = true;
 
@@ -242,7 +243,7 @@ export class EditorComponent implements OnInit {
   }
 
   showCitiesByCountry() {
-    if(this.countryId == undefined) {
+    if (this.countryId == undefined) {
       this.countryId = this.countries[0].id;
     }
     this.locationService.getCitiesByCountry(this.countryId).subscribe((data: any) => {
@@ -293,6 +294,19 @@ export class EditorComponent implements OnInit {
   }
 
   editEvent(eventId: number) {
+    if (this.selectedEvent.title == '' || this.selectedEvent.description == '' || this.selectedEvent.startDate == null || this.selectedEvent.endDate == null || this.selectedEvent.locationId == 0 || this.selectedEvent.categoryId == 0 || this.selectedEvent.formatId == 0 || this.selectedEvent.maxGuestAmount == 0 || this.selectedEvent.ageLimit == 0) {
+      this.isErrorMessage = true;
+      this.errorMessage = "Event not selected";
+      return;
+    } if (new Date(this.selectedEvent.startDate) < new Date(moment.now())) {
+      this.isErrorMessage = true;
+      this.errorMessage = "Date is too early";
+      return;
+    } if (new Date(this.selectedEvent.startDate) > new Date(this.selectedEvent.endDate)) {
+      this.isErrorMessage = true;
+      this.errorMessage = "End date is before start date";
+      return;
+    }
     this.updateLocation(this.selectedEvent.locationId);
     this.eventService.updateEvent(eventId, {
       title: this.selectedEvent.title,
@@ -320,16 +334,7 @@ export class EditorComponent implements OnInit {
           this.isErrorMessage = true;
           this.errorMessage = "Title is too long";
           return;
-        } if (this.selectedEvent.startDate < new Date(moment.now())) {
-          this.isErrorMessage = true;
-          this.errorMessage = "Date is too early";
-          return;
-        } if (this.selectedEvent.startDate > this.selectedEvent.endDate) {
-          this.isErrorMessage = true;
-          this.errorMessage = "End date is before start date";
-          return;
-        }
-        else {
+        } else {
           this.errorMessage = "Error: something went wrong while updating the event";
           this.isErrorMessage = true;
         }
@@ -349,13 +354,27 @@ export class EditorComponent implements OnInit {
   }
 
   createEvent() {
-  this.event = this.selectedEvent;
-    if (this.event.startDate < new Date()) {
+    this.event = this.selectedEvent;
+    const startDate = new Date(this.event.startDate);
+    const endDate = new Date(this.event.endDate);
+    if (this.event.title == '' || this.event.description == '' || this.event.startDate == null || this.event.endDate == null || this.event.locationId == 0 || this.event.categoryId == 0 || this.event.formatId == 0 || this.event.maxGuestAmount == 0 || this.event.ageLimit == 0) {
+      this.errorMessage = "Fill in the empty fields";
+      this.isErrorMessage = true;
+      return;
+    }
+    if (this.selectedEvent.title.length >= 50) {
+      this.isErrorMessage = true;
+      this.isSuccessMessage = false;
+      this.errorMessage = "Title is too long";
+      return;
+    }
+
+    if (startDate < new Date()) {
       this.errorMessage = "Date is too early";
       this.isErrorMessage = true;
       return;
-    } 
-    if (this.selectedEvent.startDate > this.selectedEvent.endDate) {
+    }
+    if (startDate > endDate) {
       this.isErrorMessage = true;
       this.errorMessage = "End date is before start date";
       return;
@@ -395,18 +414,10 @@ export class EditorComponent implements OnInit {
         this._snackBar.open('You can add a cover to the event in the editor!', '', { duration: 5000 });
       },
       (error) => {
-        if (this.selectedEvent.title.length >= 50) {
-          this.isErrorMessage = true;
-          this.isSuccessMessage = false;
-          this.errorMessage = "Title is too long";
-          return;
-        }
-        else {
-          this.errorMessage = "Error: something went wrong while creating the event";
-          this.isErrorMessage = true;
-          this.isSuccessMessage = false;
-          console.log("Error: " + error.message);
-        }
+        this.errorMessage = "Error: something went wrong while creating the event";
+        this.isErrorMessage = true;
+        this.isSuccessMessage = false;
+        return;
       }
     );
   }
@@ -418,6 +429,11 @@ export class EditorComponent implements OnInit {
   }
 
   deleteEvent(eventId: number) {
+    if (this.selectedEvent.title == '' || this.selectedEvent.description == '' || this.selectedEvent.startDate == null || this.selectedEvent.endDate == null || this.selectedEvent.locationId == 0 || this.selectedEvent.categoryId == 0 || this.selectedEvent.formatId == 0 || this.selectedEvent.maxGuestAmount == 0 || this.selectedEvent.ageLimit == 0) {
+      this.isErrorMessage = true;
+      this.errorMessage = "Event not selected";
+      return;
+    }
     this.eventService.removeEvent(eventId).subscribe(
       (response: any) => {
         this.successMessage = "Event successfully deleted!";
@@ -434,16 +450,14 @@ export class EditorComponent implements OnInit {
   }
 
   createLocation() {
-    this.locationService.createLocation(+this.cityId,this.address,+this.cityId).subscribe(
+    this.locationService.createLocation(+this.cityId, this.address, +this.cityId).subscribe(
       (response: any) => {
         this.isErrorMessage = false;
-        console.log("Location successfully created");
       },
       (error) => {
         this.errorMessage = "Error: something went wrong while creating the location";
         this.isErrorMessage = true;
         this.isSuccessMessage = false;
-        console.log("Error: " + error.message);
       }
     );
   }
@@ -509,6 +523,11 @@ export class EditorComponent implements OnInit {
     this.eventService.showImage(id).subscribe((data) => {
       this.image = data;
     });
+  }
+
+  openStatistic() {
+    this.isOpenStatistic = !this.isOpenStatistic;
+    this.isEventsListOpen = false;
   }
 }
 

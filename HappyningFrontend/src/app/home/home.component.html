@@ -2,14 +2,14 @@
 <app-error *ngIf="!isUser && !isHighRole"></app-error>
 
 <body *ngIf="isUser" class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" aria-hidden="false">
-  <div class="h-full">
+  <div class="w-full">
     <app-header></app-header>
     <hr class="mt-6 mb-2">
     <form>
       <app-event-list></app-event-list>
-      <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
-        <app-footer></app-footer>
-      </div>
     </form>
+  </div>
+  <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
+    <app-footer></app-footer>
   </div>
 </body>

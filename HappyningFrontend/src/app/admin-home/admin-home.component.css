@@ -7,10 +7,10 @@
 }
 
 .special-button {
-    @apply inline-flex items-center rounded-lg text-transparent bg-gradient-to-r from-green-300 via-pink-400 to-purple-400
-    hover:from-green-200 hover:to-pink-300 text-white font-bold py-2 px-4 focus:ring transform transition 
+    @apply inline-flex items-center rounded-lg text-transparent bg-gradient-to-r from-lime-300 via-pink-400 to-purple-400
+    hover:from-lime-200 hover:to-pink-300 text-white font-bold focus:ring transform transition 
     hover:scale-105 duration-300
-    px-3 py-2 text-sm font-semibold text-white shadow-sm 
+    px-3 py-2 text-sm font-semibold shadow-sm 
     hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
     focus-visible:outline-indigo-600
 }

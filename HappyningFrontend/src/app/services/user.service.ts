@@ -22,6 +22,10 @@ export class UserService {
   findUser(id: number): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}/user/${id}`);
   }
+
+  findOrganizerEvents(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/organizer/${id}`);
+  }
   
   updateUser(id: number, dto: User): Observable<any> {
     return this.http.patch(`${this.baseUrl}/${id}`, dto);

@@ -1,23 +1,13 @@
 .base-button {
-    @apply inline-flex items-center rounded-lg px-3 py-2 mr-4 justify-center
-                text-sm font-semibold text-gray-600 shadow-sm ring-1 ring-inset hover:bg-gray-100
-                ring-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                focus:outline-none transition duration-200 ease-in-out active:bg-gray-300
+    @apply inline-flex items-center rounded-lg px-3 py-2 mr-4 justify-center text-sm font-semibold text-gray-600 shadow-sm ring-1 ring-inset hover:bg-gray-100 ring-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus:outline-none transition duration-200 ease-in-out active:bg-gray-300
 }
 
 .special-button {
-    @apply inline-flex items-center justify-center rounded-lg text-transparent bg-gradient-to-r from-green-300 via-pink-400 to-purple-400
-    hover:from-green-200 hover:to-pink-300 text-white font-bold py-2 px-4 focus:ring transform transition 
-    hover:scale-105 duration-300
-    px-3 py-2 text-sm font-semibold text-white shadow-sm 
-    hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
-    focus-visible:outline-indigo-600
+    @apply inline-flex items-center justify-center rounded-lg text-transparent bg-gradient-to-r from-lime-300 via-pink-400 to-purple-400 hover:from-lime-200 hover:to-pink-300 text-white font-bold focus:ring transform transition hover:scale-105 duration-300 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
 }
 
 .accent-button {
-    @apply inline-flex items-center rounded-lg px-3 py-2 mr-4 justify-center
-    text-sm font-semibold text-white shadow-sm focus-visible:outline 
-    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
+    @apply inline-flex items-center rounded-lg px-3 py-2 mr-4 justify-center text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
 }
 
 .base-message {
@@ -45,15 +35,11 @@
 }
 
 .base-input {
-    @apply w-64 rounded-lg border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1
-    ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-    focus:ring-indigo-600 sm:text-sm sm:leading-6
+    @apply w-64 rounded-lg border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
 }
 
 .base-select {
-    @apply block w-full rounded-lg border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 
-    ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 
-    sm:max-w-xs sm:text-sm sm:leading-6 w-64
+    @apply block w-full rounded-lg border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 w-64
 }
 
 .complaint {

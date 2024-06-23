@@ -1,10 +1,10 @@
 <body>
-
-    <div *ngIf="isOrganizer" class="text-gray-700 mb-5 mt-10">
+    <div *ngIf="isOrganizer" class="text-gray-700 mb-5 w-96">
         <div class="text-base font-bold">The interval between sending messages (sec)</div>
-        <label class="text-green-500">
+        <label class="text-lime-500">
             &#10022; You can set a time interval in which you can send messages to this chat</label><br>
-        <input [(ngModel)]="currentLatency" type="number" class="w-20 pl-3 rounded-md border-0 py-1 text-gray-900
+        <input [(ngModel)]="currentLatency" type="number" 
+        class="w-20 pl-3 rounded-md border-0 py-1 text-gray-900
         shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400
         focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
         <span> seconds</span>
@@ -18,7 +18,8 @@
         </button>
     </div>
 
-    <div *ngIf="isComplaint" class="bg-pink-100 rounded-md shadow-sm p-2 max-w-md items-center text-pink-500">
+    <div *ngIf="isComplaint" 
+    class="bg-pink-100 rounded-md shadow-sm p-2 w-96 items-center text-pink-500">
         <p class="text-pink-500 font-bold text-lg">Is there something wrong with the message?</p>
         <p class="text-gray-700 font-bold text-base">"{{selectMessage.message}}"</p>
         <label class="text-gray-500">&#10022; You can submit a complaint, which will be reviewed by the
@@ -32,20 +33,19 @@
                 <option *ngFor="let cat of complaintsCategory" [value]="cat.id">{{cat.title}} {{cat.description}}
                 </option>
             </select>
-
             <button (click)="sendComplaint()" class="ml-3 font-bold text-lg">Send</button>
         </div>
     </div>
 
-    <div class="flex flex-col h-full mt-10">
-        <div class="flex-grow overflow-y-auto max-w-lg h-64">
+    <div class="flex flex-col h-full">
+        <div class="flex-grow overflow-y-auto w-96 h-64">
             <div *ngFor="let message of messages" [ngClass]="{ 
             'bg-gray-100 flex-row': message.user.id === currentUser.id, 
             'bg-gray-200 flex-row-revesrse': message.user.id !== currentUser.id }"
-                class="p-2 mb-2 rounded-md max-w-lg">
+                class="p-2 mb-2 rounded-md max-w-md">
                 <div class="flex justify-between">
-                    <div *ngIf="message.user.id === currentUser.id" class="font-bold text-green-500">You</div>
-                    <div *ngIf="message.user.id !== currentUser.id" class="font-bold text-green-500">
+                    <div *ngIf="message.user.id === currentUser.id" class="font-bold text-lime-500">You</div>
+                    <div *ngIf="message.user.id !== currentUser.id" class="font-bold text-lime-500">
                         {{ message.user.username }}</div>
                     <button *ngIf="message.user.id !== currentUser.id" (click)="openComplaintDialog(message)" class="text-pink-500 font-bold">🛇</button>
                 </div>
@@ -60,39 +60,5 @@
             <button (click)="sendMessage()" class="font-bold text-gray-700 text-sm hover:text-pink-400 ml-4"
                 [disabled]="newMessage === ''">Send</button>
         </div>
-
     </div>
-
 </body>
-
-<!-- <div class="chat-container">
-    <div class="messages-container" #chatContainer>
-        <div *ngFor="let message of messages" class="message"
-            [ngClass]="{ 'currentUser': message.user.id === currentUser.id, 'otherUser': message.user.id !== currentUser.id }">
-            <div class="message-header" *ngIf="message.user.id === currentUser.id">
-                Вы
-            </div>
-            <div class="message-header" *ngIf="message.user.id !== currentUser.id">
-                {{ message.user.username }}
-            </div>
-            <span class="message-date">{{
-                message.createdAt | date : "MMM d, h:mm a"
-                }}</span>
-            <div class="message-content">{{ message.message }}</div>
-
-        </div>
-    </div>
-    <div class="input-container">
-        <input [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" class="input-field" />
-        <button mat-button (click)="sendMessage()" class="send-button" [disabled]="newMessage === ''">
-            Отправить
-        </button>
-    </div>
-
-    <div *ngIf="isOrganizer" class="latency-main">
-        <div>Определите секундный интервал отправки 1 сообщения</div>
-        <input [(ngModel)]="currentLatency" type="number" class="latency" />
-        <span> секунд</span>
-        <button mat-button (click)="changeLatency()" class="latency-button">ОК</button>
-    </div>
-</div> -->

@@ -40,6 +40,7 @@ export class EventRegistrationComponent implements OnInit {
   isOpenList: boolean = false;
   isQRCode: boolean = false;
   isChatOpen: boolean = false;
+
   constructor(
     private participantService: ParticipantService,
     private authService: AuthService,
@@ -111,6 +112,9 @@ export class EventRegistrationComponent implements OnInit {
   }
 
   tryToAddParticipant() {
+    if(this.isRegistered) {
+      return;
+    }
     this.openCaptcha = true;
     const { question, answer } = this.customCaptcha();
     const userAnswer = prompt(`Please, solve a simple mathematical example: ${question}`);
@@ -125,7 +129,10 @@ export class EventRegistrationComponent implements OnInit {
 
   openChat() {
     this.isChatOpen = !this.isChatOpen;
+    this.isOpenList = false;
+    this.isQRCode = false;
   }
+
   addParticipant(): void {
     if (this.event.maxGuestAmount <= this.participants!.length) {
       this.openSnackBar('The maximum number of participants in the event has been reached');
@@ -139,7 +146,7 @@ export class EventRegistrationComponent implements OnInit {
         userId: this.userId
       }).subscribe(
         (response: any) => {
-          this.openSnackBar('You have successfully registered for this event');
+          this.openSnackBar('You have successfully registered for this event!');
           this.findAllEventParticipants();
           this.ngOnInit();
           this.registrationService.isRegistered = true;
@@ -202,8 +209,9 @@ export class EventRegistrationComponent implements OnInit {
 
   showQrCode() {
     this.isQRCode = !this.isQRCode;
+    this.isOpenList = false;
+    this.isChatOpen = false;
   }
-
 
   isUserRegistered() {
     this.participantService.findEventParticipant(this.eventId, {
@@ -234,14 +242,18 @@ export class EventRegistrationComponent implements OnInit {
 
   applyFilter(filterValue: number) {
     const filter = filterValue.toString().toLowerCase();
-    console.log(filter);
-    
     this.filteredUsers = this.participantsFullInfo.filter(user => user.userId.toString().toLowerCase().includes(filter));
-    console.log(this.filteredUsers);
-    
   } 
 
   openList() {
     this.isOpenList = !this.isOpenList;
+    this.isQRCode = false;
+    this.isChatOpen = false;
+  }
+
+  openStatistics() {
+    this.isOpenList = false;
+    this.isQRCode = false;
+    this.isChatOpen = false;
   }
 }
